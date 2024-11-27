@@ -41,6 +41,6 @@
     "vite": "^5.4.10"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix"
+    "*.{ts, js, css, md, html, json}": "eslint --cache --fix"
   }
 }
