@@ -1,23 +1,13 @@
 import {Box, Divider, Paper, Typography} from "@mui/material";
 import Logo from "../../assets/logoFullW.png";
+import {headerIdentityBox, headerLogo, headerStyles} from "./Header.styles.ts";
 
 const Header = () => {
 	return (
-		<Paper component='header' sx={{
-			display: 'flex',
-			padding: '2rem'
-		}}>
-			<Box component='img' sx={{
-				width: '45%'
-			}} alt='Logo' src={Logo} />
+		<Paper component='header' sx={headerStyles}>
+			<Box component='img' sx={headerLogo} alt='Logo' src={Logo} />
 			<Divider orientation="vertical" variant="middle" flexItem />
-			<Box component='div' sx={{
-				width: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				justifyContent: 'center'
-			}}>
+			<Box component='div' sx={headerIdentityBox}>
 				<Typography variant='h1'>Korona Gór Świętokrzyskich</Typography>
 				<Typography variant='h2'>Panel administracyjny</Typography>
 			</Box>
