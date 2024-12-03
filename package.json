@@ -11,6 +11,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@fontsource-variable/montserrat": "^5.1.0",
+    "@fontsource/russo-one": "^5.1.0",
+    "@mui/material": "^6.1.9",
     "@reduxjs/toolkit": "^2.4.0",
     "msw": "^2.6.5",
     "react": "^18.3.1",

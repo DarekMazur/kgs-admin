@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import {store} from "../store";
 import {Provider} from "react-redux";
+import {ThemeProvider} from "@mui/material";
+import {theme} from "./utils/theme.tsx";
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -19,9 +21,11 @@ async function enableMocking() {
 enableMocking().then(() => {
   root.render(
     <StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </StrictMode>,
+      <ThemeProvider theme={theme} >
+        <Provider store={store}>
+          <App />
+        </Provider>
+    </ThemeProvider>
+    </StrictMode>
   )
 });
