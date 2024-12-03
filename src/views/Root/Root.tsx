@@ -2,6 +2,7 @@ import UnauthorisedView from "../UnauthorisedView/UnauthorisedView.tsx";
 import {RootState, switchIsLoading, useGetUsersQuery} from "../../../store";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
+import Header from "../../components/Header/Header.tsx";
 
 const Root = () => {
 	const { data: users, isLoading: usersLoading } = useGetUsersQuery();
@@ -17,7 +18,7 @@ const Root = () => {
 		<>
 			{isLoading ? (<h1>Loading...</h1>) : (
 				<>
-					<h1>Lorem Ipsum</h1>
+					<Header />
 					{!isAuthorised ? <UnauthorisedView /> : (
 						<>
 							<h3>Welcome</h3>
