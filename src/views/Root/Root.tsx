@@ -17,7 +17,10 @@ const Root = () => {
 		<>
 			{isLoading ? (<h1>Loading...</h1>) : (
 				<>
-					<h1>Lorem Ipsum</h1>
+					<header>
+						<h1>Lorem Ipsum</h1>
+						<h2>Dolor sit amet</h2>
+					</header>
 					{!isAuthorised ? <UnauthorisedView /> : (
 						<>
 							<h3>Welcome</h3>
