@@ -27,12 +27,14 @@ export const theme = createTheme({
 		fontSize: 16,
 		h1: {
 			fontFamily: '"Russo One", sans-serif;',
-			fontSize: '2rem',
+			fontSize: '3rem',
+			fontWeight: '700',
 			lineHeight: '1.5',
 			textAlign: 'center'
 		},
 		h2: {
 			fontFamily: '"Russo One", sans-serif;',
+			fontSize: '2.5rem',
 			lineHeight: '1.5'
 		},
 		h3: {
