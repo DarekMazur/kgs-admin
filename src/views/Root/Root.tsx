@@ -7,12 +7,6 @@ import Footer from '../../components/Footer/Footer.tsx';
 import Logo from "../../assets/images/logoW.png";
 import {Box, Paper, Typography, Link} from "@mui/material";
 
-const currentYear = () => {
-	const today = new Date(Date.now())
-
-	return today.getFullYear()
-}
-
 const Root = () => {
 	const { data: users, isLoading: usersLoading } = useGetUsersQuery();
 	const dispatch = useDispatch();
