@@ -1,5 +1,5 @@
 import {Box, Divider, Paper, Typography} from "@mui/material";
-import Logo from "../../assets/logoFullW.png";
+import Logo from "../../assets/images/logoFullW.png";
 import {headerIdentityBox, headerLogo, headerStyles} from "./Header.styles.ts";
 
 const Header = () => {
