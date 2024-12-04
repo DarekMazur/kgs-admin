@@ -3,6 +3,15 @@ import {RootState, switchIsLoading, useGetUsersQuery} from "../../../store";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import Header from "../../components/Header/Header.tsx";
+import Footer from '../../components/Footer/Footer.tsx';
+import Logo from "../../assets/images/logoW.png";
+import {Box, Paper, Typography, Link} from "@mui/material";
+
+const currentYear = () => {
+	const today = new Date(Date.now())
+
+	return today.getFullYear()
+}
 
 const Root = () => {
 	const { data: users, isLoading: usersLoading } = useGetUsersQuery();
@@ -27,6 +36,7 @@ const Root = () => {
 							</ul>
 						</>
 					)}
+					<Footer />
 				</>
 			)}
 		</>
