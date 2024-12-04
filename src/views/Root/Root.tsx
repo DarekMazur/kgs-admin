@@ -27,6 +27,9 @@ const Root = () => {
 							</ul>
 						</>
 					)}
+					<footer>
+						<p>Lorem Ipsum</p>
+					</footer>
 				</>
 			)}
 		</>
