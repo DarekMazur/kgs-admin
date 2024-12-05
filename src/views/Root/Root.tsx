@@ -1,7 +1,7 @@
 import UnauthorisedView from '../UnauthorisedView/UnauthorisedView.tsx'
 import { RootState, switchIsLoading, useGetUsersQuery } from '../../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header.tsx'
 import Footer from '../../components/Footer/Footer.tsx'
 
@@ -9,7 +9,7 @@ const Root = () => {
   const { data: users, isLoading: usersLoading } = useGetUsersQuery()
   const dispatch = useDispatch()
   const isLoading = useSelector<RootState>((state) => state.isLoading)
-  const isAuthorised = true
+  const [isAuthorised, setIsAuthorised] = useState(false)
 
   useEffect(() => {
     dispatch(switchIsLoading(usersLoading))
@@ -23,7 +23,7 @@ const Root = () => {
         <>
           <Header />
           {!isAuthorised ? (
-            <UnauthorisedView />
+            <UnauthorisedView setIsAuthorised={setIsAuthorised} />
           ) : (
             <>
               <h3>Welcome</h3>

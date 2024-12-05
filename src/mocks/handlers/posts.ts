@@ -1,8 +1,8 @@
-import { http, HttpResponse } from 'msw';
-import { db } from '../db';
+import { http, HttpResponse } from 'msw'
+import { db } from '../db'
 
 export const handlers = [
   http.get(`/posts`, () => {
-    return HttpResponse.json(db.post.getAll());
-  }),
-];
+    return HttpResponse.json(db.post.getAll())
+  })
+]
