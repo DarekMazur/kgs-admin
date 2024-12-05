@@ -136,7 +136,8 @@ const updatePosts = () => {
           username: author?.username,
           firstName: author?.firstName,
           avatar: author?.avatar,
-          isSuspended: !!author?.suspensionTimeout && author?.suspensionTimeout > Date.now(),
+          isSuspended:
+            !!author?.suspensionTimeout && author?.suspensionTimeout > new Date(Date.now()),
           isBanned: author?.isBanned,
           role: author?.role?.id ?? 3
         },
@@ -320,7 +321,7 @@ updateUsers()
 updateDemoUser()
 
 for (let i = 0; i < faker.number.int({ min: 3, max: 10 }); i += 1) {
-  createDemoUsersWithAllPeaks()
+  await createDemoUsersWithAllPeaks()
 }
 
 updateUsersWithNoRole()
