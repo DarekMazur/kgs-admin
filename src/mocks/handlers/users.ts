@@ -6,14 +6,15 @@ export const handlers = [
     return HttpResponse.json(db.user.getAll())
   }),
 
-  http.get(`${import.meta.env.VITE_API_URL}/users/login`, ({ request }) => {
-    // @ts-expect-error
-    if (request.body && request.body.email) {
+  http.post(`${import.meta.env.VITE_API_URL}/users/login`, async ({ request }) => {
+    const body = await request.json()
+    // @ts-ignore
+    const { email, password } = body
+    if (body && email) {
       const loggedUser = db.user.findFirst({
         where: {
           email: {
-            // @ts-expect-error
-            equals: request.body.email
+            equals: email
           }
         }
       })
@@ -22,8 +23,7 @@ export const handlers = [
         return HttpResponse.json('User not found', { status: 404 })
       }
 
-      // @ts-expect-error
-      if (loggedUser.password !== request.body.password) {
+      if (loggedUser.password !== password) {
         return HttpResponse.json('Authentication failed', { status: 403 })
       }
 

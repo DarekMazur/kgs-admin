@@ -42,6 +42,11 @@ export interface IPost {
   }
 }
 
+export interface ILogin {
+  email: string | null
+  password: string | null
+}
+
 export interface IUser {
   id: string
   username: string | null

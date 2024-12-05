@@ -6,20 +6,73 @@ import {
   styledLabel,
   styledSubmitButton
 } from './Login.styles.ts'
+import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react'
+import { ILogin } from '../../utils/types.ts'
 
-const Login = () => {
+const initUser: ILogin = {
+  email: null,
+  password: null
+}
+
+const Login = ({ setIsAuthorised }: { setIsAuthorised: Dispatch<SetStateAction<boolean>> }) => {
+  const [loggedUser, setLoggedUser] = useState(initUser)
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    type: 'email' | 'password'
+  ) => {
+    if (type === 'email') {
+      setLoggedUser({ email: e.target.value, password: loggedUser.password })
+    } else {
+      setLoggedUser({ email: loggedUser.email, password: e.target.value })
+    }
+  }
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+
+    fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
+      method: 'POST',
+      body: JSON.stringify(loggedUser)
+    })
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error(`Nie udało się zalogować`)
+        }
+
+        setIsAuthorised(true)
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
   return (
     <Paper elevation={3} sx={styledFormWrapper}>
       <FormLabel sx={styledLabel}>Zaloguj się</FormLabel>
       <FormControl sx={styledForm}>
-        <TextField label={'Email'} variant="filled" required type="email" sx={styledInput} />
-        <TextField label={'Hasło'} variant="filled" required type="password" sx={styledInput} />
+        <TextField
+          label={'Email'}
+          variant="filled"
+          required
+          type="email"
+          sx={styledInput}
+          onChange={(e) => handleInputChange(e, 'email')}
+        />
+        <TextField
+          label={'Hasło'}
+          variant="filled"
+          required
+          type="password"
+          sx={styledInput}
+          onChange={(e) => handleInputChange(e, 'password')}
+        />
         <Button
           disabled={false}
           variant="contained"
           type="submit"
           sx={styledSubmitButton}
-          onClick={() => {}}
+          onClick={handleSubmit}
         >
           Zaloguj
         </Button>
