@@ -1,14 +1,47 @@
+import { Box, Button, TextField } from '@mui/material'
+import { theme } from '../../utils/theme.tsx'
+
 const UnauthorisedView = () => {
   return (
-    <div>
-      <h3>You are not authorised</h3>
-      <p>
-        We regret to inform you that your current user permissions do not allow access to this
-        particular section of the application. If you believe this is in error or require further
-        assistance, please contact your system administrator.
-      </p>
-      <button type="button">Go back</button>
-    </div>
+    <Box
+      component="form"
+      sx={{
+        m: '3rem 0',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
+      <TextField
+        label={'Email'}
+        variant="filled"
+        required
+        type="email"
+        sx={{
+          border: 'none',
+          fontSize: '1.5rem',
+          mb: '3rem'
+        }}
+      />
+      <TextField label={'Hasło'} variant="filled" required type="password" />
+      <Button
+        disabled={false}
+        variant="contained"
+        type="submit"
+        sx={{
+          fontFamily: '"Russo One", sans-serif;',
+          width: '10rem',
+          height: '3rem',
+          m: '1rem 1.2rem',
+          color: theme.palette.secondary.contrastText,
+          backgroundColor: theme.palette.primary.contrastText,
+          alignSelf: 'self-end'
+        }}
+        onClick={() => {}}
+      >
+        Zaloguj
+      </Button>
+    </Box>
   )
 }
 

@@ -9,7 +9,7 @@ const Root = () => {
   const { data: users, isLoading: usersLoading } = useGetUsersQuery()
   const dispatch = useDispatch()
   const isLoading = useSelector<RootState>((state) => state.isLoading)
-  const isAuthorised = true
+  const isAuthorised = false
 
   useEffect(() => {
     dispatch(switchIsLoading(usersLoading))

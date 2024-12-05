@@ -1,10 +1,7 @@
-import Root from "./views/Root/Root.tsx";
+import Root from './views/Root/Root.tsx'
 
 const App = () => {
-
-  return (
-    <Root />
-  )
+  return <Root />
 }
 
 export default App
