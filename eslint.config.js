@@ -46,7 +46,8 @@ export default tseslint.config(
       'react/button-has-type': 'error',
       'react/react-in-jsx-scope': ['off'],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      '@typescript-eslint/ban-ts-comment': ['off']
+      '@typescript-eslint/ban-ts-comment': ['off'],
+      '@typescript-eslint/no-unused-expressions': ['warn']
     }
   },
   {

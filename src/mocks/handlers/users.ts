@@ -45,7 +45,7 @@ export const handlers = [
         return HttpResponse.json('Authentication failed', { status: 403 })
       }
 
-      const token = import.meta.env.VITE_TOKEN_PUBLIC_USER
+      const token = import.meta.env.VITE_TOKEN_PUBLIC_ADMIN
 
       const response = {
         data: loggedUser,
