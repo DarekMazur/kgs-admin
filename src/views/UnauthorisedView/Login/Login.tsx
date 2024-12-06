@@ -7,9 +7,8 @@ import {
   styledSubmitButton
 } from './Login.styles.ts'
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { ILogin } from '../../utils/types.ts'
-import { setGlobalUser } from '../../../store'
-import { useDispatch } from 'react-redux'
+import { ILogin } from '../../../utils/types.ts'
+import { useMe } from '../../../utils/hooks/useMe.tsx'
 
 const initUser: ILogin = {
   email: null,
@@ -18,7 +17,7 @@ const initUser: ILogin = {
 
 const Login = () => {
   const [loggedUser, setLoggedUser] = useState(initUser)
-  const dispatch = useDispatch()
+  const me = useMe()
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -48,14 +47,7 @@ const Login = () => {
       .then((res) => {
         localStorage.setItem('jwt', res.token)
 
-        fetch(`${import.meta.env.VITE_API_URL}/users/${res.data.id}`)
-          .then((res) => {
-            return res.json()
-          })
-          .then((res) => dispatch(setGlobalUser(res)))
-          .catch((err) => {
-            console.error(err.message)
-          })
+        me(res.data.id)
       })
       .catch((err) => {
         console.error(err.message)

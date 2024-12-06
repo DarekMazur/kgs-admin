@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import Home from '../Home/Home.tsx'
+import Home from './Home/Home.tsx'
 
 const AuthorisedView = () => {
   return (

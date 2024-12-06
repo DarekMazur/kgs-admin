@@ -1,4 +1,4 @@
-import { theme } from '../../utils/theme.tsx'
+import { theme } from '../../../utils/theme.tsx'
 
 export const styledFormWrapper = {
   p: '2rem 0',
