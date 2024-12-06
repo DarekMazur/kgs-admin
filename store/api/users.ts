@@ -13,8 +13,14 @@ export const usersApi = createApi({
         url: 'users'
       }),
       providesTags: ['Users']
+    }),
+    getSingleUsers: builder.query<IUser[], string>({
+      query: (id) => ({
+        url: `users/${id}`
+      }),
+      providesTags: ['Users']
     })
   })
 })
 
-export const { useGetUsersQuery } = usersApi
+export const { useGetUsersQuery, useGetSingleUsersQuery } = usersApi

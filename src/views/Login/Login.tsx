@@ -6,16 +6,19 @@ import {
   styledLabel,
   styledSubmitButton
 } from './Login.styles.ts'
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { ILogin } from '../../utils/types.ts'
+import { setGlobalUser } from '../../../store'
+import { useDispatch } from 'react-redux'
 
 const initUser: ILogin = {
   email: null,
   password: null
 }
 
-const Login = ({ setIsAuthorised }: { setIsAuthorised: Dispatch<SetStateAction<boolean>> }) => {
+const Login = () => {
   const [loggedUser, setLoggedUser] = useState(initUser)
+  const dispatch = useDispatch()
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -40,10 +43,22 @@ const Login = ({ setIsAuthorised }: { setIsAuthorised: Dispatch<SetStateAction<b
           throw new Error(`Nie udało się zalogować`)
         }
 
-        setIsAuthorised(true)
+        return res.json()
+      })
+      .then((res) => {
+        localStorage.setItem('jwt', res.token)
+
+        fetch(`${import.meta.env.VITE_API_URL}/users/${res.data.id}`)
+          .then((res) => {
+            return res.json()
+          })
+          .then((res) => dispatch(setGlobalUser(res)))
+          .catch((err) => {
+            console.error(err.message)
+          })
       })
       .catch((err) => {
-        console.log(err.message)
+        console.error(err.message)
       })
   }
 
