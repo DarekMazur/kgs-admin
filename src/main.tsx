@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { store } from '../store'
 import { Provider } from 'react-redux'
-import { CssBaseline, ThemeProvider } from '@mui/material'
+import { CssBaseline, GlobalStyles, ThemeProvider } from '@mui/material'
 import { theme } from './utils/theme.tsx'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -25,6 +25,16 @@ enableMocking().then(() => {
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <BrowserRouter>
+            <GlobalStyles
+              styles={{
+                '#root': {
+                  height: '100vh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }
+              }}
+            />
             <CssBaseline />
             <App />
           </BrowserRouter>

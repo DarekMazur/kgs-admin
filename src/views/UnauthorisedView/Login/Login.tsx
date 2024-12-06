@@ -6,9 +6,10 @@ import {
   styledLabel,
   styledSubmitButton
 } from './Login.styles.ts'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { ILogin } from '../../../utils/types.ts'
 import { useMe } from '../../../utils/hooks/useMe.tsx'
+import { useNavigate } from 'react-router'
 
 const initUser: ILogin = {
   email: null,
@@ -18,6 +19,13 @@ const initUser: ILogin = {
 const Login = () => {
   const [loggedUser, setLoggedUser] = useState(initUser)
   const me = useMe()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (localStorage.getItem('jwt')) {
+      navigate('/')
+    }
+  }, [])
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -48,6 +56,8 @@ const Login = () => {
         localStorage.setItem('jwt', res.token)
 
         me(res.data.id)
+
+        navigate('/home')
       })
       .catch((err) => {
         console.error(err.message)
