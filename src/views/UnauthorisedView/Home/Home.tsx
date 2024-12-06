@@ -1,6 +1,6 @@
 import { Link, Paper, Typography } from '@mui/material'
 
-const Home = () => {
+const UnauthorizedHome = () => {
   return (
     <Paper
       elevation={0}
@@ -26,4 +26,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default UnauthorizedHome
