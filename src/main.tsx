@@ -5,6 +5,7 @@ import { store } from '../store'
 import { Provider } from 'react-redux'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { theme } from './utils/theme.tsx'
+import { BrowserRouter } from 'react-router-dom'
 
 const container = document.getElementById('root')!
 const root = createRoot(container)
@@ -23,8 +24,10 @@ enableMocking().then(() => {
     <StrictMode>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <CssBaseline />
-          <App />
+          <BrowserRouter>
+            <CssBaseline />
+            <App />
+          </BrowserRouter>
         </Provider>
       </ThemeProvider>
     </StrictMode>
