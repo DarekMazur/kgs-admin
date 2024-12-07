@@ -1,66 +1,27 @@
-import UnauthorisedView from '../UnauthorisedView/UnauthorisedView.tsx'
-import { RootState } from '../../../store'
-import { useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header.tsx'
 import Footer from '../../components/Footer/Footer.tsx'
-import { IUser } from '../../utils/types.ts'
-import { jwtDecode } from 'jwt-decode'
-import AuthorisedView from '../AutohorisedView/AuthorisedView.tsx'
-import { useNavigate } from 'react-router'
-import { useMe } from '../../utils/hooks/useMe.tsx'
+import { Route, Routes } from 'react-router-dom'
+import { AuthProvider } from '../../utils/providers/AuthProvider.tsx'
+import PrivateRoutes from '../../utils/providers/PrivateRoutes.tsx'
+import Home from '../AutohorisedView/Home/Home.tsx'
+import Login from '../UnauthorisedView/Login/Login.tsx'
+import UnauthorizedHome from '../UnauthorisedView/Home/Home.tsx'
+import UnauthorisedUser from '../UnauthorisedView/UnauthorisedUser/UnauthorisedUser.tsx'
 
 const Root = () => {
-  const globalUser = useSelector<RootState>((state) => state.globalUser)
-  const [isAuthorised, setIsAuthorised] = useState(false)
-  const navigate = useNavigate()
-  const me = useMe()
-
-  useEffect(() => {
-    const token = localStorage.getItem('jwt')
-
-    if (token) {
-      const decoded = jwtDecode(token)
-
-      if (!globalUser) {
-        // @ts-ignore
-        me(decoded.id)
-      }
-
-      // @ts-ignore
-      if (decoded.role_id < 3) {
-        setIsAuthorised(true)
-      } else {
-        setIsAuthorised(false)
-        navigate('/unauthorised')
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (globalUser) {
-      if (localStorage.getItem('jwt') && globalUser && (globalUser as IUser).role.id < 3) {
-        const token = localStorage.getItem('jwt')
-        if (token) {
-          const decoded = jwtDecode(token)
-          // @ts-ignore
-          if (decoded.id === (globalUser as IUser).id) {
-            setIsAuthorised(true)
-          }
-        }
-      } else {
-        setIsAuthorised(false)
-        navigate('/unauthorised')
-      }
-    } else {
-      setIsAuthorised(false)
-    }
-  }, [globalUser])
-
   return (
     <>
       <Header />
-      {!isAuthorised ? <UnauthorisedView /> : <AuthorisedView />}
+      <AuthProvider>
+        <Routes>
+          <Route element={<PrivateRoutes />}>
+            <Route path="/admin" element={<Home />} />
+          </Route>
+          <Route path="/" element={<UnauthorizedHome />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/unauthorized" element={<UnauthorisedUser />} />
+        </Routes>
+      </AuthProvider>
       <Footer />
     </>
   )

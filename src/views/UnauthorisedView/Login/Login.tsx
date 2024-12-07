@@ -8,8 +8,8 @@ import {
 } from './Login.styles.ts'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { ILogin } from '../../../utils/types.ts'
-import { useMe } from '../../../utils/hooks/useMe.tsx'
 import { useNavigate } from 'react-router'
+import { useAuth } from '../../../utils/providers/AuthProvider.tsx'
 
 const initUser: ILogin = {
   email: null,
@@ -18,12 +18,12 @@ const initUser: ILogin = {
 
 const Login = () => {
   const [loggedUser, setLoggedUser] = useState(initUser)
-  const me = useMe()
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
-      navigate('/')
+      navigate('/admin')
     }
   }, [])
 
@@ -49,17 +49,20 @@ const Login = () => {
         if (res.status !== 200) {
           throw new Error(`Nie udało się zalogować`)
         }
-
         return res.json()
       })
       .then((res) => {
-        localStorage.setItem('jwt', res.token)
-
-        me(res.data.id)
-
-        navigate('/home')
+        try {
+          login(res.data.id, res.token)
+        } catch (error) {
+          console.error(error)
+          sessionStorage.setItem('auth', 'false')
+          localStorage.removeItem('jwt')
+        }
       })
       .catch((err) => {
+        sessionStorage.setItem('auth', 'false')
+        localStorage.removeItem('jwt')
         console.error(err.message)
       })
   }
