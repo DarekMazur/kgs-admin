@@ -2,11 +2,13 @@ import { RootState, setGlobalUser, switchIsLoading, useGetUsersQuery } from '../
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, MouseEvent } from 'react'
 import { Button } from '@mui/material'
+import { useAuth } from '../../../utils/providers/AuthProvider.tsx'
 
 const Home = () => {
   const { data: users, isLoading: usersLoading } = useGetUsersQuery()
   const dispatch = useDispatch()
   const isLoading = useSelector<RootState>((state) => state.isLoading)
+  const { logout } = useAuth()
 
   useEffect(() => {
     dispatch(switchIsLoading(usersLoading))
@@ -15,7 +17,7 @@ const Home = () => {
   const handleLogout = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
 
-    localStorage.removeItem('jwt')
+    logout()
     dispatch(setGlobalUser(null))
   }
 

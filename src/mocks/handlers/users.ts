@@ -1,27 +1,49 @@
 import { http, HttpResponse } from 'msw'
 import { db } from '../db'
+import { jwtDecode } from 'jwt-decode'
 
 export const handlers = [
   http.get(`${import.meta.env.VITE_API_URL}/users`, () => {
     return HttpResponse.json(db.user.getAll())
   }),
 
-  http.get(`${import.meta.env.VITE_API_URL}/users/:userId`, async ({ params }) => {
+  http.get(`${import.meta.env.VITE_API_URL}/users/:userId`, async ({ request, params }) => {
     const { userId } = params
 
     if (!userId) {
       return HttpResponse.json('Request failed', { status: 400 })
     }
 
-    const user = db.user.findFirst({
-      where: {
-        id: {
-          equals: userId as string
-        }
+    try {
+      const token = request.headers.get('authorization')?.split(' ')[1]
+      if (!token) {
+        return HttpResponse.json('Invalid or expired token', { status: 403 })
       }
-    })
 
-    return HttpResponse.json(user, { status: 200 })
+      try {
+        const decode = jwtDecode(token)
+
+        if (!decode) {
+          return HttpResponse.json('Authentication failed', { status: 403 })
+        }
+
+        const user = db.user.findFirst({
+          where: {
+            id: {
+              equals: userId as string
+            }
+          }
+        })
+
+        return HttpResponse.json(user, { status: 200 })
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        return HttpResponse.json('Authentication failed', { status: 403 })
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      return HttpResponse.json('Invalid or expired token', { status: 403 })
+    }
   }),
 
   http.post(`${import.meta.env.VITE_API_URL}/users/login`, async ({ request }) => {
