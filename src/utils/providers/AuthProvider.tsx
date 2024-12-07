@@ -3,6 +3,7 @@ import { useMe } from '../hooks/useMe.tsx'
 import { useDispatch } from 'react-redux'
 import { setGlobalUser } from '../../../store'
 import { useNavigate } from 'react-router'
+import { jwtDecode } from 'jwt-decode'
 
 interface IAuthValue {
   isAuthenticated: boolean
@@ -30,6 +31,14 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
   useEffect(() => {
     setIsAuthenticated(!!token)
   }, [token])
+
+  useEffect(() => {
+    if (token) {
+      // @ts-ignore
+      const id = jwtDecode(token).id
+      login(id, token)
+    }
+  }, [])
 
   const login = async (userId: string, userToken: string) => {
     try {
