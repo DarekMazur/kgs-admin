@@ -17,7 +17,7 @@ import { headerIdentityBox, headerLogo, headerStyles, avatarStyles } from './Hea
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../store'
 import { IUser } from '../../utils/types.ts'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import GroupIcon from '@mui/icons-material/Group'
@@ -66,9 +66,9 @@ const Header = () => {
             <Box sx={{ width: 250, mt: '4rem' }} role="presentation" onClick={toggleDrawer(false)}>
               <List>
                 {menuItems.map((item) => (
-                  <>
+                  <Fragment key={item.title}>
                     {item.icon ? (
-                      <ListItem key={item.title} disablePadding>
+                      <ListItem disablePadding>
                         <ListItemButton>
                           <ListItemIcon>{item.icon}</ListItemIcon>
                           <ListItemText primary={item.title} />
@@ -77,7 +77,7 @@ const Header = () => {
                     ) : (
                       <Divider />
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </List>
             </Box>
