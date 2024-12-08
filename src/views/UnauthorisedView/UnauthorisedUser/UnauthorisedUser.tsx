@@ -1,5 +1,5 @@
 import { Link, Typography } from '@mui/material'
-import { useAuth } from '../../../utils/providers/AuthProvider.tsx'
+import { useAuth } from '../../../utils/hooks/useAuth.tsx'
 
 const UnauthorisedUser = () => {
   const { logout } = useAuth()

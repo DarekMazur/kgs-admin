@@ -17,7 +17,7 @@ import {
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { ILogin } from '../../../utils/types.ts'
 import { useNavigate } from 'react-router'
-import { useAuth } from '../../../utils/providers/AuthProvider.tsx'
+import { useAuth } from '../../../utils/hooks/useAuth.tsx'
 
 const initUser: ILogin = {
   email: null,

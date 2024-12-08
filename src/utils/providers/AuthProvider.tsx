@@ -1,25 +1,19 @@
-import { createContext, ReactElement, useContext, useEffect, useState } from 'react'
+import { createContext, ReactElement, useEffect, useState } from 'react'
 import { useMe } from '../hooks/useMe.tsx'
 import { useDispatch } from 'react-redux'
 import { setGlobalUser } from '../../../store'
 import { useNavigate } from 'react-router'
 import { jwtDecode } from 'jwt-decode'
+import { IAuthValue } from '../types.ts'
 
-interface IAuthValue {
-  isAuthenticated: boolean
-  isAuthorized: boolean
-  login: (userToken: string, userId: string, isPermanent: boolean) => void
-  logout: () => void
-}
-
-const initialValue = {
+export const initialValue = {
   isAuthenticated: false,
   isAuthorized: false,
   login: () => {},
   logout: () => {}
 }
 
-const AuthContext = createContext<IAuthValue>(initialValue)
+export const AuthContext = createContext<IAuthValue>(initialValue)
 
 export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const me = useMe()
@@ -74,10 +68,10 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
   )
 }
 
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
+// export const useAuth = () => {
+//   const context = useContext(AuthContext)
+//   if (!context) {
+//     throw new Error('useAuth must be used within an AuthProvider')
+//   }
+//   return context
+// }
