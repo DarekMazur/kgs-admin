@@ -77,5 +77,36 @@ export const handlers = [
       return HttpResponse.json(response, { status: 200 })
     }
     return HttpResponse.json('Request failed', { status: 400 })
+  }),
+
+  http.post(`${import.meta.env.VITE_API_URL}/users/me`, async ({ request }) => {
+    const body = await request.json()
+    // @ts-ignore
+    const { id } = body
+    const token = request.headers.get('authorization')?.split(' ')[1]
+
+    if (!id) {
+      return HttpResponse.json('Authentication failed', { status: 403 })
+    }
+
+    if (!token) {
+      return HttpResponse.json('Invalid or expired token', { status: 403 })
+    }
+
+    const decode = jwtDecode(token)
+    // @ts-ignore
+    if (!decode || decode.id !== id) {
+      return HttpResponse.json('Authentication failed', { status: 403 })
+    }
+
+    const user = db.user.findFirst({
+      where: {
+        id: {
+          equals: id as string
+        }
+      }
+    })
+
+    return HttpResponse.json(user, { status: 200 })
   })
 ]

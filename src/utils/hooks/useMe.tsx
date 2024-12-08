@@ -6,8 +6,9 @@ export const useMe = () => {
   const dispatch = useDispatch()
 
   return async (id: string, token: string) => {
-    await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
-      method: 'GET',
+    await fetch(`${import.meta.env.VITE_API_URL}/users/me`, {
+      method: 'POST',
+      body: JSON.stringify({ id }),
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
