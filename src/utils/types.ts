@@ -65,3 +65,10 @@ export interface IUser {
   registrationDate: Date
   role: IRole
 }
+
+export interface IAuthValue {
+  isAuthenticated: boolean
+  isAuthorized: boolean
+  login: (userToken: string, userId: string, isPermanent: boolean) => void
+  logout: () => void
+}

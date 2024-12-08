@@ -2,7 +2,7 @@ import { RootState, setGlobalUser, switchIsLoading, useGetUsersQuery } from '../
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, MouseEvent } from 'react'
 import { Button } from '@mui/material'
-import { useAuth } from '../../../utils/providers/AuthProvider.tsx'
+import { useAuth } from '../../../utils/hooks/useAuth.tsx'
 
 const Home = () => {
   const { data: users, isLoading: usersLoading } = useGetUsersQuery()
