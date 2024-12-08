@@ -1,49 +1,9 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Typography
-} from '@mui/material'
+import { Box, Divider, Paper, Typography } from '@mui/material'
 import Logo from '../../assets/images/logoFullW.png'
-import { headerIdentityBox, headerLogo, headerStyles, avatarStyles } from './Header.styles.ts'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../../store'
-import { IUser } from '../../utils/types.ts'
-import { Fragment, useState } from 'react'
-import PersonIcon from '@mui/icons-material/Person'
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import GroupIcon from '@mui/icons-material/Group'
-import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
-import BlockIcon from '@mui/icons-material/Block'
-
-const menuItems = [
-  {
-    icon: <PersonIcon />,
-    title: 'Profil'
-  },
-  { icon: <ExitToAppIcon />, title: 'Wyloguj' },
-  { icon: null, title: null },
-  { icon: <GroupIcon />, title: 'Użytkownicy' },
-  { icon: <QuestionAnswerIcon />, title: 'Wpisy' },
-  { icon: <BlockIcon />, title: 'Zablokowani' }
-]
+import { headerIdentityBox, headerLogo, headerStyles } from './Header.styles.ts'
+import Menu from '../Menu/Menu.tsx'
 
 const Header = () => {
-  const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
-  const [isOpen, setIsOpen] = useState(false)
-
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setIsOpen(newOpen)
-  }
-
   return (
     <>
       <Paper component="header" sx={headerStyles}>
@@ -54,36 +14,7 @@ const Header = () => {
           <Typography variant="h2">Panel administracyjny</Typography>
         </Box>
       </Paper>
-      {sessionStorage.getItem('auth') === 'true' && globalUser ? (
-        <AppBar position="static">
-          <Avatar
-            alt={globalUser.username as string}
-            src={globalUser.avatar}
-            sx={avatarStyles}
-            onClick={() => setIsOpen(true)}
-          />
-          <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
-            <Box sx={{ width: 250, mt: '4rem' }} role="presentation" onClick={toggleDrawer(false)}>
-              <List>
-                {menuItems.map((item) => (
-                  <Fragment key={item.title}>
-                    {item.icon ? (
-                      <ListItem disablePadding>
-                        <ListItemButton>
-                          <ListItemIcon>{item.icon}</ListItemIcon>
-                          <ListItemText primary={item.title} />
-                        </ListItemButton>
-                      </ListItem>
-                    ) : (
-                      <Divider />
-                    )}
-                  </Fragment>
-                ))}
-              </List>
-            </Box>
-          </Drawer>
-        </AppBar>
-      ) : null}
+      <Menu />
     </>
   )
 }
