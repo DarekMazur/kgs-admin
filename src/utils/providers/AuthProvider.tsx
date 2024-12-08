@@ -3,11 +3,12 @@ import { useMe } from '../hooks/useMe.tsx'
 import { useDispatch } from 'react-redux'
 import { setGlobalUser } from '../../../store'
 import { useNavigate } from 'react-router'
+import { jwtDecode } from 'jwt-decode'
 
 interface IAuthValue {
   isAuthenticated: boolean
   isAuthorized: boolean
-  login: (userToken: string, userId: string) => void
+  login: (userToken: string, userId: string, isPermanent: boolean) => void
   logout: () => void
 }
 
@@ -31,11 +32,24 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
     setIsAuthenticated(!!token)
   }, [token])
 
-  const login = async (userId: string, userToken: string) => {
+  useEffect(() => {
+    if (token) {
+      // @ts-ignore
+      const id = jwtDecode(token).id
+      login(id, token, true)
+    }
+  }, [])
+
+  const login = async (userId: string, userToken: string, isPermanent: boolean) => {
     try {
       await me(userId, userToken)
 
-      localStorage.setItem('jwt', userToken)
+      if (isPermanent) {
+        localStorage.setItem('jwt', userToken)
+      } else {
+        sessionStorage.setItem('jwt', userToken)
+      }
+
       setToken(userToken)
       navigate('/admin')
     } catch (error) {
@@ -45,6 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
 
   const logout = () => {
     localStorage.removeItem('jwt')
+    sessionStorage.removeItem('jwt')
     sessionStorage.removeItem('auth')
     setToken(null)
     dispatch(setGlobalUser(null))
