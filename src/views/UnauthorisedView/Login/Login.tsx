@@ -1,4 +1,12 @@
-import { Button, FormControl, FormLabel, Paper, TextField } from '@mui/material'
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Paper,
+  TextField
+} from '@mui/material'
 import {
   styledForm,
   styledFormWrapper,
@@ -18,14 +26,19 @@ const initUser: ILogin = {
 
 const Login = () => {
   const [loggedUser, setLoggedUser] = useState(initUser)
+  const [isChecked, setIsChecked] = useState(false)
   const navigate = useNavigate()
   const { login } = useAuth()
 
   useEffect(() => {
-    if (localStorage.getItem('jwt')) {
+    if (localStorage.getItem('jwt') || sessionStorage.getItem('jwt')) {
       navigate('/admin')
     }
   }, [])
+
+  const handleChange = () => {
+    setIsChecked((prevState) => !prevState)
+  }
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -53,7 +66,7 @@ const Login = () => {
       })
       .then((res) => {
         try {
-          login(res.data.id, res.token)
+          login(res.data.id, res.token, isChecked)
         } catch (error) {
           console.error(error)
           sessionStorage.setItem('auth', 'false')
@@ -87,6 +100,11 @@ const Login = () => {
           sx={styledInput}
           onChange={(e) => handleInputChange(e, 'password')}
         />
+        <FormControlLabel
+          control={<Checkbox checked={isChecked} onChange={handleChange} />}
+          label="Zapamiętaj mnie przez 30 dni"
+        />
+
         <Button
           disabled={false}
           variant="contained"
