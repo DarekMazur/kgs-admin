@@ -44,7 +44,7 @@ const Menu = () => {
   return (
     <>
       {sessionStorage.getItem('auth') === 'true' && globalUser ? (
-        <AppBar position="static">
+        <AppBar position="static" component="div">
           <Avatar
             alt={globalUser.username as string}
             src={globalUser.avatar}
@@ -52,7 +52,12 @@ const Menu = () => {
             onClick={() => setIsOpen(true)}
           />
           <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
-            <Box sx={{ width: 250, mt: '4rem' }} role="presentation" onClick={toggleDrawer(false)}>
+            <Box
+              component="nav"
+              sx={{ width: 250, mt: '4rem' }}
+              role="presentation"
+              onClick={toggleDrawer(false)}
+            >
               <List>
                 {menuItems.map((item) => (
                   <Fragment key={item.title}>
