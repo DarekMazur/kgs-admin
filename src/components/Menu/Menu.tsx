@@ -10,7 +10,6 @@ import {
   ListItemIcon,
   ListItemText
 } from '@mui/material'
-import { avatarStyles } from '../Header/Header.styles.ts'
 import { Fragment, useState } from 'react'
 import { IUser } from '../../utils/types.ts'
 import { useSelector } from 'react-redux'
@@ -20,6 +19,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import GroupIcon from '@mui/icons-material/Group'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 import BlockIcon from '@mui/icons-material/Block'
+import { avatarStyles } from './Menu.styles.ts'
 
 const menuItems = [
   {
