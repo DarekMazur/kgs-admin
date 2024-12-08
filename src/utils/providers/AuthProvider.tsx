@@ -1,24 +1,15 @@
-import { createContext, ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { useMe } from '../hooks/useMe.tsx'
 import { useDispatch } from 'react-redux'
 import { setGlobalUser } from '../../../store'
 import { useNavigate } from 'react-router'
 import { jwtDecode } from 'jwt-decode'
-import { IAuthValue } from '../types.ts'
-
-export const initialValue = {
-  isAuthenticated: false,
-  isAuthorized: false,
-  login: () => {},
-  logout: () => {}
-}
-
-export const AuthContext = createContext<IAuthValue>(initialValue)
+import { AuthContext } from '../../../store/context/AuthContext.tsx'
 
 export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const me = useMe()
   const [token, setToken] = useState<string | null>(localStorage.getItem('jwt'))
-  const [isAuthenticated, setIsAuthenticated] = useState(initialValue.isAuthenticated)
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
