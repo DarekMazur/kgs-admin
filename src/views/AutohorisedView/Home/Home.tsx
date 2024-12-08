@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, MouseEvent } from 'react'
 import { Button } from '@mui/material'
 import { useAuth } from '../../../utils/hooks/useAuth.tsx'
+import Loader from '../../../components/Loader/Loader.tsx'
 
 const Home = () => {
   const { data: users, isLoading: usersLoading } = useGetUsersQuery()
@@ -24,7 +25,7 @@ const Home = () => {
   return (
     <>
       {isLoading ? (
-        <h1>Loading...</h1>
+        <Loader />
       ) : (
         <>
           <h3>Welcome</h3>
