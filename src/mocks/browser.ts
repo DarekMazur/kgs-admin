@@ -45,6 +45,7 @@ const createUsers = () => {
     password: '123',
     username: 'TestUser',
     registrationDate: demoUserRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined
   })
   db.user.create({
@@ -53,6 +54,7 @@ const createUsers = () => {
     password: '123',
     username: 'TestAdmin',
     registrationDate: demoAdminRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined
   })
   db.user.create({
@@ -61,6 +63,7 @@ const createUsers = () => {
     password: '123',
     username: 'TestModerator',
     registrationDate: demoModRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined,
     isConfirmed: faker.datatype.boolean({ probability: 0.8 })
   })
@@ -70,11 +73,14 @@ const createUsers = () => {
     password: '123',
     username: 'TestSuperAdmin',
     registrationDate: demoSuperAdminRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined
   })
   for (let i = 0; i < faker.number.int({ min: 55, max: 70 }); i += 1) {
     db.user.create({
-      suspensionTimeout: undefined,
+      suspensionTimeout: faker.datatype.boolean({ probability: 0.1 })
+        ? faker.date.future()
+        : undefined,
       registrationDate:
         faker.number.int({ min: 0, max: 3 }) === 0
           ? faker.date.recent().getTime()

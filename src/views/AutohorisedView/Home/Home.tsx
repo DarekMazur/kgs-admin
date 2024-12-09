@@ -5,6 +5,7 @@ import { Box, Paper, Tab, Tabs, Typography } from '@mui/material'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { IUser } from '../../../utils/types.ts'
 import { PieChart } from '@mui/x-charts/PieChart'
+import HomeUsers from '../../../components/HomeUsers/HomeUsers.tsx'
 
 interface ITabPanelProps {
   children?: ReactNode
@@ -55,20 +56,7 @@ const Home = () => {
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                  <PieChart
-                    series={[
-                      {
-                        data: [
-                          { id: 0, value: 10, label: 'Nowi Użytkownicy' },
-                          { id: 1, value: 6, label: 'Zawieszeni Użytkownicy' },
-                          { id: 2, value: 2, label: 'Zablokowani Użytkownicy' },
-                          { id: 3, value: 30, label: 'Pozostali' }
-                        ]
-                      }
-                    ]}
-                    width={800}
-                    height={300}
-                  />
+                  <HomeUsers />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   <PieChart
