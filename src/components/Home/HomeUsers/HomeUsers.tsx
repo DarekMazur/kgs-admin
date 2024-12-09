@@ -38,32 +38,32 @@ const HomeUsers = () => {
     {
       icon: <GroupIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz wszystkich Użytkowników',
-      action: () => {}
+      link: '/'
     },
     {
       icon: <BedroomBabyIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz najnowszych Użytkowników',
-      action: () => {}
+      link: '/'
     },
     {
       icon: <KeyOffIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz nieaktywnych Użytkowników',
-      action: () => {}
+      link: '/'
     },
     {
       icon: <HourglassBottomIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz zawieszonych Użytkowników',
-      action: () => {}
+      link: '/'
     },
     {
       icon: <BlockIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz zablokowanych Użytkowników',
-      action: () => {}
+      link: '/'
     },
     {
       icon: <AccountBalanceIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz administrację',
-      action: () => {}
+      link: '/'
     }
   ]
 
@@ -112,7 +112,7 @@ const HomeUsers = () => {
             {buttons.map((button) => (
               <Grid key={button.label} size={1}>
                 <Tooltip title={button.label}>
-                  <Link href={'/'}>{button.icon}</Link>
+                  <Link href={button.link}>{button.icon}</Link>
                 </Tooltip>
               </Grid>
             ))}
