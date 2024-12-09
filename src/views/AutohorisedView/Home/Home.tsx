@@ -1,7 +1,7 @@
 import { RootState, switchIsLoading, useGetUsersQuery } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { FC, ReactNode, SyntheticEvent, useEffect, useState } from 'react'
-import { Box, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Paper, styled, Tab, Tabs, Typography } from '@mui/material'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { IUser } from '../../../utils/types.ts'
 import { PieChart } from '@mui/x-charts/PieChart'
@@ -11,6 +11,10 @@ interface ITabPanelProps {
   children?: ReactNode
   index: number
   value: number
+}
+
+interface IStyledTabProps {
+  label: string
 }
 
 const Home = () => {
@@ -36,6 +40,12 @@ const Home = () => {
     )
   }
 
+  const CustomTab = styled((props: IStyledTabProps) => <Tab disableRipple {...props} />)(
+    ({ theme }) => ({
+      color: theme.palette.text.primary
+    })
+  )
+
   return (
     <>
       {isLoading ? (
@@ -49,10 +59,15 @@ const Home = () => {
                   Witaj, {globalUser.username}
                 </Typography>
                 <Box>
-                  <Tabs value={value} onChange={handleChange}>
-                    <Tab label="Użytkownicy" />
-                    <Tab label="Wpisy" />
-                    <Tab label="Adminstracja" />
+                  <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    textColor="secondary"
+                    indicatorColor="secondary"
+                  >
+                    <CustomTab label="Użytkownicy" />
+                    <CustomTab label="Wpisy" />
+                    <CustomTab label="Adminstracja" />
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>

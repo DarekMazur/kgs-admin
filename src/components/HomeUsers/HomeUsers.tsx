@@ -2,7 +2,7 @@ import { PieChart } from '@mui/x-charts/PieChart'
 import { useGetUsersQuery } from '../../../store'
 import { FC, useEffect, useState } from 'react'
 import { IUser } from '../../utils/types.ts'
-import { Box, Button, Divider, Grid2 as Grid, Tooltip, Typography } from '@mui/material'
+import { Box, Divider, Grid2 as Grid, Link, Tooltip, Typography } from '@mui/material'
 import { formatDate } from '../../utils/helpers/formatDate.ts'
 import GroupIcon from '@mui/icons-material/Group'
 import BlockIcon from '@mui/icons-material/Block'
@@ -110,7 +110,7 @@ const HomeUsers = () => {
             {buttons.map((button) => (
               <Grid key={button.label} size={1}>
                 <Tooltip title={button.label}>
-                  <Button onClick={button.action}>{button.icon}</Button>
+                  <Link href={'/'}>{button.icon}</Link>
                 </Tooltip>
               </Grid>
             ))}
