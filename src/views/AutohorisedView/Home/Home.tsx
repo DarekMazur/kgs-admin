@@ -1,19 +1,39 @@
 import { RootState, switchIsLoading, useGetUsersQuery } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { Box, Paper, Typography } from '@mui/material'
+import { FC, ReactNode, SyntheticEvent, useEffect, useState } from 'react'
+import { Box, Paper, Tab, Tabs, Typography } from '@mui/material'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { IUser } from '../../../utils/types.ts'
+import { PieChart } from '@mui/x-charts/PieChart'
+
+interface ITabPanelProps {
+  children?: ReactNode
+  index: number
+  value: number
+}
 
 const Home = () => {
   const { isLoading: usersLoading } = useGetUsersQuery()
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((store) => store.globalUser)
   const dispatch = useDispatch()
   const isLoading = useSelector<RootState>((state) => state.isLoading)
+  const [value, setValue] = useState(0)
 
   useEffect(() => {
     dispatch(switchIsLoading(usersLoading))
   }, [usersLoading])
+
+  const handleChange = (_event: SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+  }
+
+  const TabPanel: FC<ITabPanelProps> = ({ children, value, index, ...props }) => {
+    return (
+      <Box role="tabpanel" hidden={value !== index} {...props} {...props}>
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </Box>
+    )
+  }
 
   return (
     <>
@@ -27,6 +47,59 @@ const Home = () => {
                 <Typography component="h3" variant="h2" color="secondary">
                   Witaj, {globalUser.username}
                 </Typography>
+                <Box>
+                  <Tabs value={value} onChange={handleChange}>
+                    <Tab label="Użytkownicy" />
+                    <Tab label="Wpisy" />
+                    <Tab label="Adminstracja" />
+                  </Tabs>
+                </Box>
+                <TabPanel value={value} index={0}>
+                  <PieChart
+                    series={[
+                      {
+                        data: [
+                          { id: 0, value: 10, label: 'Nowi Użytkownicy' },
+                          { id: 1, value: 6, label: 'Zawieszeni Użytkownicy' },
+                          { id: 2, value: 2, label: 'Zablokowani Użytkownicy' },
+                          { id: 3, value: 30, label: 'Pozostali' }
+                        ]
+                      }
+                    ]}
+                    width={800}
+                    height={300}
+                  />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <PieChart
+                    series={[
+                      {
+                        data: [
+                          { id: 0, value: 46, label: 'Nowe Wpisy' },
+                          { id: 2, value: 31, label: 'Ukryte wpisy' },
+                          { id: 3, value: 523, label: 'Pozostałe' }
+                        ]
+                      }
+                    ]}
+                    width={800}
+                    height={300}
+                  />
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                  <PieChart
+                    series={[
+                      {
+                        data: [
+                          { id: 0, value: 10, label: 'Moderatorzy' },
+                          { id: 1, value: 6, label: 'Administratorzy' },
+                          { id: 2, value: 2, label: 'Super Administratorzy' }
+                        ]
+                      }
+                    ]}
+                    width={800}
+                    height={300}
+                  />
+                </TabPanel>
               </Box>
             </Paper>
           ) : null}
