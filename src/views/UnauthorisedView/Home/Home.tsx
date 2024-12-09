@@ -1,6 +1,16 @@
 import { Link, Paper, Typography } from '@mui/material'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router'
 
 const UnauthorizedHome = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (localStorage.getItem('jwt') || sessionStorage.getItem('jwt')) {
+      navigate('/admin')
+    }
+  }, [])
+
   return (
     <Paper
       elevation={0}
