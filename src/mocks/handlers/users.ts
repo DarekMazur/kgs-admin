@@ -4,7 +4,9 @@ import { jwtDecode } from 'jwt-decode'
 
 export const handlers = [
   http.get(`${import.meta.env.VITE_API_URL}/users`, () => {
-    return HttpResponse.json(db.user.getAll())
+    return HttpResponse.json(
+      db.user.getAll().sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
+    )
   }),
 
   http.get(`${import.meta.env.VITE_API_URL}/users/:userId`, async ({ request, params }) => {

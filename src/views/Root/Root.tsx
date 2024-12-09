@@ -11,18 +11,20 @@ import UnauthorisedUser from '../UnauthorisedView/UnauthorisedUser/UnauthorisedU
 const Root = () => {
   return (
     <>
-      <Header />
       <AuthProvider>
-        <Routes>
-          <Route element={<PrivateRoutes />}>
-            <Route path="/admin" element={<Home />} />
-          </Route>
-          <Route path="/" element={<UnauthorizedHome />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/unauthorized" element={<UnauthorisedUser />} />
-        </Routes>
+        <>
+          <Header />
+          <Routes>
+            <Route element={<PrivateRoutes />}>
+              <Route path="/admin" element={<Home />} />
+            </Route>
+            <Route path="/" element={<UnauthorizedHome />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/unauthorized" element={<UnauthorisedUser />} />
+          </Routes>
+          <Footer />
+        </>
       </AuthProvider>
-      <Footer />
     </>
   )
 }

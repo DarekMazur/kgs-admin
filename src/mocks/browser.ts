@@ -16,20 +16,20 @@ worker.events.on('request:start', ({ request }) => {
   console.log('MSW intercepted:', request.method, request.url)
 })
 
-const demoUserRegistrationTime = faker.date.past().getTime()
-const demoAdminRegistrationTime = faker.date.past().getTime()
-const demoModRegistrationTime = faker.date.past().getTime()
-const demoSuperAdminRegistrationTime = faker.date.past().getTime()
+const demoUserRegistrationTime = faker.date.past()
+const demoAdminRegistrationTime = faker.date.past()
+const demoModRegistrationTime = faker.date.past()
+const demoSuperAdminRegistrationTime = faker.date.past()
 const demoUserId = faker.string.uuid()
 const demoAdminId = faker.string.uuid()
 const demoModId = faker.string.uuid()
 const demoSuperAdminId = faker.string.uuid()
 
 const createRoles = () => {
-  db.role.create({ id: 0, name: 'Super Administrator', type: 'superAdmin' })
-  db.role.create({ id: 1, name: 'Administrator', type: 'admin' })
-  db.role.create({ id: 2, name: 'Moderator', type: 'mod' })
-  db.role.create({ id: 3, name: 'User', type: 'user' })
+  db.role.create({ id: 1, name: 'Super Administrator', type: 'superAdmin' })
+  db.role.create({ id: 2, name: 'Administrator', type: 'admin' })
+  db.role.create({ id: 3, name: 'Moderator', type: 'mod' })
+  db.role.create({ id: 4, name: 'User', type: 'user' })
 }
 
 const createPeaks = () => {
@@ -45,6 +45,7 @@ const createUsers = () => {
     password: '123',
     username: 'TestUser',
     registrationDate: demoUserRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined
   })
   db.user.create({
@@ -53,6 +54,7 @@ const createUsers = () => {
     password: '123',
     username: 'TestAdmin',
     registrationDate: demoAdminRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined
   })
   db.user.create({
@@ -61,6 +63,7 @@ const createUsers = () => {
     password: '123',
     username: 'TestModerator',
     registrationDate: demoModRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined,
     isConfirmed: faker.datatype.boolean({ probability: 0.8 })
   })
@@ -70,22 +73,27 @@ const createUsers = () => {
     password: '123',
     username: 'TestSuperAdmin',
     registrationDate: demoSuperAdminRegistrationTime,
+    isBanned: false,
     suspensionTimeout: undefined
   })
   for (let i = 0; i < faker.number.int({ min: 55, max: 70 }); i += 1) {
     db.user.create({
-      suspensionTimeout: undefined,
+      suspensionTimeout: faker.datatype.boolean({ probability: 0.1 })
+        ? faker.date.future()
+        : undefined,
       registrationDate:
-        faker.number.int({ min: 0, max: 3 }) === 0
-          ? faker.date.recent().getTime()
-          : faker.date.past().getTime()
+        faker.number.int({ min: 0, max: 3 }) === 0 ? faker.date.recent() : faker.date.past()
     })
   }
 }
 
 const createPosts = () => {
   for (let i = 0; i < faker.number.int({ min: 100, max: 500 }); i += 1) {
-    db.post.create()
+    db.post.create({
+      createdAt:
+        faker.number.int({ min: 0, max: 3 }) === 0 ? faker.date.recent() : faker.date.past(),
+      isHidden: faker.datatype.boolean({ probability: 0.1 })
+    })
   }
 }
 
@@ -279,9 +287,7 @@ const createDemoUsersWithAllPeaks = async () => {
   db.user.create({
     role: roles[faker.number.int({ min: 0, max: roles.length - 1 })],
     registrationDate:
-      faker.number.int({ min: 0, max: 3 }) === 0
-        ? faker.date.recent().getTime()
-        : faker.date.past().getTime(),
+      faker.number.int({ min: 0, max: 3 }) === 0 ? faker.date.recent() : faker.date.past(),
     suspensionTimeout: undefined,
     isConfirmed: true,
     posts: db.post.findMany({
