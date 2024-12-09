@@ -4,9 +4,9 @@ import { FC, ReactNode, SyntheticEvent, useEffect, useState } from 'react'
 import { Box, Paper, styled, Tab, Tabs, Typography } from '@mui/material'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { IUser } from '../../../utils/types.ts'
-import { PieChart } from '@mui/x-charts/PieChart'
 import HomeUsers from '../../../components/Home/HomeUsers/HomeUsers.tsx'
 import HomePosts from '../../../components/Home/HomePosts/HomePosts.tsx'
+import HomeAdmins from '../../../components/Home/HomeAdmins/HomeAdmins.tsx'
 
 interface ITabPanelProps {
   children?: ReactNode
@@ -78,19 +78,7 @@ const Home = () => {
                   <HomePosts />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  <PieChart
-                    series={[
-                      {
-                        data: [
-                          { id: 0, value: 10, label: 'Moderatorzy' },
-                          { id: 1, value: 6, label: 'Administratorzy' },
-                          { id: 2, value: 2, label: 'Super Administratorzy' }
-                        ]
-                      }
-                    ]}
-                    width={800}
-                    height={300}
-                  />
+                  <HomeAdmins />
                 </TabPanel>
               </Box>
             </Paper>
