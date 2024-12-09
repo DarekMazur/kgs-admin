@@ -14,19 +14,21 @@ const Root = () => {
   const { data: users } = useGetUsersQuery()
   return (
     <>
-      <Header />
       <AuthProvider>
-        <Routes>
-          <Route element={<PrivateRoutes />}>
-            <Route path="/admin" element={<Home />} />
-            <Route path="/test" element={<TestView list={users ? users : []} />} />
-          </Route>
-          <Route path="/" element={<UnauthorizedHome />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/unauthorized" element={<UnauthorisedUser />} />
-        </Routes>
+        <>
+          <Header />
+          <Routes>
+            <Route element={<PrivateRoutes />}>
+              <Route path="/admin" element={<Home />} />
+              <Route path="/test" element={<TestView list={users ? users : []} />} />
+            </Route>
+            <Route path="/" element={<UnauthorizedHome />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/unauthorized" element={<UnauthorisedUser />} />
+          </Routes>
+          <Footer />
+        </>
       </AuthProvider>
-      <Footer />
     </>
   )
 }

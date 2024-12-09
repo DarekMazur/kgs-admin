@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
       if (token) {
         // @ts-ignore
         const id = jwtDecode(token).id
-        await login(id, token, true)
+        await login(id, token, !!localStorage.getItem('jwt'))
         return <Outlet />
       }
     }

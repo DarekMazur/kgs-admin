@@ -20,22 +20,25 @@ import GroupIcon from '@mui/icons-material/Group'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 import BlockIcon from '@mui/icons-material/Block'
 import { avatarStyles } from './Menu.styles.ts'
-
-const menuItems = [
-  {
-    icon: <PersonIcon />,
-    title: 'Profil'
-  },
-  { icon: <ExitToAppIcon />, title: 'Wyloguj' },
-  { icon: null, title: null },
-  { icon: <GroupIcon />, title: 'Użytkownicy' },
-  { icon: <QuestionAnswerIcon />, title: 'Wpisy' },
-  { icon: <BlockIcon />, title: 'Zablokowani' }
-]
+import { useAuth } from '../../utils/hooks/useAuth.tsx'
 
 const Menu = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
   const [isOpen, setIsOpen] = useState(false)
+  const { logout } = useAuth()
+
+  const menuItems = [
+    {
+      icon: <PersonIcon />,
+      title: 'Profil',
+      action: () => {}
+    },
+    { icon: <ExitToAppIcon />, title: 'Wyloguj', action: logout },
+    { icon: null, title: null, action: () => {} },
+    { icon: <GroupIcon />, title: 'Użytkownicy', action: () => {} },
+    { icon: <QuestionAnswerIcon />, title: 'Wpisy', action: () => {} },
+    { icon: <BlockIcon />, title: 'Zablokowani', action: () => {} }
+  ]
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setIsOpen(newOpen)
@@ -63,7 +66,7 @@ const Menu = () => {
                   <Fragment key={item.title}>
                     {item.icon ? (
                       <ListItem disablePadding>
-                        <ListItemButton>
+                        <ListItemButton onClick={() => item.action()}>
                           <ListItemIcon>{item.icon}</ListItemIcon>
                           <ListItemText primary={item.title} />
                         </ListItemButton>
