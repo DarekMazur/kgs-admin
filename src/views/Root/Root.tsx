@@ -7,8 +7,11 @@ import Home from '../AutohorisedView/Home/Home.tsx'
 import Login from '../UnauthorisedView/Login/Login.tsx'
 import UnauthorizedHome from '../UnauthorisedView/Home/Home.tsx'
 import UnauthorisedUser from '../UnauthorisedView/UnauthorisedUser/UnauthorisedUser.tsx'
+import TestView from '../AutohorisedView/TestView/TestView.tsx'
+import { useGetUsersQuery } from '../../../store'
 
 const Root = () => {
+  const { data: users } = useGetUsersQuery()
   return (
     <>
       <Header />
@@ -16,6 +19,7 @@ const Root = () => {
         <Routes>
           <Route element={<PrivateRoutes />}>
             <Route path="/admin" element={<Home />} />
+            <Route path="/test" element={<TestView list={users ? users : []} />} />
           </Route>
           <Route path="/" element={<UnauthorizedHome />} />
           <Route path="/login" element={<Login />} />

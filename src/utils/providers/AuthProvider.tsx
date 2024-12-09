@@ -2,27 +2,36 @@ import { ReactElement, useEffect, useState } from 'react'
 import { useMe } from '../hooks/useMe.tsx'
 import { useDispatch } from 'react-redux'
 import { setGlobalUser } from '../../../store'
-import { useNavigate } from 'react-router'
 import { jwtDecode } from 'jwt-decode'
 import { AuthContext } from '../../../store/context/AuthContext.tsx'
+import { Outlet, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const me = useMe()
-  const [token, setToken] = useState<string | null>(localStorage.getItem('jwt'))
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem('jwt') || sessionStorage.getItem('jwt')
+  )
   const [isAuthenticated, setIsAuthenticated] = useState(!!token)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   useEffect(() => {
     setIsAuthenticated(!!token)
   }, [token])
 
   useEffect(() => {
-    if (token) {
-      // @ts-ignore
-      const id = jwtDecode(token).id
-      login(id, token, true)
+    const userLogin = async () => {
+      if (token) {
+        // @ts-ignore
+        const id = jwtDecode(token).id
+        await login(id, token, true)
+        return <Outlet />
+      }
     }
+
+    userLogin().catch((error) => console.error(error))
   }, [])
 
   const login = async (userId: string, userToken: string, isPermanent: boolean) => {
@@ -36,7 +45,12 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
       }
 
       setToken(userToken)
-      navigate('/admin')
+
+      if (location.pathname === '/login') {
+        navigate('/admin')
+      } else {
+        return <Outlet />
+      }
     } catch (error) {
       console.error(error)
     }

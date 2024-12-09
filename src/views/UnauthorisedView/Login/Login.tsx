@@ -67,6 +67,7 @@ const Login = () => {
       .then((res) => {
         try {
           login(res.data.id, res.token, isChecked)
+          navigate('/admin')
         } catch (error) {
           console.error(error)
           sessionStorage.setItem('auth', 'false')
