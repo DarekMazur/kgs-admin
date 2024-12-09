@@ -1,20 +1,50 @@
 import { PieChart } from '@mui/x-charts/PieChart'
+import { useGetPostsQuery } from '../../../../store'
+import { useEffect, useState } from 'react'
+import { IPost } from '../../../utils/types.ts'
 
 const HomePosts = () => {
+  const { data: posts, isLoading } = useGetPostsQuery()
+  const [newPosts, setNewPosts] = useState<IPost[]>([])
+  const [hidden, setHidden] = useState<IPost[]>([])
+
+  useEffect(() => {
+    const date7daysFromNow = Date.now() - 7 * 24 * 60 * 60 * 1000
+
+    if (posts) {
+      setNewPosts(posts.filter((post) => new Date(post.createdAt).getTime() > date7daysFromNow))
+      setHidden(posts.filter((post) => post.isHidden))
+    }
+  }, [posts])
+
   return (
-    <PieChart
-      series={[
-        {
-          data: [
-            { id: 0, value: 46, label: 'Nowe Wpisy' },
-            { id: 2, value: 31, label: 'Ukryte wpisy' },
-            { id: 3, value: 523, label: 'Pozostałe' }
-          ]
-        }
-      ]}
-      width={800}
-      height={300}
-    />
+    <>
+      {isLoading ? null : (
+        <>
+          {posts ? (
+            <>
+              <PieChart
+                series={[
+                  {
+                    data: [
+                      { id: 0, value: newPosts.length, label: 'Nowe Wpisy' },
+                      { id: 2, value: hidden.length, label: 'Ukryte wpisy' },
+                      {
+                        id: 3,
+                        value: posts.length - newPosts.length - hidden.length,
+                        label: 'Pozostałe'
+                      }
+                    ]
+                  }
+                ]}
+                width={800}
+                height={300}
+              />
+            </>
+          ) : null}
+        </>
+      )}
+    </>
   )
 }
 

@@ -18,10 +18,12 @@ const HomeUsers = () => {
   const [banned, setBanned] = useState<IUser[]>([])
 
   useEffect(() => {
-    const date7daysFromNow = new Date().getTime() - 7 * 24 * 60 * 60 * 1000
+    const date7daysFromNow = Date.now() - 7 * 24 * 60 * 60 * 1000
 
     if (users) {
-      setNewUsers(users.filter((user) => user.registrationDate > new Date(date7daysFromNow)))
+      setNewUsers(
+        users.filter((user) => new Date(user.registrationDate).getTime() > date7daysFromNow)
+      )
       setBanned(users.filter((user) => user.isBanned))
       setSuspended(
         users.filter(

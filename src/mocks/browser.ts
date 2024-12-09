@@ -89,7 +89,11 @@ const createUsers = () => {
 
 const createPosts = () => {
   for (let i = 0; i < faker.number.int({ min: 100, max: 500 }); i += 1) {
-    db.post.create()
+    db.post.create({
+      createdAt:
+        faker.number.int({ min: 0, max: 3 }) === 0 ? faker.date.recent() : faker.date.past(),
+      isHidden: faker.datatype.boolean({ probability: 0.1 })
+    })
   }
 }
 
