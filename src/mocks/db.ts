@@ -46,11 +46,11 @@ export const db = factory({
     lastName: () => faker.person.lastName(),
     avatar: () => faker.image.avatar(),
     description: () => faker.person.bio(),
-    registrationDate: () => faker.date.past().getTime(),
+    registrationDate: () => faker.date.past(),
     isBanned: () => faker.datatype.boolean({ probability: 0.1 }),
     suspensionTimeout: () => faker.date.future(),
     totalSuspensions: () => 0,
-    isConfirmed: () => faker.datatype.boolean({ probability: 0 }),
+    isConfirmed: () => faker.datatype.boolean({ probability: 0.8 }),
     messages: () => [],
     posts: manyOf('post'),
     role: oneOf('role')

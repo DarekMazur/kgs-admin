@@ -16,10 +16,10 @@ worker.events.on('request:start', ({ request }) => {
   console.log('MSW intercepted:', request.method, request.url)
 })
 
-const demoUserRegistrationTime = faker.date.past().getTime()
-const demoAdminRegistrationTime = faker.date.past().getTime()
-const demoModRegistrationTime = faker.date.past().getTime()
-const demoSuperAdminRegistrationTime = faker.date.past().getTime()
+const demoUserRegistrationTime = faker.date.past()
+const demoAdminRegistrationTime = faker.date.past()
+const demoModRegistrationTime = faker.date.past()
+const demoSuperAdminRegistrationTime = faker.date.past()
 const demoUserId = faker.string.uuid()
 const demoAdminId = faker.string.uuid()
 const demoModId = faker.string.uuid()
@@ -82,9 +82,7 @@ const createUsers = () => {
         ? faker.date.future()
         : undefined,
       registrationDate:
-        faker.number.int({ min: 0, max: 3 }) === 0
-          ? faker.date.recent().getTime()
-          : faker.date.past().getTime()
+        faker.number.int({ min: 0, max: 3 }) === 0 ? faker.date.recent() : faker.date.past()
     })
   }
 }
@@ -285,9 +283,7 @@ const createDemoUsersWithAllPeaks = async () => {
   db.user.create({
     role: roles[faker.number.int({ min: 0, max: roles.length - 1 })],
     registrationDate:
-      faker.number.int({ min: 0, max: 3 }) === 0
-        ? faker.date.recent().getTime()
-        : faker.date.past().getTime(),
+      faker.number.int({ min: 0, max: 3 }) === 0 ? faker.date.recent() : faker.date.past(),
     suspensionTimeout: undefined,
     isConfirmed: true,
     posts: db.post.findMany({
