@@ -21,7 +21,7 @@ export const useMe = () => {
         return res.json()
       })
       .then((res) => {
-        if (res.role.id < 3) {
+        if (res.role.id < 4) {
           dispatch(setGlobalUser(res))
           sessionStorage.setItem('auth', 'true')
           return res as IUser
