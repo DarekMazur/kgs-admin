@@ -14,9 +14,12 @@ export const usersApi = createApi({
       }),
       providesTags: ['Users']
     }),
-    getSingleUsers: builder.query<IUser[], string>({
+    getSingleUsers: builder.query<IUser, string>({
       query: (id) => ({
-        url: `users/${id}`
+        url: `users/${id}`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt') || sessionStorage.getItem('jwt')}`
+        }
       }),
       providesTags: ['Users']
     })

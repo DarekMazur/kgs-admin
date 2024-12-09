@@ -43,7 +43,7 @@ const HomeUsers = () => {
     {
       icon: <BedroomBabyIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz najnowszych Użytkowników',
-      link: '/'
+      link: `/admin/users/${users && users[0].id}`
     },
     {
       icon: <KeyOffIcon sx={{ fontSize: '10vw' }} />,
