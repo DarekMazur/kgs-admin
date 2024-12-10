@@ -29,7 +29,7 @@ const HomePosts = () => {
     {
       icon: <ForumIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz wszystkie wpisy',
-      link: '/'
+      link: '/admin/posts'
     },
     {
       icon: <BedroomBabyIcon sx={{ fontSize: '10vw' }} />,
