@@ -1,6 +1,7 @@
 import { Box, Link, Paper, Typography } from '@mui/material'
 import { useAuth } from '../../../utils/hooks/useAuth.tsx'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
+import { Link as RouterLink } from 'react-router'
 
 const UnauthorisedUser = () => {
   const { logout } = useAuth()
@@ -38,7 +39,7 @@ const UnauthorisedUser = () => {
         <Typography variant="subtitle1">
           Jeśli uważasz, że to pomyłka, skontaktuj się z administratorem serwisu.
         </Typography>
-        <Link href="/login" color="secondary" onClick={logout}>
+        <Link component={RouterLink} to="/login" color="secondary" onClick={logout}>
           Wyloguj
         </Link>
       </Box>

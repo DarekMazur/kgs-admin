@@ -8,6 +8,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload'
 import Loader from '../../Loader/Loader.tsx'
+import { Link as RouterLink } from 'react-router'
 
 const HomeAdmins = () => {
   const { data: users, isLoading } = useGetUsersQuery()
@@ -74,7 +75,9 @@ const HomeAdmins = () => {
             {buttons.map((button) => (
               <Grid key={button.label} size={1}>
                 <Tooltip title={button.label}>
-                  <Link href={button.link}>{button.icon}</Link>
+                  <Link component={RouterLink} to={button.link}>
+                    {button.icon}
+                  </Link>
                 </Tooltip>
               </Grid>
             ))}

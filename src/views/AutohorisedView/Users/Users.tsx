@@ -7,6 +7,7 @@ import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
+import { Link as RouterLink } from 'react-router'
 
 interface IUsersRows {
   id: string
@@ -104,7 +105,12 @@ const Users = () => {
       width: 80,
       sortable: false,
       renderCell: (params) => (
-        <Link href={`/admin/users/${params.value}`} underline="none" sx={linkButton}>
+        <Link
+          component={RouterLink}
+          to={`/admin/users/${params.value}`}
+          underline="none"
+          sx={linkButton}
+        >
           Edytuj
         </Link>
       ),
