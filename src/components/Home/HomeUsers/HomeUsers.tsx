@@ -11,6 +11,7 @@ import BedroomBabyIcon from '@mui/icons-material/BedroomBaby'
 import KeyOffIcon from '@mui/icons-material/KeyOff'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import Loader from '../../Loader/Loader.tsx'
+import { Link as RouterLink } from 'react-router'
 
 const HomeUsers = () => {
   const { data: users, isLoading } = useGetUsersQuery()
@@ -113,7 +114,9 @@ const HomeUsers = () => {
             {buttons.map((button) => (
               <Grid key={button.label} size={1}>
                 <Tooltip title={button.label}>
-                  <Link href={button.link}>{button.icon}</Link>
+                  <Link component={RouterLink} to={button.link}>
+                    {button.icon}
+                  </Link>
                 </Tooltip>
               </Grid>
             ))}

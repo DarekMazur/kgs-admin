@@ -10,6 +10,7 @@ import BlockIcon from '@mui/icons-material/Block'
 import ForumIcon from '@mui/icons-material/Forum'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import Loader from '../../Loader/Loader.tsx'
+import { Link as RouterLink } from 'react-router'
 
 const HomePosts = () => {
   const { data: posts, isLoading } = useGetPostsQuery()
@@ -99,7 +100,9 @@ const HomePosts = () => {
             {buttons.map((button) => (
               <Grid key={button.label} size={1}>
                 <Tooltip title={button.label}>
-                  <Link href={button.link}>{button.icon}</Link>
+                  <Link component={RouterLink} to={button.link}>
+                    {button.icon}
+                  </Link>
                 </Tooltip>
               </Grid>
             ))}

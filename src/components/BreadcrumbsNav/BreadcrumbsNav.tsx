@@ -1,5 +1,6 @@
 import { Box, Breadcrumbs, Link, Typography } from '@mui/material'
 import { useLocation } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router'
 
 const BreadcrumbsNav = ({ name }: { name?: string }) => {
   const location = useLocation()
@@ -39,7 +40,7 @@ const BreadcrumbsNav = ({ name }: { name?: string }) => {
             </Typography>
           ) : (
             <>
-              <Link underline="hover" color="inherit" href={to} key={to}>
+              <Link component={RouterLink} underline="hover" color="inherit" to={to} key={to}>
                 {newVal(value)}
               </Link>
             </>

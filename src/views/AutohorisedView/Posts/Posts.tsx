@@ -8,6 +8,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
 import { useLocation } from 'react-router-dom'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
+import { Link as RouterLink } from 'react-router'
 
 const linkButton = {
   width: '100%',
@@ -47,7 +48,11 @@ const Posts = () => {
       const post = posts.filter((post) => post.author.id === id)[0]
 
       if (post) {
-        return <Link href={`/admin/users/${post.author.id}`}>{post.author.username}</Link>
+        return (
+          <Link component={RouterLink} to={`/admin/users/${post.author.id}`}>
+            {post.author.username}
+          </Link>
+        )
       }
 
       return <></>
@@ -82,7 +87,12 @@ const Posts = () => {
       width: 80,
       sortable: false,
       renderCell: (params) => (
-        <Link href={`/admin/posts/${params.value}`} underline="none" sx={linkButton}>
+        <Link
+          component={RouterLink}
+          to={`/admin/posts/${params.value}`}
+          underline="none"
+          sx={linkButton}
+        >
           Edytuj
         </Link>
       ),
