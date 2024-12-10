@@ -153,7 +153,9 @@ const Users = () => {
         <>
           {users ? (
             <Container component="main" maxWidth="xl" sx={{ p: '3rem', my: '2rem' }}>
-              <Typography>Users</Typography>
+              <Typography variant="h3" color="secondary">
+                Użytkownicy
+              </Typography>
               <Box
                 sx={{
                   '& .center': {
