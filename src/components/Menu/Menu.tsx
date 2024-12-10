@@ -66,7 +66,7 @@ const Menu = () => {
                   <Fragment key={item.title}>
                     {item.icon ? (
                       <ListItem disablePadding>
-                        <ListItemButton onClick={() => item.action()}>
+                        <ListItemButton component="a" onClick={() => item.action()}>
                           <ListItemIcon>{item.icon}</ListItemIcon>
                           <ListItemText primary={item.title} />
                         </ListItemButton>
