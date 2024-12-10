@@ -151,20 +151,20 @@ const Users = () => {
         <Loader />
       ) : (
         <>
-          {users ? (
-            <Container component="main" maxWidth="xl" sx={{ p: '3rem', my: '2rem' }}>
-              <Typography variant="h3" color="secondary">
-                Użytkownicy
-              </Typography>
-              <Box
-                sx={{
-                  '& .center': {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }
-                }}
-              >
+          <Container component="main" maxWidth="xl" sx={{ p: '3rem', my: '2rem' }}>
+            <Typography variant="h3" color="secondary">
+              Użytkownicy
+            </Typography>
+            <Box
+              sx={{
+                '& .center': {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }
+              }}
+            >
+              {users && users.length > 0 ? (
                 <DataGrid
                   getRowId={(row) => row.id}
                   rows={rows}
@@ -179,9 +179,9 @@ const Users = () => {
                     }
                   }}
                 />
-              </Box>
-            </Container>
-          ) : null}
+              ) : null}
+            </Box>
+          </Container>
         </>
       )}
     </>
