@@ -10,6 +10,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom'
 import BedroomBabyIcon from '@mui/icons-material/BedroomBaby'
 import KeyOffIcon from '@mui/icons-material/KeyOff'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
+import Loader from '../../Loader/Loader.tsx'
 
 const HomeUsers = () => {
   const { data: users, isLoading } = useGetUsersQuery()
@@ -38,7 +39,7 @@ const HomeUsers = () => {
     {
       icon: <GroupIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz wszystkich Użytkowników',
-      link: '/'
+      link: '/admin/users'
     },
     {
       icon: <BedroomBabyIcon sx={{ fontSize: '10vw' }} />,
@@ -122,7 +123,7 @@ const HomeUsers = () => {
     )
   }
 
-  return <>{isLoading ? null : <>{users ? <UsersChart users={users} /> : null}</>}</>
+  return <>{isLoading ? <Loader /> : <>{users ? <UsersChart users={users} /> : null}</>}</>
 }
 
 export default HomeUsers

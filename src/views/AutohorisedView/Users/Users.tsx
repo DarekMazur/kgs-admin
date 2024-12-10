@@ -1,8 +1,8 @@
-import { Avatar, Box, Container, Typography } from '@mui/material'
-import { switchIsLoading, useGetUsersQuery } from '../../../../store'
+import { Avatar, Box, Container, Link, Typography } from '@mui/material'
+import { useGetUsersQuery } from '../../../../store'
 import { useEffect, useState } from 'react'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import { useDispatch } from 'react-redux'
+import Loader from '../../../components/Loader/Loader.tsx'
 
 interface IUsersRows {
   id: string
@@ -22,9 +22,8 @@ interface IUsersRows {
 }
 
 const Users = () => {
-  const { data: users, isLoading: isUsersLoading } = useGetUsersQuery()
+  const { data: users, isLoading } = useGetUsersQuery()
   const [rows, setRows] = useState<IUsersRows[]>([])
-  const dispatch = useDispatch()
 
   const columns: GridColDef[] = [
     { field: 'publicId', headerName: ' ', width: 70 },
@@ -33,7 +32,7 @@ const Users = () => {
       headerName: 'Avatar',
       width: 80,
       sortable: false,
-      renderCell: (params) => <Avatar alt="" src={params.value} sx={{ heigth: '100%' }} />,
+      renderCell: (params) => <Avatar alt="" src={params.value} />,
       cellClassName: () => {
         return 'center'
       }
@@ -47,14 +46,17 @@ const Users = () => {
     { field: 'suspensionTimeout', headerName: 'Suspended end', width: 80 },
     { field: 'totalSuspensions', headerName: 'Total Suspensions', width: 80 },
     { field: 'registrationDate', headerName: 'Registration at', width: 100 },
-    { field: 'role', headerName: 'Role', width: 70 }
+    { field: 'role', headerName: 'Role', width: 70 },
+    {
+      field: 'id',
+      headerName: 'Przejdź',
+      width: 80,
+      sortable: false,
+      renderCell: (params) => <Link href={`/admin/users/${params.value}`}>Przejdź</Link>
+    }
   ]
 
   const paginationModel = { page: 0, pageSize: 5 }
-
-  useEffect(() => {
-    dispatch(switchIsLoading(isUsersLoading))
-  }, [isUsersLoading])
 
   useEffect(() => {
     if (users) {
@@ -90,30 +92,36 @@ const Users = () => {
 
   return (
     <>
-      {users ? (
-        <Container component="main">
-          <Typography>Users</Typography>
-          <Box
-            sx={{
-              '& .center': {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }
-            }}
-          >
-            <DataGrid
-              getRowId={(row) => row.id}
-              rows={rows}
-              columns={columns}
-              initialState={{ pagination: { paginationModel } }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-              sx={{ border: 0 }}
-            />
-          </Box>
-        </Container>
-      ) : null}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {users ? (
+            <Container component="main">
+              <Typography>Users</Typography>
+              <Box
+                sx={{
+                  '& .center': {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }
+                }}
+              >
+                <DataGrid
+                  getRowId={(row) => row.id}
+                  rows={rows}
+                  columns={columns}
+                  initialState={{ pagination: { paginationModel } }}
+                  pageSizeOptions={[5, 10]}
+                  checkboxSelection
+                  sx={{ border: 0 }}
+                />
+              </Box>
+            </Container>
+          ) : null}
+        </>
+      )}
     </>
   )
 }

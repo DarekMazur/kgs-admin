@@ -7,6 +7,7 @@ import GroupIcon from '@mui/icons-material/Group'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance'
 import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload'
+import Loader from '../../Loader/Loader.tsx'
 
 const HomeAdmins = () => {
   const { data: users, isLoading } = useGetUsersQuery()
@@ -83,7 +84,7 @@ const HomeAdmins = () => {
     )
   }
 
-  return <>{isLoading ? null : <>{users ? <AdminsChart users={users} /> : null}</>}</>
+  return <>{isLoading ? <Loader /> : <>{users ? <AdminsChart users={users} /> : null}</>}</>
 }
 
 export default HomeAdmins

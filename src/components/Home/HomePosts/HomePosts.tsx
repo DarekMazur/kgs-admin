@@ -9,6 +9,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom'
 import BlockIcon from '@mui/icons-material/Block'
 import ForumIcon from '@mui/icons-material/Forum'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import Loader from '../../Loader/Loader.tsx'
 
 const HomePosts = () => {
   const { data: posts, isLoading } = useGetPostsQuery()
@@ -108,7 +109,7 @@ const HomePosts = () => {
     )
   }
 
-  return <>{isLoading ? null : <>{posts ? <PostsChart posts={posts} /> : null}</>}</>
+  return <>{isLoading ? <Loader /> : <>{posts ? <PostsChart posts={posts} /> : null}</>}</>
 }
 
 export default HomePosts

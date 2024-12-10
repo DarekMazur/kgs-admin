@@ -11,6 +11,8 @@ const UnauthorizedHome = () => {
     }
   }, [])
 
+  useEffect(() => {}, [])
+
   return (
     <Paper
       elevation={0}
