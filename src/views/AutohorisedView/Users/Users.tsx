@@ -1,9 +1,11 @@
-import { Avatar, Box, Checkbox, Container, Link, Typography } from '@mui/material'
+import { Avatar, Box, Container, Link, Typography } from '@mui/material'
 import { useGetUsersQuery } from '../../../../store'
 import { useEffect, useState } from 'react'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
+import DoneIcon from '@mui/icons-material/Done'
+import CloseIcon from '@mui/icons-material/Close'
 
 interface IUsersRows {
   id: string
@@ -62,13 +64,13 @@ const Users = () => {
       field: 'isConfirmed',
       headerName: 'Aktywny?',
       width: 50,
-      renderCell: (params) => <Checkbox checked={params.value} />
+      renderCell: (params) => (params.value ? <DoneIcon /> : <CloseIcon />)
     },
     {
       field: 'isSuspended',
       headerName: 'Zawieszony?',
       width: 50,
-      renderCell: (params) => <Checkbox checked={params.value} />
+      renderCell: (params) => (params.value ? <DoneIcon /> : <CloseIcon />)
     },
     {
       field: 'suspensionTimeout',
@@ -82,7 +84,7 @@ const Users = () => {
       field: 'isBanned',
       headerName: 'Zablokowany?',
       width: 80,
-      renderCell: (params) => <Checkbox checked={params.value} />
+      renderCell: (params) => (params.value ? <DoneIcon /> : <CloseIcon />)
     },
     {
       field: 'registrationDate',
