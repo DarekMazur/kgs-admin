@@ -21,6 +21,7 @@ import GroupIcon from '@mui/icons-material/Group'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 import BlockIcon from '@mui/icons-material/Block'
 import EmailIcon from '@mui/icons-material/Email'
+import HomeIcon from '@mui/icons-material/Home'
 import { avatarStyles } from './Menu.styles.ts'
 import { useAuth } from '../../utils/hooks/useAuth.tsx'
 import { useNavigate } from 'react-router'
@@ -53,6 +54,13 @@ const Menu = () => {
     },
     { icon: <ExitToAppIcon />, title: 'Wyloguj', action: logout },
     { icon: null, title: null, action: () => {} },
+    {
+      icon: <HomeIcon />,
+      title: 'Strona główna',
+      action: () => {
+        navigate('/admin')
+      }
+    },
     {
       icon: <GroupIcon />,
       title: 'Użytkownicy',
