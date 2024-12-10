@@ -168,9 +168,14 @@ const Users = () => {
                   rows={rows}
                   columns={columns}
                   initialState={{ pagination: { paginationModel } }}
-                  pageSizeOptions={[5, 10]}
+                  pageSizeOptions={[5, 10, 50, 100]}
                   checkboxSelection
                   sx={{ border: 0 }}
+                  slotProps={{
+                    pagination: {
+                      labelRowsPerPage: 'Użytkowników na stronę'
+                    }
+                  }}
                 />
               </Box>
             </Container>
