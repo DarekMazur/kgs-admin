@@ -253,7 +253,7 @@ const createDemoUsersWithAllPeaks = async () => {
   const shuffledPeaks = shuffle(peaks)
 
   const demoUserID = faker.string.uuid()
-  const demoUserUsername = faker.internet.userName()
+  const demoUserUsername = faker.internet.username()
   const demoUserFirstName = faker.person.firstName()
   const demoUserAvatar = faker.image.avatar()
 

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { useGetSingleUsersQuery } from '../../../../store'
+import { useGetSingleUsersQuery, useUpdateUsersMutation } from '../../../../store'
 import {
   Avatar,
   Box,
@@ -23,6 +23,39 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 const UserView = () => {
   const { id } = useParams()
   const { data: user, isLoading } = useGetSingleUsersQuery(id as string)
+  const [updateUser] = useUpdateUsersMutation()
+
+  const handleHide = (id: string) => {
+    if (user) {
+      const post = user.posts.filter((post) => post.id === id)[0]
+
+      const updatedPost = {
+        ...post,
+        isHidden: !post.isHidden
+      }
+      updateUser({ id: user.id, post: updatedPost })
+    }
+  }
+
+  const handleSuspend = (id: string) => {
+    if (user) {
+      updateUser({
+        id,
+        totalSuspensions: user.totalSuspensions + 1,
+        suspensionTimeout: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      })
+    }
+  }
+
+  const handleBan = (id: string) => {
+    if (user) {
+      updateUser({
+        id,
+        isBanned: !user.isBanned,
+        suspensionTimeout: new Date()
+      })
+    }
+  }
 
   return (
     <Container>
@@ -37,7 +70,16 @@ const UserView = () => {
             />
             <Divider orientation="vertical" variant="middle" flexItem />
             <Box>
-              <Typography variant="h3" color="secondary">
+              <Typography
+                variant="h3"
+                color="secondary"
+                sx={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
+              >
+                {user.isBanned ? <BlockIcon color="error" fontSize="large" /> : null}
+                {user.suspensionTimeout &&
+                new Date(user.suspensionTimeout).getTime() > Date.now() ? (
+                  <WarningAmberIcon color="warning" fontSize="large" />
+                ) : null}{' '}
                 {user.username}
               </Typography>
               <Typography variant="h4">
@@ -94,13 +136,13 @@ const UserView = () => {
                       <CardActions disableSpacing>
                         {post.isHidden ? (
                           <Tooltip title="Pokaż wpis">
-                            <IconButton>
+                            <IconButton onClick={() => handleHide(post.id)}>
                               <VisibilityIcon />
                             </IconButton>
                           </Tooltip>
                         ) : (
                           <Tooltip title="Ukryj wpis">
-                            <IconButton>
+                            <IconButton onClick={() => handleHide(post.id)}>
                               <VisibilityOffIcon />
                             </IconButton>
                           </Tooltip>
@@ -108,16 +150,26 @@ const UserView = () => {
                         <Tooltip title="Zawieś Użytkownika">
                           <IconButton
                             disabled={
-                              user.suspensionTimeout &&
-                              user.suspensionTimeout.getTime() > Date.now()
+                              (user.suspensionTimeout &&
+                                new Date(user.suspensionTimeout).getTime() > Date.now()) ||
+                              user.isBanned
                             }
+                            onClick={() => handleSuspend(user.id)}
                           >
-                            <WarningAmberIcon color="warning" />
+                            <WarningAmberIcon
+                              color={
+                                (user.suspensionTimeout &&
+                                  new Date(user.suspensionTimeout).getTime() > Date.now()) ||
+                                user.isBanned
+                                  ? 'disabled'
+                                  : 'warning'
+                              }
+                            />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Zablokuj Użytkownika">
-                          <IconButton disabled={user.isBanned}>
-                            <BlockIcon color="error" />
+                          <IconButton disabled={user.isBanned} onClick={() => handleBan(user.id)}>
+                            <BlockIcon color={user.isBanned ? 'disabled' : 'error'} />
                           </IconButton>
                         </Tooltip>
                       </CardActions>

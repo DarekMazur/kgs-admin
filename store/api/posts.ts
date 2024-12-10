@@ -13,8 +13,23 @@ export const postsApi = createApi({
         url: 'posts'
       }),
       providesTags: ['Posts']
+    }),
+    updatePost: builder.mutation<IPost, { id: string; notes?: string; isHidden?: boolean }>({
+      query: ({ id, notes, isHidden }) => ({
+        url: `posts/${id}`,
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt') || sessionStorage.getItem('jwt')}`
+        },
+        body: {
+          id,
+          notes,
+          isHidden
+        }
+      }),
+      invalidatesTags: ['Posts']
     })
   })
 })
 
-export const { useGetPostsQuery } = postsApi
+export const { useGetPostsQuery, useUpdatePostMutation } = postsApi

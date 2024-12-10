@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IUser } from '../../src/utils/types'
+import { IPost, IUser } from '../../src/utils/types'
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -22,8 +22,48 @@ export const usersApi = createApi({
         }
       }),
       providesTags: ['Users']
+    }),
+    updateUsers: builder.mutation<
+      IUser,
+      {
+        id: string
+        email?: string
+        password?: string
+        isBanned?: boolean
+        suspensionTimeout?: Date
+        totalSuspensions?: number
+        isConfirmed?: boolean
+        post?: IPost
+      }
+    >({
+      query: ({
+        id,
+        email,
+        password,
+        isBanned,
+        suspensionTimeout,
+        totalSuspensions,
+        isConfirmed,
+        post
+      }) => ({
+        url: `users/${id}`,
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt') || sessionStorage.getItem('jwt')}`
+        },
+        body: {
+          email,
+          password,
+          isBanned,
+          suspensionTimeout,
+          totalSuspensions,
+          isConfirmed,
+          post
+        }
+      }),
+      invalidatesTags: ['Users']
     })
   })
 })
 
-export const { useGetUsersQuery, useGetSingleUsersQuery } = usersApi
+export const { useGetUsersQuery, useGetSingleUsersQuery, useUpdateUsersMutation } = usersApi
