@@ -116,7 +116,8 @@ const Users = () => {
   const paginationModel = { page: 0, pageSize: 5 }
 
   useEffect(() => {
-    if (users && users.length !== rows.length) {
+    if (users) {
+      setRows([])
       users.map((user, index) => {
         const row = {
           id: user.id,
