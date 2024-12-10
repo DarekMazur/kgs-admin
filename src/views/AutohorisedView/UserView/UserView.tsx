@@ -20,6 +20,7 @@ import BlockIcon from '@mui/icons-material/Block'
 import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import Loader from '../../../components/Loader/Loader.tsx'
+import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 
 const UserView = () => {
   const { id } = useParams()
@@ -62,7 +63,8 @@ const UserView = () => {
     <Container>
       {isLoading ? <Loader /> : null}
       {user ? (
-        <>
+        <Box sx={{ mt: '2rem' }}>
+          <BreadcrumbsNav name={user.username as string} />
           <Box sx={{ display: 'flex', alignItems: 'center', my: '2rem', gap: '3rem' }}>
             <Avatar
               alt={user.username as string}
@@ -182,7 +184,7 @@ const UserView = () => {
           ) : (
             <Typography>Brak wpisów</Typography>
           )}
-        </>
+        </Box>
       ) : null}
     </Container>
   )
