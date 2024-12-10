@@ -20,6 +20,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import GroupIcon from '@mui/icons-material/Group'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 import BlockIcon from '@mui/icons-material/Block'
+import EmailIcon from '@mui/icons-material/Email'
 import { avatarStyles } from './Menu.styles.ts'
 import { useAuth } from '../../utils/hooks/useAuth.tsx'
 import { useNavigate } from 'react-router'
@@ -34,6 +35,20 @@ const Menu = () => {
     {
       icon: <PersonIcon />,
       title: 'Profil',
+      action: () => {}
+    },
+    {
+      icon: (
+        <Badge
+          badgeContent={
+            globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+          }
+          color="primary"
+        >
+          <EmailIcon />
+        </Badge>
+      ),
+      title: 'Wiadomości',
       action: () => {}
     },
     { icon: <ExitToAppIcon />, title: 'Wyloguj', action: logout },
