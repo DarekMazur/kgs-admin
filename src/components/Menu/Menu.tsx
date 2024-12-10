@@ -21,11 +21,13 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 import BlockIcon from '@mui/icons-material/Block'
 import { avatarStyles } from './Menu.styles.ts'
 import { useAuth } from '../../utils/hooks/useAuth.tsx'
+import { useNavigate } from 'react-router'
 
 const Menu = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
   const [isOpen, setIsOpen] = useState(false)
   const { logout } = useAuth()
+  const navigate = useNavigate()
 
   const menuItems = [
     {
@@ -35,8 +37,20 @@ const Menu = () => {
     },
     { icon: <ExitToAppIcon />, title: 'Wyloguj', action: logout },
     { icon: null, title: null, action: () => {} },
-    { icon: <GroupIcon />, title: 'Użytkownicy', action: () => {} },
-    { icon: <QuestionAnswerIcon />, title: 'Wpisy', action: () => {} },
+    {
+      icon: <GroupIcon />,
+      title: 'Użytkownicy',
+      action: () => {
+        navigate('/admin/users')
+      }
+    },
+    {
+      icon: <QuestionAnswerIcon />,
+      title: 'Wpisy',
+      action: () => {
+        navigate('/admin/posts')
+      }
+    },
     { icon: <BlockIcon />, title: 'Zablokowani', action: () => {} }
   ]
 
@@ -66,7 +80,7 @@ const Menu = () => {
                   <Fragment key={item.title}>
                     {item.icon ? (
                       <ListItem disablePadding>
-                        <ListItemButton onClick={() => item.action()}>
+                        <ListItemButton component="a" onClick={() => item.action()}>
                           <ListItemIcon>{item.icon}</ListItemIcon>
                           <ListItemText primary={item.title} />
                         </ListItemButton>

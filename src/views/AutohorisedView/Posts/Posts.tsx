@@ -1,9 +1,11 @@
-import { Box, Checkbox, Container, Link, Typography } from '@mui/material'
+import { Box, Container, Link, Typography } from '@mui/material'
 import { useGetPostsQuery } from '../../../../store'
 import { useEffect, useState } from 'react'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import Loader from '../../../components/Loader/Loader.tsx'
+import DoneIcon from '@mui/icons-material/Done'
+import CloseIcon from '@mui/icons-material/Close'
 
 const linkButton = {
   width: '100%',
@@ -58,9 +60,9 @@ const Posts = () => {
     { field: 'notes', headerName: 'Notatki', width: 350 },
     {
       field: 'isHidden',
-      headerName: 'Ukryty?',
+      headerName: 'Widoczny?',
       width: 50,
-      renderCell: (params) => <Checkbox checked={params.value} />
+      renderCell: (params) => (params.value ? <CloseIcon /> : <DoneIcon />)
     },
     {
       field: 'publishedAt',
@@ -87,7 +89,8 @@ const Posts = () => {
   const paginationModel = { page: 0, pageSize: 5 }
 
   useEffect(() => {
-    if (posts && posts.length !== rows.length) {
+    if (posts) {
+      setRows([])
       posts.map((post, index) => {
         const row = {
           id: post.id,
