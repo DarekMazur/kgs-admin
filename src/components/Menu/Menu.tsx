@@ -1,6 +1,7 @@
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Divider,
   Drawer,
@@ -62,12 +63,27 @@ const Menu = () => {
     <>
       {sessionStorage.getItem('auth') === 'true' && globalUser ? (
         <AppBar position="static" component="div">
-          <Avatar
-            alt={globalUser.username as string}
-            src={globalUser.avatar}
-            sx={avatarStyles}
-            onClick={() => setIsOpen(true)}
-          />
+          <Box sx={{ m: '1rem 2rem' }}>
+            <Badge
+              badgeContent={
+                globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+              }
+              color="secondary"
+              sx={{
+                '& .MuiBadge-badge': {
+                  color: 'background.default',
+                  fontWeight: '700'
+                }
+              }}
+            >
+              <Avatar
+                alt={globalUser.username as string}
+                src={globalUser.avatar}
+                sx={avatarStyles}
+                onClick={() => setIsOpen(true)}
+              />
+            </Badge>
+          </Box>
           <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
             <Box
               component="nav"

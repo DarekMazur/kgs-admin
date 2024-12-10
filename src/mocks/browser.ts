@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { handlers } from './handlers'
 import { db } from './db.ts'
 import { setupWorker } from 'msw/browser'
-import { IPeak } from '../utils/types.ts'
+import { IMessage, IPeak } from '../utils/types.ts'
 
 declare global {
   interface Window {
@@ -167,6 +167,23 @@ const updateUsers = () => {
       }
     })
 
+    const messages: IMessage[] = []
+
+    for (let i = 0; i < faker.number.int({ min: 0, max: 150 }); i++) {
+      if (faker.datatype.boolean()) {
+        const message = {
+          id: faker.string.uuid(),
+          priority: faker.number.int({ min: 0, max: 3 }),
+          header: faker.lorem.words({ min: 1, max: 3 }),
+          message: faker.lorem.paragraph(),
+          sendTime: faker.date.past(),
+          openedTime: faker.datatype.boolean({ probability: 0.8 }) ? faker.date.recent() : null
+        }
+
+        messages.push(message)
+      }
+    }
+
     db.user.update({
       where: {
         id: {
@@ -175,6 +192,7 @@ const updateUsers = () => {
       },
       data: {
         suspensionTimeout: undefined,
+        messages: messages,
         role: roles[faker.number.int({ min: 0, max: roles.length - 1 })],
         posts: postsList || []
       }

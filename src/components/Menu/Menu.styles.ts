@@ -1,5 +1,5 @@
 export const avatarStyles = {
-  m: '1rem 2rem',
+  m: '-0.3rem',
   width: '50px',
   height: '50px',
   transition: '200ms opacity',
