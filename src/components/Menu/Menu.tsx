@@ -1,6 +1,7 @@
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Divider,
   Drawer,
@@ -19,6 +20,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import GroupIcon from '@mui/icons-material/Group'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 import BlockIcon from '@mui/icons-material/Block'
+import EmailIcon from '@mui/icons-material/Email'
+import HomeIcon from '@mui/icons-material/Home'
 import { avatarStyles } from './Menu.styles.ts'
 import { useAuth } from '../../utils/hooks/useAuth.tsx'
 import { useNavigate } from 'react-router'
@@ -35,8 +38,29 @@ const Menu = () => {
       title: 'Profil',
       action: () => {}
     },
+    {
+      icon: (
+        <Badge
+          badgeContent={
+            globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+          }
+          color="primary"
+        >
+          <EmailIcon />
+        </Badge>
+      ),
+      title: 'Wiadomości',
+      action: () => {}
+    },
     { icon: <ExitToAppIcon />, title: 'Wyloguj', action: logout },
     { icon: null, title: null, action: () => {} },
+    {
+      icon: <HomeIcon />,
+      title: 'Strona główna',
+      action: () => {
+        navigate('/admin')
+      }
+    },
     {
       icon: <GroupIcon />,
       title: 'Użytkownicy',
@@ -62,12 +86,27 @@ const Menu = () => {
     <>
       {sessionStorage.getItem('auth') === 'true' && globalUser ? (
         <AppBar position="static" component="div">
-          <Avatar
-            alt={globalUser.username as string}
-            src={globalUser.avatar}
-            sx={avatarStyles}
-            onClick={() => setIsOpen(true)}
-          />
+          <Box sx={{ m: '1rem 2rem' }}>
+            <Badge
+              badgeContent={
+                globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+              }
+              color="secondary"
+              sx={{
+                '& .MuiBadge-badge': {
+                  color: 'background.default',
+                  fontWeight: '700'
+                }
+              }}
+            >
+              <Avatar
+                alt={globalUser.username as string}
+                src={globalUser.avatar}
+                sx={avatarStyles}
+                onClick={() => setIsOpen(true)}
+              />
+            </Badge>
+          </Box>
           <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
             <Box
               component="nav"
