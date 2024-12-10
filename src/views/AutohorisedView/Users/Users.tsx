@@ -179,7 +179,9 @@ const Users = () => {
                     }
                   }}
                 />
-              ) : null}
+              ) : (
+                <Typography>Brak Użytkowników</Typography>
+              )}
             </Box>
           </Container>
         </>

@@ -137,7 +137,9 @@ const Posts = () => {
                   }
                 }}
               />
-            ) : null}
+            ) : (
+              <Typography>Brak wpisów</Typography>
+            )}
           </Box>
         </Container>
       )}
