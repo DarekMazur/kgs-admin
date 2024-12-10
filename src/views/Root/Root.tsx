@@ -9,6 +9,7 @@ import UnauthorizedHome from '../UnauthorisedView/Home/Home.tsx'
 import UnauthorisedUser from '../UnauthorisedView/UnauthorisedUser/UnauthorisedUser.tsx'
 import UserView from '../AutohorisedView/UserView/UserView.tsx'
 import Users from '../AutohorisedView/Users/Users.tsx'
+import Posts from '../AutohorisedView/Posts/Posts.tsx'
 
 const Root = () => {
   return (
@@ -21,6 +22,7 @@ const Root = () => {
               <Route path="/admin" element={<Home />} />
               <Route path="/admin/users/:id" element={<UserView />} />
               <Route path="/admin/users" element={<Users />} />
+              <Route path={'/admin/posts'} element={<Posts />} />
             </Route>
             <Route path="/" element={<UnauthorizedHome />} />
             <Route path="/login" element={<Login />} />
