@@ -133,7 +133,7 @@ const Posts = () => {
                 sx={{ border: 0 }}
                 slotProps={{
                   pagination: {
-                    labelRowsPerPage: 'Użytkowników na stronę'
+                    labelRowsPerPage: 'Postów na stronę'
                   }
                 }}
               />
