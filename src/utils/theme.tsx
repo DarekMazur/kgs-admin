@@ -1,4 +1,6 @@
 import { createTheme } from '@mui/material'
+import '@fontsource/russo-one'
+import '@fontsource-variable/montserrat'
 
 export const theme = createTheme({
   palette: {
@@ -28,7 +30,6 @@ export const theme = createTheme({
     h1: {
       fontFamily: '"Russo One", sans-serif;',
       fontSize: '3rem',
-      fontWeight: '700',
       lineHeight: '1.5',
       textAlign: 'center'
     },
