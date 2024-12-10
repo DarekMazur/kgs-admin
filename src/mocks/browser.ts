@@ -29,7 +29,7 @@ const createRoles = () => {
   db.role.create({ id: 1, name: 'Super Administrator', type: 'superAdmin' })
   db.role.create({ id: 2, name: 'Administrator', type: 'admin' })
   db.role.create({ id: 3, name: 'Moderator', type: 'mod' })
-  db.role.create({ id: 4, name: 'User', type: 'user' })
+  db.role.create({ id: 4, name: 'Użytkownik', type: 'user' })
 }
 
 const createPeaks = () => {
@@ -253,7 +253,7 @@ const createDemoUsersWithAllPeaks = async () => {
   const shuffledPeaks = shuffle(peaks)
 
   const demoUserID = faker.string.uuid()
-  const demoUserUsername = faker.internet.userName()
+  const demoUserUsername = faker.internet.username()
   const demoUserFirstName = faker.person.firstName()
   const demoUserAvatar = faker.image.avatar()
 
