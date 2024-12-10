@@ -6,6 +6,7 @@ import Loader from '../../../components/Loader/Loader.tsx'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
+import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 
 interface IUsersRows {
   id: string
@@ -154,7 +155,8 @@ const Users = () => {
         <Loader />
       ) : (
         <>
-          <Container component="main" maxWidth="xl" sx={{ p: '3rem', my: '2rem' }}>
+          <Container component="main" maxWidth="xl" sx={{ p: '3rem', pt: '1rem', mb: '2rem' }}>
+            <BreadcrumbsNav />
             <Typography variant="h3" color="secondary">
               Użytkownicy
             </Typography>
