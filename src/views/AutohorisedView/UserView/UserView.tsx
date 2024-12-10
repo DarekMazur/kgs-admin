@@ -19,6 +19,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import BlockIcon from '@mui/icons-material/Block'
 import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import VisibilityIcon from '@mui/icons-material/Visibility'
+import Loader from '../../../components/Loader/Loader.tsx'
 
 const UserView = () => {
   const { id } = useParams()
@@ -59,7 +60,7 @@ const UserView = () => {
 
   return (
     <Container>
-      {isLoading ? <>Loading</> : null}
+      {isLoading ? <Loader /> : null}
       {user ? (
         <>
           <Box sx={{ display: 'flex', alignItems: 'center', my: '2rem', gap: '3rem' }}>
