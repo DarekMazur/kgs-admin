@@ -56,6 +56,21 @@ export const handlers = [
           )
         }
       }
+
+      if (params.get('status')) {
+        const status = JSON.parse(<string>params.get('status'))
+
+        status.map(
+          (param: 'inactive' | 'hidden' | 'banned') =>
+            (users = users.filter((user) =>
+              param === 'inactive'
+                ? !user.isConfirmed
+                : param === 'banned'
+                  ? user.isBanned
+                  : user.suspensionTimeout && user.suspensionTimeout.getTime() > Date.now()
+            ))
+        )
+      }
     }
 
     return HttpResponse.json(users)

@@ -50,22 +50,22 @@ const HomeUsers = () => {
     {
       icon: <KeyOffIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz nieaktywnych Użytkowników',
-      link: '/admin'
+      link: '/admin/users/inactive'
     },
     {
       icon: <HourglassBottomIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz zawieszonych Użytkowników',
-      link: '/'
+      link: '/admin/users/suspended'
     },
     {
       icon: <BlockIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz zablokowanych Użytkowników',
-      link: '/'
+      link: '/admin/users/banned'
     },
     {
       icon: <AccountBalanceIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz administrację',
-      link: '/'
+      link: '/admin/users/team'
     }
   ]
 

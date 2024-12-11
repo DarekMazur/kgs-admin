@@ -37,6 +37,12 @@ const BreadcrumbsNav = ({ name }: { name?: string }) => {
                 return 'super administratorzy'
               case 'latest':
                 return 'nowi użytkownicy'
+              case 'inactive':
+                return 'nieaktywni użytkownicy'
+              case 'suspended':
+                return 'zawieszeni użytkownicy'
+              case 'banned':
+                return 'zablokowani użytkownicy'
               default:
                 return value
             }
