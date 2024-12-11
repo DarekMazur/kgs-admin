@@ -8,7 +8,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 import { Link as RouterLink } from 'react-router'
-import { IParams } from '../../../utils/types.ts'
+import { IUserParams } from '../../../utils/types.ts'
 import { useLocation } from 'react-router-dom'
 
 interface IUsersRows {
@@ -44,7 +44,7 @@ const linkButton = {
   }
 }
 
-const Users = (props: { params?: IParams }) => {
+const Users = (props: { params?: IUserParams }) => {
   const { data: users, isLoading } = useGetUsersQuery(props.params)
   const [rows, setRows] = useState<IUsersRows[]>([])
   const location = useLocation()

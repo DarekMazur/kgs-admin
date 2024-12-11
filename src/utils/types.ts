@@ -78,7 +78,14 @@ export interface IMinMax {
   max: number
 }
 
-export interface IParams {
+export interface IUserParams {
   roleId?: IMinMax | number
+  registration?: IMinMax | number
+  status?: Array<'inactive' | 'hidden' | 'banned'>
+  hasPosts?: boolean
+  hasDescription?: boolean
+  hasAvatar?: boolean
+  hasFirstName?: boolean
+  hasLastName?: boolean
   sort?: 'asc' | 'desc'
 }
