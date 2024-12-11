@@ -75,7 +75,13 @@ const Menu = () => {
         navigate('/admin/posts')
       }
     },
-    { icon: <BlockIcon />, title: 'Zablokowani', action: () => {} }
+    {
+      icon: <BlockIcon />,
+      title: 'Zablokowani',
+      action: () => {
+        navigate('/admin/users/blocked')
+      }
+    }
   ]
 
   const toggleDrawer = (newOpen: boolean) => () => {
