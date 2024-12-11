@@ -48,7 +48,7 @@ const BreadcrumbsNav = ({ name }: { name?: string }) => {
             </Typography>
           ) : (
             <Link component={RouterLink} underline="hover" color="inherit" to={to} key={to}>
-              {newVal(value)}
+              {value === 'admin' ? 'Główna' : newVal(value)}
             </Link>
           )
         })}
