@@ -22,6 +22,13 @@ const Root = () => {
               <Route path="/admin" element={<Home />} />
               <Route path="/admin/users/:id" element={<UserView />} />
               <Route path="/admin/users" element={<Users />} />
+              <Route path="/admin/users/team" element={<Users params={{ roleId: { max: 3 } }} />} />
+              <Route path="/admin/users/team/mod" element={<Users params={{ roleId: 3 }} />} />
+              <Route path="/admin/users/team/admin" element={<Users params={{ roleId: 2 }} />} />
+              <Route
+                path="/admin/users/team/super-admin"
+                element={<Users params={{ roleId: 1 }} />}
+              />
               <Route path={'/admin/posts'} element={<Posts />} />
             </Route>
             <Route path="/" element={<UnauthorizedHome />} />

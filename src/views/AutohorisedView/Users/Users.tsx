@@ -8,6 +8,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 import { Link as RouterLink } from 'react-router'
+import { IParams } from '../../../utils/types.ts'
 
 interface IUsersRows {
   id: string
@@ -42,8 +43,8 @@ const linkButton = {
   }
 }
 
-const Users = () => {
-  const { data: users, isLoading } = useGetUsersQuery()
+const Users = (props: { params?: IParams }) => {
+  const { data: users, isLoading } = useGetUsersQuery(props.params)
   const [rows, setRows] = useState<IUsersRows[]>([])
 
   const columns: GridColDef[] = [

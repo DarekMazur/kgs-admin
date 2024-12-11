@@ -28,22 +28,22 @@ const HomeAdmins = () => {
     {
       icon: <GroupIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz cały zespół',
-      link: '/'
+      link: '/admin/users/team'
     },
     {
       icon: <ManageAccountsIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz wszystkich moderatorów',
-      link: '/'
+      link: '/admin/users/team/mod'
     },
     {
       icon: <AccountBalanceIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz wszystkich administratorów',
-      link: '/'
+      link: '/admin/users/team/admin'
     },
     {
       icon: <AssuredWorkloadIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz wszystkich super administratorów',
-      link: '/'
+      link: '/admin/users/team/super-admin'
     }
   ]
 
