@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
 import { db } from '../db'
 import { jwtDecode } from 'jwt-decode'
-import { IPeak, IPost, IMinMax } from '../../utils/types.ts'
+import { IPeak, IPost, IMinMax, IUser } from '../../utils/types.ts'
 import { formatDate } from '../../utils/helpers/formatDate.ts'
 
 // @ts-ignore
@@ -15,7 +15,8 @@ export const handlers = [
 
     const params = url.searchParams
 
-    let users = db.user
+    //@ts-ignore
+    let users: IUser[] = db.user
       .getAll()
       .sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
 
@@ -59,17 +60,27 @@ export const handlers = [
 
       if (params.get('status')) {
         const status = JSON.parse(<string>params.get('status'))
+        const inactive: IUser[] = []
+        const suspended: IUser[] = []
+        const banned: IUser[] = []
 
-        status.map(
-          (param: 'inactive' | 'hidden' | 'banned') =>
-            (users = users.filter((user) =>
-              param === 'inactive'
-                ? !user.isConfirmed
-                : param === 'banned'
-                  ? user.isBanned
-                  : user.suspensionTimeout && user.suspensionTimeout.getTime() > Date.now()
-            ))
+        status.map((param: 'inactive' | 'hidden' | 'banned') =>
+          users.map((user) =>
+            param === 'inactive'
+              ? !user.isConfirmed
+                ? inactive.push(user as IUser)
+                : false
+              : param === 'banned'
+                ? user.isBanned
+                  ? banned.push(user as IUser)
+                  : false
+                : user.suspensionTimeout && user.suspensionTimeout.getTime() > Date.now()
+                  ? suspended.push(user as IUser)
+                  : false
+          )
         )
+
+        users = inactive.concat(suspended).concat(banned)
       }
     }
 

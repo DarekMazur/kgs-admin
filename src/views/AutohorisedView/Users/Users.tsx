@@ -48,6 +48,8 @@ const newVal = (value: string) => {
       return 'zawieszeni użytkownicy'
     case 'banned':
       return 'zablokowani użytkownicy'
+    case 'blocked':
+      return 'użytkownicy zawieszeni i zablokowani'
     default:
       return value
   }
