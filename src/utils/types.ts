@@ -82,10 +82,4 @@ export interface IUserParams {
   roleId?: IMinMax | number
   registration?: IMinMax | number
   status?: Array<'inactive' | 'suspended' | 'banned'>
-  hasPosts?: boolean
-  hasDescription?: boolean
-  hasAvatar?: boolean
-  hasFirstName?: boolean
-  hasLastName?: boolean
-  sort?: 'asc' | 'desc'
 }
