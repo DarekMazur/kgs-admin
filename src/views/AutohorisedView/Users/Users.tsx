@@ -28,6 +28,31 @@ interface IUsersRows {
   role: 'Użytkownik' | 'Moderator' | 'Administrator' | 'Super Administrator'
 }
 
+const newVal = (value: string) => {
+  switch (value) {
+    case 'users':
+      return 'użytkownicy'
+    case 'team':
+      return 'zespół'
+    case 'mod':
+      return 'moderatorzy'
+    case 'admin':
+      return 'administratorzy'
+    case 'super-admin':
+      return 'super administratorzy'
+    case 'latest':
+      return 'nowi użytkownicy'
+    case 'inactive':
+      return 'nieaktywni użytkownicy'
+    case 'suspended':
+      return 'zawieszeni użytkownicy'
+    case 'banned':
+      return 'zablokowani użytkownicy'
+    default:
+      return value
+  }
+}
+
 const linkButton = {
   width: '100%',
   height: '2rem',
@@ -51,31 +76,6 @@ const Users = (props: { params?: IUserParams }) => {
 
   const pageHeader = () => {
     const pathNames = location.pathname.split('/').filter((x) => x)
-
-    const newVal = (value: string) => {
-      switch (value) {
-        case 'users':
-          return 'użytkownicy'
-        case 'team':
-          return 'zespół'
-        case 'mod':
-          return 'moderatorzy'
-        case 'admin':
-          return 'administratorzy'
-        case 'super-admin':
-          return 'super administratorzy'
-        case 'latest':
-          return 'nowi użytkownicy'
-        case 'inactive':
-          return 'nieaktywni użytkownicy'
-        case 'suspended':
-          return 'zawieszeni użytkownicy'
-        case 'banned':
-          return 'zablokowani użytkownicy'
-        default:
-          return value
-      }
-    }
 
     return newVal(pathNames[pathNames.length - 1])
   }
