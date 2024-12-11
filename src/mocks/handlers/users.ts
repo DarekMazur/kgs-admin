@@ -1,10 +1,41 @@
 import { http, HttpResponse } from 'msw'
 import { db } from '../db'
 import { jwtDecode } from 'jwt-decode'
-import { IPeak, IPost } from '../../utils/types.ts'
+import { IPeak, IPost, IMinMax } from '../../utils/types.ts'
+
+// @ts-ignore
+const instanceofMinMax = (data): data is IMinMax => {
+  return !!data?.max
+}
 
 export const handlers = [
-  http.get(`${import.meta.env.VITE_API_URL}/users`, () => {
+  http.get(`${import.meta.env.VITE_API_URL}/users`, ({ request }) => {
+    const url = new URL(request.url)
+
+    const params = url.searchParams
+
+    if (params.size > 0) {
+      if (params.get('roleId')) {
+        if (instanceofMinMax(JSON.parse(<string>params.get('roleId')))) {
+          const min = JSON.parse(<string>params.get('roleId')).min
+          const max = JSON.parse(<string>params.get('roleId')).max
+
+          return HttpResponse.json(
+            db.user
+              .getAll()
+              .sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
+              .filter((user) => user.role!.id >= (min ?? 1) && user.role!.id <= max)
+          )
+        }
+        return HttpResponse.json(
+          db.user
+            .getAll()
+            .sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
+            .filter((user) => user.role && user.role.id === Number(params.get('roleId')))
+        )
+      }
+    }
+
     return HttpResponse.json(
       db.user.getAll().sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
     )
