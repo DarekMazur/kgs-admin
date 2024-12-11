@@ -78,7 +78,8 @@ export interface IMinMax {
   max: number
 }
 
-export interface IParams {
+export interface IUserParams {
   roleId?: IMinMax | number
-  sort?: 'asc' | 'desc'
+  registration?: IMinMax | number
+  status?: Array<'inactive' | 'suspended' | 'banned'>
 }

@@ -24,7 +24,7 @@ const HomeUsers = () => {
 
     if (users) {
       setNewUsers(
-        users.filter((user) => new Date(user.registrationDate).getTime() > date7daysFromNow)
+        users.filter((user) => new Date(user.registrationDate).getTime() >= date7daysFromNow)
       )
       setBanned(users.filter((user) => user.isBanned))
       setSuspended(
@@ -45,27 +45,27 @@ const HomeUsers = () => {
     {
       icon: <BedroomBabyIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz najnowszych Użytkowników',
-      link: `/admin/users/${users && users[0].id}`
+      link: '/admin/users/latest'
     },
     {
       icon: <KeyOffIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz nieaktywnych Użytkowników',
-      link: '/'
+      link: '/admin/users/inactive'
     },
     {
       icon: <HourglassBottomIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz zawieszonych Użytkowników',
-      link: '/'
+      link: '/admin/users/suspended'
     },
     {
       icon: <BlockIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz zablokowanych Użytkowników',
-      link: '/'
+      link: '/admin/users/banned'
     },
     {
       icon: <AccountBalanceIcon sx={{ fontSize: '10vw' }} />,
       label: 'Zobacz administrację',
-      link: '/'
+      link: '/admin/users/team'
     }
   ]
 
@@ -99,7 +99,9 @@ const HomeUsers = () => {
         <Typography>
           Najnowszy Użytkownik:{' '}
           <Typography component="span" color="secondary" sx={{ fontWeight: 700 }}>
-            {users[0].username} ({formatDate(new Date(users[0].registrationDate))})
+            <Link component={RouterLink} to={`/admin/users/${users && users[0].id}`}>
+              {users[0].username} ({formatDate(new Date(users[0].registrationDate))})
+            </Link>
           </Typography>
         </Typography>
         <Typography>

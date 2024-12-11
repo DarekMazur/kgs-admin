@@ -29,6 +29,22 @@ const Root = () => {
                 path="/admin/users/team/super-admin"
                 element={<Users params={{ roleId: 1 }} />}
               />
+              <Route
+                path="/admin/users/latest"
+                element={<Users params={{ registration: { max: 7 } }} />}
+              />
+              <Route
+                path="/admin/users/inactive"
+                element={<Users params={{ status: ['inactive'] }} />}
+              />
+              <Route
+                path="/admin/users/suspended"
+                element={<Users params={{ status: ['suspended'] }} />}
+              />
+              <Route
+                path="/admin/users/banned"
+                element={<Users params={{ status: ['banned'] }} />}
+              />
               <Route path={'/admin/posts'} element={<Posts />} />
             </Route>
             <Route path="/" element={<UnauthorizedHome />} />

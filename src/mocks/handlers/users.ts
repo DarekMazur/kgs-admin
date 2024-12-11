@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw'
 import { db } from '../db'
 import { jwtDecode } from 'jwt-decode'
 import { IPeak, IPost, IMinMax } from '../../utils/types.ts'
+import { formatDate } from '../../utils/helpers/formatDate.ts'
 
 // @ts-ignore
 const instanceofMinMax = (data): data is IMinMax => {
@@ -14,31 +15,65 @@ export const handlers = [
 
     const params = url.searchParams
 
+    let users = db.user
+      .getAll()
+      .sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
+
     if (params.size > 0) {
       if (params.get('roleId')) {
         if (instanceofMinMax(JSON.parse(<string>params.get('roleId')))) {
           const min = JSON.parse(<string>params.get('roleId')).min
           const max = JSON.parse(<string>params.get('roleId')).max
 
-          return HttpResponse.json(
-            db.user
-              .getAll()
-              .sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
-              .filter((user) => user.role!.id >= (min ?? 1) && user.role!.id <= max)
+          users = users.filter((user) => user.role!.id >= (min ?? 1) && user.role!.id <= max)
+        } else {
+          users = users.filter((user) => user.role && user.role.id === Number(params.get('roleId')))
+        }
+      }
+
+      if (params.get('registration')) {
+        if (instanceofMinMax(JSON.parse(<string>params.get('registration')))) {
+          const min = JSON.parse(<string>params.get('registration')).min
+          const max = JSON.parse(<string>params.get('registration')).max
+
+          const now = Date.now()
+
+          const startDate = now - max * 24 * 60 * 60 * 1000
+          const endDate = min ? now - min * 24 * 60 * 60 * 1000 : now
+
+          users = users.filter(
+            (user) =>
+              user.registrationDate.getTime() >= startDate &&
+              user.registrationDate.getTime() <= endDate
+          )
+        } else {
+          const registrationDate = new Date(
+            Date.now() - Number(params.get('registration')) * 24 * 60 * 60 * 1000
+          )
+
+          users = users.filter(
+            (user) => formatDate(user.registrationDate) === formatDate(registrationDate)
           )
         }
-        return HttpResponse.json(
-          db.user
-            .getAll()
-            .sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
-            .filter((user) => user.role && user.role.id === Number(params.get('roleId')))
+      }
+
+      if (params.get('status')) {
+        const status = JSON.parse(<string>params.get('status'))
+
+        status.map(
+          (param: 'inactive' | 'hidden' | 'banned') =>
+            (users = users.filter((user) =>
+              param === 'inactive'
+                ? !user.isConfirmed
+                : param === 'banned'
+                  ? user.isBanned
+                  : user.suspensionTimeout && user.suspensionTimeout.getTime() > Date.now()
+            ))
         )
       }
     }
 
-    return HttpResponse.json(
-      db.user.getAll().sort((a, b) => b.registrationDate.getTime() - a.registrationDate.getTime())
-    )
+    return HttpResponse.json(users)
   }),
 
   http.get(`${import.meta.env.VITE_API_URL}/users/:userId`, async ({ request, params }) => {

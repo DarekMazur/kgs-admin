@@ -8,7 +8,7 @@ import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 import { Link as RouterLink } from 'react-router'
-import { IParams } from '../../../utils/types.ts'
+import { IUserParams } from '../../../utils/types.ts'
 import { useLocation } from 'react-router-dom'
 
 interface IUsersRows {
@@ -28,6 +28,31 @@ interface IUsersRows {
   role: 'Użytkownik' | 'Moderator' | 'Administrator' | 'Super Administrator'
 }
 
+const newVal = (value: string) => {
+  switch (value) {
+    case 'users':
+      return 'użytkownicy'
+    case 'team':
+      return 'zespół'
+    case 'mod':
+      return 'moderatorzy'
+    case 'admin':
+      return 'administratorzy'
+    case 'super-admin':
+      return 'super administratorzy'
+    case 'latest':
+      return 'nowi użytkownicy'
+    case 'inactive':
+      return 'nieaktywni użytkownicy'
+    case 'suspended':
+      return 'zawieszeni użytkownicy'
+    case 'banned':
+      return 'zablokowani użytkownicy'
+    default:
+      return value
+  }
+}
+
 const linkButton = {
   width: '100%',
   height: '2rem',
@@ -44,30 +69,13 @@ const linkButton = {
   }
 }
 
-const Users = (props: { params?: IParams }) => {
+const Users = (props: { params?: IUserParams }) => {
   const { data: users, isLoading } = useGetUsersQuery(props.params)
   const [rows, setRows] = useState<IUsersRows[]>([])
   const location = useLocation()
 
   const pageHeader = () => {
     const pathNames = location.pathname.split('/').filter((x) => x)
-
-    const newVal = (value: string) => {
-      switch (value) {
-        case 'users':
-          return 'użytkownicy'
-        case 'team':
-          return 'zespół'
-        case 'mod':
-          return 'moderatorzy'
-        case 'admin':
-          return 'administratorzy'
-        case 'super-admin':
-          return 'super administratorzy'
-        default:
-          return value
-      }
-    }
 
     return newVal(pathNames[pathNames.length - 1])
   }

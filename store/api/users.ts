@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IParams, IPost, IUser } from '../../src/utils/types'
+import { IUserParams, IPost, IUser } from '../../src/utils/types'
 
-const getParams = (params: IParams) => {
+const getParams = (params: IUserParams) => {
   const keys = Object.keys(params)
   let paramsString = ''
   keys.map((key, index) => {
-    paramsString = `${paramsString}${key}=${JSON.stringify(params[key as keyof IParams])}${index + 1 < keys.length ? `&` : ''}`
+    paramsString = `${paramsString}${key}=${JSON.stringify(params[key as keyof IUserParams])}${index + 1 < keys.length ? `&` : ''}`
   })
 
   return paramsString
@@ -18,7 +18,7 @@ export const usersApi = createApi({
   }),
   tagTypes: ['Users'],
   endpoints: (builder) => ({
-    getUsers: builder.query<IUser[], IParams | void>({
+    getUsers: builder.query<IUser[], IUserParams | void>({
       query: (params) => ({
         url: `users${params ? `?${getParams(params)}` : ''}`
       }),
