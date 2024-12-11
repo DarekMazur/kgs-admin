@@ -37,7 +37,7 @@ const Menu = () => {
       icon: <PersonIcon />,
       title: 'Profil',
       action: () => {
-        navigate('/admin/users/me')
+        navigate('/admin/profile')
       }
     },
     {
