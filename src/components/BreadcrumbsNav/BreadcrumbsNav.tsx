@@ -28,7 +28,13 @@ const BreadcrumbsNav = ({ name }: { name?: string }) => {
               case 'users':
                 return 'użytkownicy'
               case 'team':
-                return 'zaspół'
+                return 'zespół'
+              case 'mod':
+                return 'moderatorzy'
+              case 'admin':
+                return 'administratorzy'
+              case 'super-admin':
+                return 'super administratorzy'
               default:
                 return value
             }
@@ -39,11 +45,9 @@ const BreadcrumbsNav = ({ name }: { name?: string }) => {
               {name ? name : newVal(value)}
             </Typography>
           ) : (
-            <>
-              <Link component={RouterLink} underline="hover" color="inherit" to={to} key={to}>
-                {newVal(value)}
-              </Link>
-            </>
+            <Link component={RouterLink} underline="hover" color="inherit" to={to} key={to}>
+              {newVal(value)}
+            </Link>
           )
         })}
       </Breadcrumbs>

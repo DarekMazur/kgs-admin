@@ -72,3 +72,13 @@ export interface IAuthValue {
   login: (userToken: string, userId: string, isPermanent: boolean) => void
   logout: () => void
 }
+
+export interface IMinMax {
+  min?: number
+  max: number
+}
+
+export interface IParams {
+  roleId?: IMinMax | number
+  sort?: 'asc' | 'desc'
+}
