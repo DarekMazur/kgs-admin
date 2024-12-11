@@ -49,6 +49,7 @@ const Root = () => {
                 path="/admin/users/blocked"
                 element={<Users params={{ status: ['banned', 'suspended'] }} />}
               />
+              <Route path="/admin/users/me" element={<h3>My profile</h3>} />
               <Route path={'/admin/posts'} element={<Posts />} />
             </Route>
             <Route path="/" element={<UnauthorizedHome />} />
