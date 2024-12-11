@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 import { Link as RouterLink } from 'react-router'
 import { IParams } from '../../../utils/types.ts'
+import { useLocation } from 'react-router-dom'
 
 interface IUsersRows {
   id: string
@@ -46,6 +47,30 @@ const linkButton = {
 const Users = (props: { params?: IParams }) => {
   const { data: users, isLoading } = useGetUsersQuery(props.params)
   const [rows, setRows] = useState<IUsersRows[]>([])
+  const location = useLocation()
+
+  const pageHeader = () => {
+    const pathNames = location.pathname.split('/').filter((x) => x)
+
+    const newVal = (value: string) => {
+      switch (value) {
+        case 'users':
+          return 'użytkownicy'
+        case 'team':
+          return 'zespół'
+        case 'mod':
+          return 'moderatorzy'
+        case 'admin':
+          return 'administratorzy'
+        case 'super-admin':
+          return 'super administratorzy'
+        default:
+          return value
+      }
+    }
+
+    return newVal(pathNames[pathNames.length - 1])
+  }
 
   const columns: GridColDef[] = [
     { field: 'publicId', headerName: 'id', width: 70, sortable: false },
@@ -164,8 +189,8 @@ const Users = (props: { params?: IParams }) => {
         <>
           <Container component="main" maxWidth="xl" sx={{ p: '3rem', pt: '1rem', mb: '2rem' }}>
             <BreadcrumbsNav />
-            <Typography variant="h3" color="secondary">
-              Użytkownicy
+            <Typography variant="h3" color="secondary" sx={{ textTransform: 'capitalize' }}>
+              {pageHeader()}
             </Typography>
             <Box
               sx={{
