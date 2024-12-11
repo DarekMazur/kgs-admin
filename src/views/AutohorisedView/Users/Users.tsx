@@ -64,6 +64,8 @@ const Users = (props: { params?: IUserParams }) => {
           return 'administratorzy'
         case 'super-admin':
           return 'super administratorzy'
+        case 'latest':
+          return 'nowi użytkownicy'
         default:
           return value
       }
