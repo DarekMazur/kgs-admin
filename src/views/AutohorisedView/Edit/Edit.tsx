@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setGlobalUser } from '../../../../store'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { theme } from '../../../utils/theme.tsx'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import {
   styledInput,
   styledResetButton,
@@ -52,13 +52,13 @@ const Edit = () => {
     }
   }
 
-  const handleReset = (e) => {
+  const handleReset = (e: FormEvent) => {
     e.preventDefault()
 
     setEdited(initialData)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
 
     dispatch(setGlobalUser({ ...globalUser, ...edited }))
