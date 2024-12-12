@@ -17,10 +17,20 @@ import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.ts
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import BlockIcon from '@mui/icons-material/Block'
+import { useState } from 'react'
 
 const SinglePost = () => {
   const { id } = useParams()
   const { data: post, isLoading } = useGetSinglePostQuery(id as string)
+  const [status, setStatus] = useState<{
+    visibility: boolean
+    authorSuspended: boolean
+    authorBanned: boolean
+  }>({
+    visibility: post ? post.isHidden : false,
+    authorSuspended: post ? post.author.isSuspended : false,
+    authorBanned: post ? post.author.isBanned : false
+  })
 
   return (
     <>
@@ -57,9 +67,14 @@ const SinglePost = () => {
                     mb: '1rem'
                   }}
                 >
-                  <VisibilityIcon color={post.isHidden ? 'info' : 'disabled'} />
+                  <VisibilityIcon color={status.visibility ? 'info' : 'disabled'} />
                   <FormControlLabel
-                    control={<Switch checked={post.isHidden} />}
+                    control={
+                      <Switch
+                        checked={status.visibility}
+                        onChange={() => setStatus({ ...status, visibility: !status.visibility })}
+                      />
+                    }
                     label="Widoczność wpisu"
                   />
                 </Box>
@@ -67,9 +82,16 @@ const SinglePost = () => {
                   component="span"
                   sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', my: '1rem' }}
                 >
-                  <WarningAmberIcon color={post.author.isSuspended ? 'warning' : 'disabled'} />
+                  <WarningAmberIcon color={status.authorSuspended ? 'warning' : 'disabled'} />
                   <FormControlLabel
-                    control={<Switch checked={post.author.isSuspended} />}
+                    control={
+                      <Switch
+                        checked={status.authorSuspended}
+                        onChange={() =>
+                          setStatus({ ...status, authorSuspended: !status.authorSuspended })
+                        }
+                      />
+                    }
                     label="Autor - zaieszenie"
                   />
                 </Box>
@@ -77,9 +99,16 @@ const SinglePost = () => {
                   component="span"
                   sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', my: '1rem' }}
                 >
-                  <BlockIcon color={post.author.isBanned ? 'error' : 'disabled'} />
+                  <BlockIcon color={status.authorBanned ? 'error' : 'disabled'} />
                   <FormControlLabel
-                    control={<Switch checked={post.author.isBanned} />}
+                    control={
+                      <Switch
+                        checked={status.authorBanned}
+                        onChange={() =>
+                          setStatus({ ...status, authorBanned: !status.authorBanned })
+                        }
+                      />
+                    }
                     label="Autor - blokada"
                   />
                 </Box>
