@@ -11,11 +11,11 @@ import {
   Typography
 } from '@mui/material'
 import { IUser } from '../../../utils/types.ts'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../../../store'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, setGlobalUser } from '../../../../store'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { theme } from '../../../utils/theme.tsx'
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 import {
   styledInput,
   styledResetButton,
@@ -24,6 +24,16 @@ import {
 
 const Edit = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
+  const dispatch = useDispatch()
+
+  const initialData = {
+    avatar: globalUser ? globalUser.avatar : '',
+    firstName: globalUser ? globalUser.firstName : '',
+    lastName: globalUser ? globalUser.lastName : '',
+    description: globalUser ? globalUser.description : ''
+  }
+
+  const [edited, setEdited] = useState(initialData)
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -41,6 +51,19 @@ const Edit = () => {
       }
     }
   }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+
+    setEdited(initialData)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    dispatch(setGlobalUser({ ...globalUser, ...edited }))
+  }
+
   return (
     <>
       {globalUser ? (
@@ -132,14 +155,20 @@ const Edit = () => {
                 variant="filled"
                 type="text"
                 sx={styledInput}
-                onChange={() => {}}
+                value={edited.firstName}
+                onChange={(e) => {
+                  setEdited({ ...edited, firstName: e.target.value })
+                }}
               />
               <TextField
                 label={'Nazwisko'}
                 variant="filled"
                 type="text"
                 sx={styledInput}
-                onChange={() => {}}
+                value={edited.lastName}
+                onChange={(e) => {
+                  setEdited({ ...edited, lastName: e.target.value })
+                }}
               />
               <TextField
                 label={'O mnie'}
@@ -148,7 +177,10 @@ const Edit = () => {
                 rows={4}
                 type="text"
                 sx={styledInput}
-                onChange={() => {}}
+                value={edited.description}
+                onChange={(e) => {
+                  setEdited({ ...edited, description: e.target.value })
+                }}
               />
             </Box>
             <ButtonGroup size="large" sx={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
@@ -157,7 +189,7 @@ const Edit = () => {
                 variant="contained"
                 type="reset"
                 sx={styledResetButton}
-                onClick={() => {}}
+                onClick={handleReset}
               >
                 Anuluj
               </Button>
@@ -166,7 +198,7 @@ const Edit = () => {
                 variant="contained"
                 type="submit"
                 sx={styledSubmitButton}
-                onClick={() => {}}
+                onClick={handleSubmit}
               >
                 Zapisz
               </Button>
