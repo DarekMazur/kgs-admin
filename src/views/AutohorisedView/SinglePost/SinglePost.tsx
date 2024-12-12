@@ -1,6 +1,6 @@
-import { Container, Typography, Box, Divider } from '@mui/material'
+import { Container, Typography, Box, Divider, Link } from '@mui/material'
+import { Link as RouterLink, useParams } from 'react-router'
 import { useGetSinglePostQuery } from '../../../../store'
-import { useParams } from 'react-router'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
@@ -26,7 +26,10 @@ const SinglePost = () => {
                     <Typography variant="h3" component={'span'} color="secondary">
                       {post.peak.name}
                     </Typography>
-                    dodany przez {post.author.username}
+                    dodany przez{' '}
+                    <Link component={RouterLink} to={`/admin/users/${post.author.id}`}>
+                      {post.author.username}
+                    </Link>
                   </Box>
                 </Typography>
               </Box>
