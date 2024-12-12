@@ -40,3 +40,12 @@ export const styledSubmitButton = {
   backgroundColor: theme.palette.primary.contrastText,
   alignSelf: 'self-end'
 }
+
+export const styledResetButton = {
+  fontFamily: '"Russo One", sans-serif;',
+  width: '10rem',
+  height: '3rem',
+  m: '1rem 1.2rem',
+  backgroundColor: theme.palette.warning.main,
+  alignSelf: 'self-end'
+}

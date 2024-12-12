@@ -10,6 +10,7 @@ import UnauthorisedUser from '../UnauthorisedView/UnauthorisedUser/UnauthorisedU
 import UserView from '../AutohorisedView/UserView/UserView.tsx'
 import Users from '../AutohorisedView/Users/Users.tsx'
 import Posts from '../AutohorisedView/Posts/Posts.tsx'
+import Edit from '../AutohorisedView/Edit/Edit.tsx'
 
 const Root = () => {
   return (
@@ -49,6 +50,7 @@ const Root = () => {
                 path="/admin/users/blocked"
                 element={<Users params={{ status: ['banned', 'suspended'] }} />}
               />
+              <Route path="/admin/profile" element={<Edit />} />
               <Route path={'/admin/posts'} element={<Posts />} />
             </Route>
             <Route path="/" element={<UnauthorizedHome />} />

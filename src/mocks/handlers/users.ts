@@ -195,6 +195,10 @@ export const handlers = [
       id: string
       email?: string
       password?: string
+      firstName?: string
+      lastName?: string
+      description?: string
+      avatar?: string
       isBanned?: boolean
       suspensionTimeout?: Date
       totalSuspensions?: number
@@ -203,6 +207,8 @@ export const handlers = [
     }
     const { userId } = params
     const body = (await request.json()) as IUserUpdate
+
+    console.log(body)
 
     if (!userId || !body) {
       return HttpResponse.json('Request failed', { status: 400 })
@@ -266,11 +272,11 @@ export const handlers = [
           username: user.username,
           email: body.email ?? user.email,
           password: body.password ?? user.password,
-          avatar: user.avatar,
-          description: user.description,
+          avatar: body.avatar ?? user.avatar,
+          description: body.description ?? user.description,
           messages: user.messages,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          firstName: body.firstName ?? user.firstName,
+          lastName: body.lastName ?? user.lastName,
           isBanned: body.isBanned === undefined ? user.isBanned : body.isBanned,
           suspensionTimeout: body.suspensionTimeout ?? user.suspensionTimeout,
           totalSuspensions: body.totalSuspensions ?? user.totalSuspensions,

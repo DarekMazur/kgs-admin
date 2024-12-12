@@ -39,6 +39,10 @@ export const usersApi = createApi({
         id: string
         email?: string
         password?: string
+        avatar?: string
+        firstName?: string
+        lastName?: string
+        description?: string
         isBanned?: boolean
         suspensionTimeout?: Date
         totalSuspensions?: number
@@ -50,6 +54,10 @@ export const usersApi = createApi({
         id,
         email,
         password,
+        avatar,
+        firstName,
+        lastName,
+        description,
         isBanned,
         suspensionTimeout,
         totalSuspensions,
@@ -64,6 +72,10 @@ export const usersApi = createApi({
         body: {
           email,
           password,
+          avatar,
+          firstName,
+          lastName,
+          description,
           isBanned,
           suspensionTimeout,
           totalSuspensions,
