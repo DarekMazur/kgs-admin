@@ -14,6 +14,15 @@ export const postsApi = createApi({
       }),
       providesTags: ['Posts']
     }),
+    getSinglePost: builder.query<IPost, string>({
+      query: (id) => ({
+        url: `posts/${id}`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt') || sessionStorage.getItem('jwt')}`
+        }
+      }),
+      providesTags: ['Posts']
+    }),
     updatePost: builder.mutation<IPost, { id: string; notes?: string; isHidden?: boolean }>({
       query: ({ id, notes, isHidden }) => ({
         url: `posts/${id}`,
@@ -32,4 +41,4 @@ export const postsApi = createApi({
   })
 })
 
-export const { useGetPostsQuery, useUpdatePostMutation } = postsApi
+export const { useGetPostsQuery, useGetSinglePostQuery, useUpdatePostMutation } = postsApi
