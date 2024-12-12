@@ -83,8 +83,10 @@ const HomePosts = () => {
         <Typography>
           Najnowszy wpis:{' '}
           <Typography component="span" color="secondary" sx={{ fontWeight: 700 }}>
-            {posts[0].peak.name} (dodany {formatDate(new Date(posts[0].createdAt))} przez{' '}
-            {posts[0].author.username})
+            <Link component={RouterLink} to={`/admin/posts/${posts[0].id}`}>
+              {posts[0].peak.name} (dodany {formatDate(new Date(posts[0].createdAt))} przez{' '}
+              {posts[0].author.username})
+            </Link>
           </Typography>
         </Typography>
         <Divider sx={{ my: '2rem' }} />
