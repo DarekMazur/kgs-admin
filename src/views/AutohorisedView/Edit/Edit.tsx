@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { IUser } from '../../../utils/types.ts'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setGlobalUser } from '../../../../store'
+import { RootState, setGlobalUser, useUpdateUsersMutation } from '../../../../store'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { theme } from '../../../utils/theme.tsx'
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
@@ -26,6 +26,7 @@ const Edit = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
   const [image, setImage] = useState<File[]>([])
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined)
+  const [updateUser] = useUpdateUsersMutation()
   const dispatch = useDispatch()
 
   const initialData = {
@@ -86,6 +87,7 @@ const Edit = () => {
     e.preventDefault()
 
     dispatch(setGlobalUser({ ...globalUser, ...edited }))
+    updateUser({ id: globalUser!.id, ...edited })
   }
 
   return (
