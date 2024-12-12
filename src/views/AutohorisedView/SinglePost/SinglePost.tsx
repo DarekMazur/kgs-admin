@@ -25,7 +25,7 @@ const SinglePost = () => {
                     {post.isHidden ? <VisibilityOffIcon color="error" fontSize="large" /> : null}
                     <Typography variant="h3" component={'span'} color="secondary">
                       {post.peak.name}
-                    </Typography>{' '}
+                    </Typography>
                     dodany przez {post.author.username}
                   </Box>
                 </Typography>
