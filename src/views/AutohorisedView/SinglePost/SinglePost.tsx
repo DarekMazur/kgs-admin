@@ -1,10 +1,22 @@
-import { Container, Typography, Box, Divider, Link } from '@mui/material'
+import {
+  Container,
+  Typography,
+  Box,
+  Divider,
+  Link,
+  Switch,
+  FormGroup,
+  FormControlLabel
+} from '@mui/material'
 import { Link as RouterLink, useParams } from 'react-router'
 import { useGetSinglePostQuery } from '../../../../store'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'
+import BlockIcon from '@mui/icons-material/Block'
 
 const SinglePost = () => {
   const { id } = useParams()
@@ -34,6 +46,44 @@ const SinglePost = () => {
                 </Typography>
               </Box>
               <Typography>{formatDate(new Date(post.createdAt))}</Typography>
+              <FormGroup>
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    mt: '2rem',
+                    mb: '1rem'
+                  }}
+                >
+                  <VisibilityIcon color={post.isHidden ? 'info' : 'disabled'} />
+                  <FormControlLabel
+                    control={<Switch checked={post.isHidden} />}
+                    label="Widoczność wpisu"
+                  />
+                </Box>
+                <Box
+                  component="span"
+                  sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', my: '1rem' }}
+                >
+                  <WarningAmberIcon color={post.author.isSuspended ? 'warning' : 'disabled'} />
+                  <FormControlLabel
+                    control={<Switch checked={post.author.isSuspended} />}
+                    label="Autor - zaieszenie"
+                  />
+                </Box>
+                <Box
+                  component="span"
+                  sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', my: '1rem' }}
+                >
+                  <BlockIcon color={post.author.isBanned ? 'error' : 'disabled'} />
+                  <FormControlLabel
+                    control={<Switch checked={post.author.isBanned} />}
+                    label="Autor - blokada"
+                  />
+                </Box>
+              </FormGroup>
               <Box sx={{ display: 'flex', gap: '2rem', alignItems: 'center', m: '2rem' }}>
                 <Box
                   component="img"
