@@ -23,8 +23,16 @@ export const postsApi = createApi({
       }),
       providesTags: ['Posts']
     }),
-    updatePost: builder.mutation<IPost, { id: string; notes?: string; isHidden?: boolean }>({
-      query: ({ id, notes, isHidden }) => ({
+    updatePost: builder.mutation<
+      IPost,
+      {
+        id: string
+        notes?: string
+        isHidden?: boolean
+        author?: { id: string; isBanned: boolean; isSuspended: boolean }
+      }
+    >({
+      query: ({ id, notes, isHidden, author }) => ({
         url: `posts/${id}`,
         method: 'PUT',
         headers: {
@@ -33,7 +41,12 @@ export const postsApi = createApi({
         body: {
           id,
           notes,
-          isHidden
+          isHidden,
+          author: {
+            id: author?.id,
+            isBanned: author?.isBanned,
+            isSuspended: author?.isSuspended
+          }
         }
       }),
       invalidatesTags: ['Posts']

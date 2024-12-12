@@ -7,10 +7,11 @@ import {
   Switch,
   FormGroup,
   FormControlLabel,
-  Tooltip
+  Tooltip,
+  Button
 } from '@mui/material'
 import { Link as RouterLink, useParams } from 'react-router'
-import { useGetSinglePostQuery } from '../../../../store'
+import { useGetSinglePostQuery, useUpdatePostMutation } from '../../../../store'
 import Loader from '../../../components/Loader/Loader.tsx'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
@@ -18,7 +19,7 @@ import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.ts
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import BlockIcon from '@mui/icons-material/Block'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 
 const SinglePost = () => {
   const { id } = useParams()
@@ -32,6 +33,23 @@ const SinglePost = () => {
     authorSuspended: post ? post.author.isSuspended : false,
     authorBanned: post ? post.author.isBanned : false
   })
+  const [updatePost] = useUpdatePostMutation()
+
+  const handleSubmit = (e: FormEvent) => {
+    if (post) {
+      e.preventDefault()
+
+      updatePost({
+        id: post.id,
+        isHidden: status.visibility,
+        author: {
+          id: post.author.id,
+          isSuspended: status.authorSuspended,
+          isBanned: status.authorBanned
+        }
+      })
+    }
+  }
 
   return (
     <>
@@ -92,12 +110,16 @@ const SinglePost = () => {
                         <Switch
                           checked={status.authorSuspended}
                           onChange={() =>
-                            setStatus({ ...status, authorSuspended: !status.authorSuspended })
+                            setStatus({
+                              ...status,
+                              authorSuspended: !status.authorSuspended,
+                              authorBanned: false
+                            })
                           }
                         />
                       </Tooltip>
                     }
-                    label="Autor - zaieszenie"
+                    label="Autor - zawieszenie"
                   />
                 </Box>
                 <Box
@@ -111,7 +133,11 @@ const SinglePost = () => {
                         <Switch
                           checked={status.authorBanned}
                           onChange={() =>
-                            setStatus({ ...status, authorBanned: !status.authorBanned })
+                            setStatus({
+                              ...status,
+                              authorSuspended: false,
+                              authorBanned: !status.authorBanned
+                            })
                           }
                         />
                       </Tooltip>
@@ -131,6 +157,7 @@ const SinglePost = () => {
                 <Divider orientation="vertical" variant="middle" flexItem />
                 <Typography>{post.notes}</Typography>
               </Box>
+              <Button onClick={handleSubmit}>Submit</Button>
             </>
           ) : null}
         </Container>
