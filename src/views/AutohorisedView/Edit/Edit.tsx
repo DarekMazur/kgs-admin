@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState, setGlobalUser } from '../../../../store'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { theme } from '../../../utils/theme.tsx'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 import {
   styledInput,
   styledResetButton,
@@ -24,6 +24,8 @@ import {
 
 const Edit = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
+  const [image, setImage] = useState<File[]>([])
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined)
   const dispatch = useDispatch()
 
   const initialData = {
@@ -35,10 +37,30 @@ const Edit = () => {
 
   const [edited, setEdited] = useState(initialData)
 
-  const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (globalUser) {
+      setEdited({
+        avatar: globalUser.avatar,
+        firstName: globalUser.firstName,
+        lastName: globalUser.lastName,
+        description: globalUser.description
+      })
+    }
+  }, [globalUser])
+
+  useEffect(() => {
+    if (imageUrl) {
+      setEdited({ ...edited, avatar: imageUrl })
+    }
+  }, [imageUrl])
+
+  useEffect(() => {
+    image.length > 0 && setImageUrl(URL.createObjectURL(image[0]))
+  }, [image])
+
+  const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0]
-      console.log(file)
 
       if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
         alert('Zły format pliku. Zdjęcie musi mieć format png lub jpg!')
@@ -49,6 +71,8 @@ const Edit = () => {
         alert('Za duże zdjęcie. Maksymalny rozmiar pliku to 1MB!')
         return
       }
+
+      setImage([file])
     }
   }
 
@@ -81,7 +105,7 @@ const Edit = () => {
               <Box sx={{ position: 'relative', width: 200, height: 200 }}>
                 <Avatar
                   alt={globalUser.username as string}
-                  src={globalUser.avatar}
+                  src={edited.avatar}
                   sx={{ width: 200, height: 200 }}
                 />
                 <Button
@@ -118,6 +142,7 @@ const Edit = () => {
                 >
                   <Input
                     type="file"
+                    value={''}
                     onChange={handleFileUpload}
                     inputProps={{
                       accept: 'image/png, image/jpeg'
