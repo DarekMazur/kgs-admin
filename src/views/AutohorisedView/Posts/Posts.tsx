@@ -6,7 +6,6 @@ import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import Loader from '../../../components/Loader/Loader.tsx'
 import DoneIcon from '@mui/icons-material/Done'
 import CloseIcon from '@mui/icons-material/Close'
-import { useLocation } from 'react-router-dom'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 import { Link as RouterLink } from 'react-router'
 
@@ -38,10 +37,6 @@ interface IPostsRows {
 const Posts = () => {
   const { data: posts, isLoading } = useGetPostsQuery()
   const [rows, setRows] = useState<IPostsRows[]>([])
-  const location = useLocation()
-  const pathnames = location.pathname.split('/').filter((x) => x)
-
-  console.log(pathnames)
 
   const Author = ({ id }: { id: string }) => {
     if (posts) {
