@@ -212,7 +212,12 @@ const Edit = () => {
             </Box>
             <ButtonGroup size="large" sx={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
               <Button
-                disabled={false}
+                disabled={
+                  edited.avatar === globalUser.avatar &&
+                  edited.description === globalUser.description &&
+                  edited.firstName === globalUser.firstName &&
+                  edited.lastName === globalUser.lastName
+                }
                 variant="contained"
                 type="reset"
                 sx={styledResetButton}
@@ -221,7 +226,12 @@ const Edit = () => {
                 Anuluj
               </Button>
               <Button
-                disabled={false}
+                disabled={
+                  edited.avatar === globalUser.avatar &&
+                  edited.description === globalUser.description &&
+                  edited.firstName === globalUser.firstName &&
+                  edited.lastName === globalUser.lastName
+                }
                 variant="contained"
                 type="submit"
                 sx={styledSubmitButton}
