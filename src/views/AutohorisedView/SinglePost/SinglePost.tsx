@@ -6,7 +6,8 @@ import {
   Link,
   Switch,
   FormGroup,
-  FormControlLabel
+  FormControlLabel,
+  Tooltip
 } from '@mui/material'
 import { Link as RouterLink, useParams } from 'react-router'
 import { useGetSinglePostQuery } from '../../../../store'
@@ -70,10 +71,12 @@ const SinglePost = () => {
                   <VisibilityIcon color={status.visibility ? 'info' : 'disabled'} />
                   <FormControlLabel
                     control={
-                      <Switch
-                        checked={status.visibility}
-                        onChange={() => setStatus({ ...status, visibility: !status.visibility })}
-                      />
+                      <Tooltip title={status.visibility ? 'Pokaż' : 'Ukryj'}>
+                        <Switch
+                          checked={status.visibility}
+                          onChange={() => setStatus({ ...status, visibility: !status.visibility })}
+                        />
+                      </Tooltip>
                     }
                     label="Widoczność wpisu"
                   />
@@ -85,12 +88,14 @@ const SinglePost = () => {
                   <WarningAmberIcon color={status.authorSuspended ? 'warning' : 'disabled'} />
                   <FormControlLabel
                     control={
-                      <Switch
-                        checked={status.authorSuspended}
-                        onChange={() =>
-                          setStatus({ ...status, authorSuspended: !status.authorSuspended })
-                        }
-                      />
+                      <Tooltip title={status.authorSuspended ? 'Cofnij zawiszenie' : 'Zawieś'}>
+                        <Switch
+                          checked={status.authorSuspended}
+                          onChange={() =>
+                            setStatus({ ...status, authorSuspended: !status.authorSuspended })
+                          }
+                        />
+                      </Tooltip>
                     }
                     label="Autor - zaieszenie"
                   />
@@ -102,12 +107,14 @@ const SinglePost = () => {
                   <BlockIcon color={status.authorBanned ? 'error' : 'disabled'} />
                   <FormControlLabel
                     control={
-                      <Switch
-                        checked={status.authorBanned}
-                        onChange={() =>
-                          setStatus({ ...status, authorBanned: !status.authorBanned })
-                        }
-                      />
+                      <Tooltip title={status.authorBanned ? 'Odblokuj' : 'Zablokuj'}>
+                        <Switch
+                          checked={status.authorBanned}
+                          onChange={() =>
+                            setStatus({ ...status, authorBanned: !status.authorBanned })
+                          }
+                        />
+                      </Tooltip>
                     }
                     label="Autor - blokada"
                   />
