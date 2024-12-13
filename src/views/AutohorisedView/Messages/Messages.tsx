@@ -52,7 +52,7 @@ const Messages = () => {
               height: 'calc(600px + 2rem)'
             }}
           >
-            <Box>
+            <Box sx={{ width: '35%' }}>
               <List sx={{ height: '600px', overflowY: 'auto' }}>
                 {globalUser.messages.inbox.map((message, index) => (
                   <ListItem
@@ -64,15 +64,19 @@ const Messages = () => {
                       <Typography
                         variant="body2"
                         component="p"
-                        sx={{ fontWeight: message.openedTime ? 300 : 700 }}
+                        sx={{ fontWeight: message.openedTime ? 300 : 700, fontSize: '0.8rem' }}
                       >
-                        {formatDate(new Date(message.sendTime))}
+                        {formatDate(new Date(message.sendTime), 'short')}
                       </Typography>
-                      <Typography variant="body2" component="h3">
+                      <Typography
+                        variant="body2"
+                        component="h3"
+                        sx={{ fontSize: '0.8rem', textWrap: 'nowrap' }}
+                      >
                         {message.header}
                       </Typography>
                       {index + 1 < globalUser.messages.inbox.length ? (
-                        <Divider sx={{ my: '1rem', width: '100%' }} />
+                        <Divider sx={{ my: '0.5rem', width: '100%' }} />
                       ) : null}
                     </Box>
                   </ListItem>
@@ -80,8 +84,11 @@ const Messages = () => {
               </List>
             </Box>
             {openMessage ? (
-              <Box sx={{ width: '60%', height: '400px' }}>
+              <Box sx={{ width: '65%', height: '400px' }}>
                 <Typography variant="h3">{openMessage.header}</Typography>
+                <Typography variant="body1">
+                  {formatDate(new Date(openMessage.sendTime), 'full')}
+                </Typography>
                 {openMessage.message}
               </Box>
             ) : null}

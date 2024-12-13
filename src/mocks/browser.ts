@@ -41,7 +41,11 @@ const createPeaks = () => {
 const createMessages = () => {
   for (let i = 0; i < faker.number.int({ min: 300, max: 4000 }); i += 1) {
     db.message.create({
-      openedTime: faker.datatype.boolean({ probability: 0.7 }) ? faker.date.recent() : null
+      openedTime: faker.datatype.boolean({ probability: 0.7 })
+        ? faker.datatype.boolean({ probability: 0.6 })
+          ? faker.date.recent()
+          : faker.date.past()
+        : null
     })
   }
 }
