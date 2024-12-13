@@ -44,7 +44,7 @@ const Menu = () => {
       icon: (
         <Badge
           badgeContent={
-            globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+            globalUser ? globalUser.messages.filter((message) => !message.openedTime).length : 0
           }
           color="primary"
         >
@@ -99,7 +99,7 @@ const Menu = () => {
           <Box sx={{ m: '1rem 2rem' }}>
             <Badge
               badgeContent={
-                globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+                globalUser ? globalUser.messages.filter((message) => !message.openedTime).length : 0
               }
               color="secondary"
               sx={{

@@ -177,7 +177,7 @@ const updateUsers = () => {
           header: faker.lorem.words({ min: 1, max: 3 }),
           message: faker.lorem.paragraph(),
           sendTime: faker.date.past(),
-          openedTime: faker.datatype.boolean({ probability: 0.8 }) ? faker.date.recent() : null
+          openedTime: faker.datatype.boolean({ probability: 0.6 }) ? faker.date.recent() : null
         }
 
         messages.push(message)
