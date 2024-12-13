@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IMessage, IUser } from '../../../utils/types.ts'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import { useState } from 'react'
+import InboxIcon from '@mui/icons-material/Inbox'
 
 const Messages = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
@@ -91,7 +92,28 @@ const Messages = () => {
                 </Typography>
                 {openMessage.message}
               </Box>
-            ) : null}
+            ) : (
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '1rem'
+                }}
+              >
+                <InboxIcon color="secondary" sx={{ width: '150px', height: '150px' }} />
+                <Typography variant="h3">
+                  Witaj, {globalUser.firstName ? globalUser.firstName : globalUser.username}!
+                </Typography>
+                <Typography variant="body1">
+                  {globalUser.messages.inbox.length > 0
+                    ? `masz ${globalUser.messages.inbox.length} wiadomości${globalUser.messages.inbox.filter((message) => !message.openedTime).length > 0 ? `, w tym ${globalUser.messages.inbox.filter((message) => !message.openedTime).length} nieprzeczytanych` : ''}`
+                    : 'nie masz żadnych wiadomości'}
+                </Typography>
+              </Box>
+            )}
           </Paper>
         </Container>
       ) : (
