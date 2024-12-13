@@ -52,7 +52,9 @@ const Menu = () => {
         </Badge>
       ),
       title: 'Wiadomości',
-      action: () => {}
+      action: () => {
+        navigate('/admin/messages')
+      }
     },
     { icon: <ExitToAppIcon />, title: 'Wyloguj', action: logout },
     { icon: null, title: null, action: () => {} },
