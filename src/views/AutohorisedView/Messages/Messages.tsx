@@ -3,7 +3,7 @@ import { RootState, setGlobalUser } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMessage, IUser } from '../../../utils/types.ts'
 import { useState } from 'react'
-import Inbox from '../../../components/Inbox/Inbox.tsx'
+import MessagesList from '../../../components/MessagesList/MessagesList.tsx'
 import Message from '../../../components/Message/Message.tsx'
 
 const Messages = () => {
@@ -86,7 +86,10 @@ const Messages = () => {
               height: 'calc(600px + 2rem)'
             }}
           >
-            <Inbox handleChoseMessage={handleChoseMessage} />
+            <MessagesList
+              messages={globalUser.messages.inbox}
+              handleChoseMessage={handleChoseMessage}
+            />
             <Message
               openMessage={openMessage}
               handleDelete={handleDelete}
