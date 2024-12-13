@@ -48,6 +48,19 @@ const Messages = () => {
     }
   }
 
+  const handleDelete = (id: string) => {
+    if (globalUser) {
+      const messages = {
+        inbox: [...globalUser.messages.inbox.filter((message) => message.id !== id)],
+        sent: [...globalUser.messages.sent]
+      }
+
+      const updatedUser = { ...globalUser, messages }
+
+      dispatch(setGlobalUser(updatedUser))
+    }
+  }
+
   const handleChoseMessage = (id: string) => {
     if (globalUser) {
       const message =
@@ -164,7 +177,7 @@ const Messages = () => {
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Usuń">
-                      <IconButton>
+                      <IconButton onClick={() => handleDelete(openMessage.id)}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
