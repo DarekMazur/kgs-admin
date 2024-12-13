@@ -11,6 +11,16 @@ export interface IMessage {
   message: string
   sendTime: Date
   openedTime: Date | string | null
+  sender: {
+    id: string
+    username: string
+    role: string
+  }
+  recipient: {
+    id: string
+    username: string
+    role: string
+  }
 }
 
 export interface IPeak {

@@ -196,11 +196,13 @@ const updateMessages = () => {
       data: {
         sender: {
           id: sender.id,
-          username: sender.username
+          username: sender.username,
+          role: sender.role?.name
         },
         recipient: {
           id: recipient.id,
-          username: recipient.username
+          username: recipient.username,
+          role: recipient.role?.name
         }
       }
     })

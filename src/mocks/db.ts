@@ -41,11 +41,13 @@ export const db = factory({
     id: primaryKey(faker.string.uuid),
     recipient: {
       id: () => faker.string.uuid(),
-      username: () => faker.internet.username()
+      username: () => faker.internet.username(),
+      role: () => faker.lorem.words({ min: 1, max: 2 })
     },
     sender: {
       id: () => faker.string.uuid(),
-      username: () => faker.internet.username()
+      username: () => faker.internet.username(),
+      role: () => faker.lorem.words({ min: 1, max: 2 })
     },
     priority: () => faker.number.int({ min: 1, max: 3 }),
     header: () => faker.lorem.words({ min: 1, max: 3 }),

@@ -1,10 +1,11 @@
-import { Box, Container, Divider, List, ListItem, Paper, Typography } from '@mui/material'
+import { Avatar, Box, Container, Divider, List, ListItem, Paper, Typography } from '@mui/material'
 import { RootState, setGlobalUser } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMessage, IUser } from '../../../utils/types.ts'
 import { formatDate } from '../../../utils/helpers/formatDate.ts'
 import { useState } from 'react'
 import InboxIcon from '@mui/icons-material/Inbox'
+import { theme } from '../../../utils/theme.tsx'
 
 const Messages = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
@@ -40,7 +41,7 @@ const Messages = () => {
   return (
     <>
       {globalUser ? (
-        <Container component="main" sx={{ p: '2rem' }}>
+        <Container component="main" maxWidth={false} sx={{ p: '2rem' }}>
           <Typography variant="h3" sx={{ width: '100%', textAlign: 'center' }}>
             Wiadomości
           </Typography>
@@ -61,21 +62,44 @@ const Messages = () => {
                     sx={{ gap: '1rem' }}
                     onClick={() => handleChoseMessage(message.id)}
                   >
-                    <Box sx={{ width: '100%' }}>
+                    <Box sx={{ width: '100%', position: 'relative' }}>
                       <Typography
                         variant="body2"
                         component="p"
-                        sx={{ fontWeight: message.openedTime ? 300 : 700, fontSize: '0.8rem' }}
+                        sx={{
+                          fontWeight: message.openedTime ? 300 : 700,
+                          fontSize: '0.8rem',
+                          position: 'absolute',
+                          top: '-18px',
+                          right: '5px'
+                        }}
                       >
                         {formatDate(new Date(message.sendTime), 'short')}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        component="h3"
-                        sx={{ fontSize: '0.8rem', textWrap: 'nowrap' }}
-                      >
-                        {message.header}
-                      </Typography>
+                      <Box sx={{ display: 'flex', gap: '0.6rem' }}>
+                        <Avatar sx={{ backgroundColor: theme.palette.secondary.main }}>
+                          {message.sender.username.slice(0, 1)}
+                        </Avatar>
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            component="p"
+                            sx={{
+                              fontWeight: message.openedTime ? 300 : 700,
+                              fontSize: '0.8rem'
+                            }}
+                          >
+                            {message.sender.role} ({message.sender.username})
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            component="h3"
+                            sx={{ fontSize: '0.8rem', textWrap: 'nowrap' }}
+                          >
+                            {message.header}
+                          </Typography>
+                        </Box>
+                      </Box>
                       {index + 1 < globalUser.messages.inbox.length ? (
                         <Divider sx={{ my: '0.5rem', width: '100%' }} />
                       ) : null}
@@ -95,7 +119,8 @@ const Messages = () => {
             ) : (
               <Box
                 sx={{
-                  width: '100%',
+                  width: '65%',
+                  height: '400px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
