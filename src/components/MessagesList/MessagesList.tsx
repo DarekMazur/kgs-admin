@@ -8,7 +8,7 @@ const MessagesList: FC<{ messages: IMessage[]; handleChoseMessage: (id: string) 
   handleChoseMessage
 }) => {
   return (
-    <Box sx={{ width: '35%' }}>
+    <Box>
       <List sx={{ height: '600px', overflowY: 'auto' }}>
         {messages.map((message, index) => (
           <MessageListItem

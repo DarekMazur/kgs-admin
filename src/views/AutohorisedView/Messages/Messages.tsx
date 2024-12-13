@@ -1,15 +1,22 @@
-import { Container, Paper, Typography } from '@mui/material'
+import { Box, Container, Paper, Tabs, Typography } from '@mui/material'
 import { RootState, setGlobalUser } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMessage, IUser } from '../../../utils/types.ts'
-import { useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 import MessagesList from '../../../components/MessagesList/MessagesList.tsx'
 import Message from '../../../components/Message/Message.tsx'
+import CustomTab from '../../../components/CustomTab/CustomTab.tsx'
+import TabPanel from '../../../components/TabPanel/TabPanel.tsx'
 
 const Messages = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
   const [openMessage, setOpenMessage] = useState<IMessage | null>(null)
+  const [value, setValue] = useState(0)
   const dispatch = useDispatch()
+
+  const handleChange = (_event: SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+  }
 
   const handleReadSwitch = (id: string) => {
     if (globalUser) {
@@ -86,10 +93,29 @@ const Messages = () => {
               height: 'calc(600px + 2rem)'
             }}
           >
-            <MessagesList
-              messages={globalUser.messages.inbox}
-              handleChoseMessage={handleChoseMessage}
-            />
+            <Box sx={{ width: '35%' }}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                textColor="secondary"
+                indicatorColor="secondary"
+              >
+                <CustomTab label="Odebrane" />
+                <CustomTab label="Wysłane" />
+              </Tabs>
+              <TabPanel value={value} index={0}>
+                <MessagesList
+                  messages={globalUser.messages.inbox}
+                  handleChoseMessage={handleChoseMessage}
+                />
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <MessagesList
+                  messages={globalUser.messages.sent}
+                  handleChoseMessage={handleChoseMessage}
+                />
+              </TabPanel>
+            </Box>
             <Message
               openMessage={openMessage}
               handleDelete={handleDelete}
