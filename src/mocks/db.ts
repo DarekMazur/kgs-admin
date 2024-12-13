@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import { factory, oneOf, manyOf, primaryKey } from '@mswjs/data'
+import { factory, oneOf, manyOf, primaryKey, nullable } from '@mswjs/data'
 
 faker.seed(12356)
 
@@ -37,6 +37,22 @@ export const db = factory({
     peak: oneOf('peak'),
     isHidden: () => faker.datatype.boolean({ probability: 0 })
   },
+  message: {
+    id: primaryKey(faker.string.uuid),
+    recipient: {
+      id: () => faker.string.uuid(),
+      username: () => faker.internet.username()
+    },
+    sender: {
+      id: () => faker.string.uuid(),
+      username: () => faker.internet.username()
+    },
+    priority: () => faker.number.int({ min: 1, max: 3 }),
+    header: () => faker.lorem.words({ min: 1, max: 3 }),
+    message: () => faker.lorem.paragraph(),
+    sendTime: () => faker.date.past(),
+    openedTime: nullable(faker.date.recent)
+  },
   user: {
     id: primaryKey(faker.string.uuid),
     username: () => faker.internet.username(),
@@ -51,7 +67,10 @@ export const db = factory({
     suspensionTimeout: () => faker.date.future(),
     totalSuspensions: () => 0,
     isConfirmed: () => faker.datatype.boolean({ probability: 0.8 }),
-    messages: Array,
+    messages: {
+      inbox: manyOf('message'),
+      sent: manyOf('message')
+    },
     posts: manyOf('post'),
     role: oneOf('role')
   }

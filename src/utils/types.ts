@@ -10,7 +10,7 @@ export interface IMessage {
   header: string
   message: string
   sendTime: Date
-  openedTime: Date | null
+  openedTime: Date | string | null
 }
 
 export interface IPeak {
@@ -54,7 +54,10 @@ export interface IUser {
   password: string | null
   avatar: string
   description?: string
-  messages: IMessage[]
+  messages: {
+    inbox: IMessage[]
+    sent: IMessage[]
+  }
   firstName?: string
   lastName?: string
   isBanned: boolean
