@@ -27,6 +27,7 @@ const Messages = () => {
       setSearchParams({ box: 'inbox' })
     }
 
+    setOpenMessage(null)
     setValue(newValue)
   }
 
@@ -69,21 +70,23 @@ const Messages = () => {
         globalUser.messages.inbox.find((message) => message.id === id) ||
         globalUser.messages.sent.find((message) => message.id === id)
 
-      let messages = { ...globalUser.messages }
+      if (message && searchParams.get('box') === 'inbox') {
+        let messages = { ...globalUser.messages }
 
-      if (message && !message.openedTime) {
-        messages = {
-          inbox: [
-            ...globalUser.messages.inbox.filter((message) => message.id !== id),
-            { ...message, openedTime: JSON.stringify(new Date()) }
-          ],
-          sent: [...globalUser.messages.sent]
+        if (message && !message.openedTime) {
+          messages = {
+            inbox: [
+              ...globalUser.messages.inbox.filter((message) => message.id !== id),
+              { ...message, openedTime: JSON.stringify(new Date()) }
+            ],
+            sent: [...globalUser.messages.sent]
+          }
         }
+
+        const updatedUser = { ...globalUser, messages }
+
+        dispatch(setGlobalUser(updatedUser))
       }
-
-      const updatedUser = { ...globalUser, messages }
-
-      dispatch(setGlobalUser(updatedUser))
 
       setOpenMessage(message ? message : null)
     }
