@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { setGlobalUser } from '../../../store'
-import { IUser } from '../types.ts'
+import { IMessage, IUser } from '../types.ts'
 
 export const useMe = () => {
   const dispatch = useDispatch()
@@ -22,7 +22,20 @@ export const useMe = () => {
       })
       .then((res) => {
         if (res.role.id < 4) {
-          dispatch(setGlobalUser(res))
+          const me = structuredClone(res)
+
+          const sortedMessages = {
+            inbox: me.messages.inbox?.sort(
+              (a: IMessage, b: IMessage) =>
+                new Date(b.sendTime).getTime() - new Date(a.sendTime).getTime()
+            ),
+            sent: me.messages.sent?.sort(
+              (a: IMessage, b: IMessage) =>
+                new Date(b.sendTime).getTime() - new Date(a.sendTime).getTime()
+            )
+          }
+
+          dispatch(setGlobalUser({ ...me, messages: sortedMessages }))
           sessionStorage.setItem('auth', 'true')
           return res as IUser
         }

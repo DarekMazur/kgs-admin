@@ -208,8 +208,6 @@ export const handlers = [
     const { userId } = params
     const body = (await request.json()) as IUserUpdate
 
-    console.log(body)
-
     if (!userId || !body) {
       return HttpResponse.json('Request failed', { status: 400 })
     }
