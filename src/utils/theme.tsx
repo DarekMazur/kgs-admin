@@ -25,34 +25,34 @@ export const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: '"Montserrat Variable", sans-serif;',
+    fontFamily: '"Montserrat Variable", sans-serif',
     fontSize: 16,
     h1: {
-      fontFamily: '"Russo One", sans-serif;',
+      fontFamily: '"Russo One", sans-serif',
       fontSize: '3rem',
       lineHeight: '1.5',
       textAlign: 'center'
     },
     h2: {
-      fontFamily: '"Russo One", sans-serif;',
+      fontFamily: '"Russo One", sans-serif',
       fontSize: '2.5rem',
       lineHeight: '1.5'
     },
     h3: {
-      fontFamily: '"Russo One", sans-serif;',
+      fontFamily: '"Russo One", sans-serif',
       fontSize: '1.5rem',
       lineHeight: '1.5'
     },
     h4: {
-      fontFamily: '"Russo One", sans-serif;',
+      fontFamily: '"Russo One", sans-serif',
       lineHeight: '1.5'
     },
     h5: {
-      fontFamily: '"Russo One", sans-serif;',
+      fontFamily: '"Russo One", sans-serif',
       lineHeight: '1.5'
     },
     h6: {
-      fontFamily: '"Russo One", sans-serif;',
+      fontFamily: '"Russo One", sans-serif',
       lineHeight: '1.5'
     }
   }
