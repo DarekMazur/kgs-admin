@@ -3,12 +3,15 @@ import { formatDate } from '../../utils/helpers/formatDate.ts'
 import { theme } from '../../utils/theme.tsx'
 import { FC } from 'react'
 import { IMessage } from '../../utils/types.ts'
+import { useSearchParams } from 'react-router-dom'
 
 const MessageListItem: FC<{
   message: IMessage
   isLast: boolean
   handleChoseMessage: (id: string) => void
 }> = ({ message, isLast, handleChoseMessage }) => {
+  const [searchParams] = useSearchParams()
+
   return (
     <ListItem key={message.id} sx={{ gap: '1rem' }} onClick={() => handleChoseMessage(message.id)}>
       <Box sx={{ width: '100%', position: 'relative' }}>
@@ -27,7 +30,9 @@ const MessageListItem: FC<{
         </Typography>
         <Box sx={{ display: 'flex', gap: '0.6rem' }}>
           <Avatar sx={{ backgroundColor: theme.palette.secondary.main }}>
-            {message.sender.username.slice(0, 1)}
+            {searchParams.get('box') === 'inbox'
+              ? message.sender.username.slice(0, 1)
+              : message.recipient.username.slice(0, 1)}
           </Avatar>
           <Box>
             <Typography
@@ -38,7 +43,9 @@ const MessageListItem: FC<{
                 fontSize: '0.8rem'
               }}
             >
-              {message.sender.role} ({message.sender.username})
+              {searchParams.get('box') === 'inbox'
+                ? `${message.sender.role} (${message.sender.username})`
+                : message.recipient.username}
             </Typography>
             <Typography
               variant="body2"
