@@ -88,8 +88,6 @@ export const handlers = [
             }
           })!
 
-          console.log(new Date(7 * 24 * 60 * 60 * 1000 + Date.now()))
-
           db.user.update({
             where: {
               id: {
