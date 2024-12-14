@@ -12,7 +12,8 @@ const Message: FC<{
   openMessage: IMessage | null
   handleReadSwitch: (id: string) => void
   handleDelete: (id: string) => void
-}> = ({ openMessage, handleReadSwitch, handleDelete }) => {
+  version: string
+}> = ({ openMessage, version, handleReadSwitch, handleDelete }) => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
 
   return (
@@ -25,25 +26,29 @@ const Message: FC<{
                 {formatDate(new Date(openMessage.sendTime), 'full')}
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                Od: {openMessage.sender.username}
-                <ButtonGroup disableElevation variant="contained" sx={{ mt: '1rem', mb: '2rem' }}>
-                  <Tooltip
-                    title={
-                      openMessage.openedTime
-                        ? 'Oznacz jako nieprzeczytane'
-                        : 'Oznacz jako przeczytane'
-                    }
-                  >
-                    <IconButton onClick={() => handleReadSwitch(openMessage.id)}>
-                      <EmailIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Usuń">
-                    <IconButton onClick={() => handleDelete(openMessage.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </ButtonGroup>
+                {version === 'inbox'
+                  ? `Od: ${openMessage.sender.username}`
+                  : `Do: ${openMessage.recipient.username}`}
+                {version === 'inbox' ? (
+                  <ButtonGroup disableElevation variant="contained" sx={{ mt: '1rem', mb: '2rem' }}>
+                    <Tooltip
+                      title={
+                        openMessage.openedTime
+                          ? 'Oznacz jako nieprzeczytane'
+                          : 'Oznacz jako przeczytane'
+                      }
+                    >
+                      <IconButton onClick={() => handleReadSwitch(openMessage.id)}>
+                        <EmailIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Usuń">
+                      <IconButton onClick={() => handleDelete(openMessage.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </ButtonGroup>
+                ) : null}
               </Box>
               <Typography variant="h3">{openMessage.header}</Typography>
               {openMessage.message}

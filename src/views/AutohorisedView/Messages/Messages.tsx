@@ -2,19 +2,31 @@ import { Box, Container, Paper, Tabs, Typography } from '@mui/material'
 import { RootState, setGlobalUser } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMessage, IUser } from '../../../utils/types.ts'
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useEffect, useState } from 'react'
 import MessagesList from '../../../components/MessagesList/MessagesList.tsx'
 import Message from '../../../components/Message/Message.tsx'
 import CustomTab from '../../../components/CustomTab/CustomTab.tsx'
 import TabPanel from '../../../components/TabPanel/TabPanel.tsx'
+import { useSearchParams } from 'react-router-dom'
 
 const Messages = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((state) => state.globalUser)
   const [openMessage, setOpenMessage] = useState<IMessage | null>(null)
   const [value, setValue] = useState(0)
   const dispatch = useDispatch()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  useEffect(() => {
+    setSearchParams({ box: 'inbox' })
+  }, [])
 
   const handleChange = (_event: SyntheticEvent, newValue: number) => {
+    if (newValue === 1) {
+      setSearchParams({ box: 'sent' })
+    } else {
+      setSearchParams({ box: 'inbox' })
+    }
+
     setValue(newValue)
   }
 
@@ -120,6 +132,7 @@ const Messages = () => {
               openMessage={openMessage}
               handleDelete={handleDelete}
               handleReadSwitch={handleReadSwitch}
+              version={searchParams.get('box') ?? 'inbox'}
             />
           </Paper>
         </Container>
