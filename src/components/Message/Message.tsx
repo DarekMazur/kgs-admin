@@ -1,4 +1,4 @@
-import { Box, ButtonGroup, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, ButtonGroup, IconButton, Link, Tooltip, Typography } from '@mui/material'
 import { formatDate } from '../../utils/helpers/formatDate.ts'
 import EmailIcon from '@mui/icons-material/Email'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -7,6 +7,7 @@ import { IMessage, IUser } from '../../utils/types.ts'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../../store'
 import NoOpenMessage from '../NoOpenMessage/NoOpenMessage.tsx'
+import { Link as RouterLink } from 'react-router'
 
 const Message: FC<{
   openMessage: IMessage | null
@@ -26,9 +27,16 @@ const Message: FC<{
                 {formatDate(new Date(openMessage.sendTime), 'full')}
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                {version === 'inbox'
-                  ? `Od: ${openMessage.sender.username}`
-                  : `Do: ${openMessage.recipient.username}`}
+                {version === 'inbox' ? (
+                  `Od: ${openMessage.sender.username}`
+                ) : (
+                  <Box>
+                    Do:{' '}
+                    <Link component={RouterLink} to={`/admin/users/${openMessage.recipient.id}`}>
+                      {openMessage.recipient.username}
+                    </Link>
+                  </Box>
+                )}
                 {version === 'inbox' ? (
                   <ButtonGroup disableElevation variant="contained" sx={{ mt: '1rem', mb: '2rem' }}>
                     <Tooltip
@@ -48,7 +56,23 @@ const Message: FC<{
                       </IconButton>
                     </Tooltip>
                   </ButtonGroup>
-                ) : null}
+                ) : (
+                  <Typography
+                    color={openMessage.openedTime ? 'primary' : 'warning'}
+                    sx={{ mt: '1rem', mb: '2rem' }}
+                  >
+                    {openMessage.openedTime ? (
+                      <>
+                        Odczytana:{' '}
+                        <Typography component="span" color="secondary">
+                          {formatDate(new Date(openMessage.openedTime), 'full')}
+                        </Typography>
+                      </>
+                    ) : (
+                      'Nieodczytana'
+                    )}
+                  </Typography>
+                )}
               </Box>
               <Typography variant="h3">{openMessage.header}</Typography>
               {openMessage.message}
