@@ -12,6 +12,7 @@ import Users from '../AutohorisedView/Users/Users.tsx'
 import Posts from '../AutohorisedView/Posts/Posts.tsx'
 import Edit from '../AutohorisedView/Edit/Edit.tsx'
 import SinglePost from '../AutohorisedView/SinglePost/SinglePost.tsx'
+import Messages from '../AutohorisedView/Messages/Messages.tsx'
 
 const Root = () => {
   return (
@@ -54,6 +55,7 @@ const Root = () => {
               <Route path="/admin/profile" element={<Edit />} />
               <Route path={'/admin/posts'} element={<Posts />} />
               <Route path={'/admin/posts/:id'} element={<SinglePost />} />
+              <Route path={'/admin/messages'} element={<Messages />} />
             </Route>
             <Route path="/" element={<UnauthorizedHome />} />
             <Route path="/login" element={<Login />} />

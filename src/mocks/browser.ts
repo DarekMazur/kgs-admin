@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { handlers } from './handlers'
 import { db } from './db.ts'
 import { setupWorker } from 'msw/browser'
-import { IMessage, IPeak } from '../utils/types.ts'
+import { IPeak } from '../utils/types.ts'
 
 declare global {
   interface Window {
@@ -35,6 +35,18 @@ const createRoles = () => {
 const createPeaks = () => {
   for (let i = 0; i < faker.number.int({ min: 25, max: 40 }); i += 1) {
     db.peak.create()
+  }
+}
+
+const createMessages = () => {
+  for (let i = 0; i < faker.number.int({ min: 300, max: 4000 }); i += 1) {
+    db.message.create({
+      openedTime: faker.datatype.boolean({ probability: 0.7 })
+        ? faker.datatype.boolean({ probability: 0.6 })
+          ? faker.date.recent()
+          : faker.date.past()
+        : null
+    })
   }
 }
 
@@ -99,14 +111,16 @@ const createPosts = () => {
 
 createRoles()
 createPeaks()
+createMessages()
 createUsers()
 createPosts()
 
+const messages = db.message.getAll()
 const users = db.user.getAll()
 const posts = db.post.getAll()
 const roles = db.role.getAll()
 
-const getID = (model: 'user' | 'peak' | 'post') => {
+const getID = (model: 'user' | 'peak' | 'post' | 'message') => {
   const length = db[model].count()
 
   const element = db[model].getAll()[Math.floor(Math.random() * length)]
@@ -155,6 +169,75 @@ const updatePosts = () => {
   })
 }
 
+const updateMessages = () => {
+  messages.forEach((message) => {
+    const sender = db.user.findFirst({
+      where: {
+        id: {
+          equals: getID('user')
+        }
+      }
+    })!
+
+    const recipient = db.user.findFirst({
+      where: {
+        id: {
+          equals: getID('user')
+        }
+      }
+    })!
+
+    db.message.update({
+      where: {
+        id: {
+          equals: message.id
+        }
+      },
+      data: {
+        sender: {
+          id: sender.id,
+          username: sender.username,
+          role: sender.role?.name
+        },
+        recipient: {
+          id: recipient.id,
+          username: recipient.username,
+          role: recipient.role?.name
+        }
+      }
+    })
+
+    const inbox = recipient.messages.inbox?.concat([message])
+    const sent = sender.messages.sent?.concat([message])
+
+    db.user.update({
+      where: {
+        id: {
+          equals: recipient.id
+        }
+      },
+      data: {
+        messages: {
+          inbox
+        }
+      }
+    })
+
+    db.user.update({
+      where: {
+        id: {
+          equals: sender.id
+        }
+      },
+      data: {
+        messages: {
+          sent
+        }
+      }
+    })
+  })
+}
+
 const updateUsers = () => {
   users.forEach((author) => {
     const postsList = db.post.findMany({
@@ -167,22 +250,13 @@ const updateUsers = () => {
       }
     })
 
-    const messages: IMessage[] = []
+    const sortedInbox = author.messages.inbox?.sort(
+      (a, b) => b.sendTime.getTime() - a.sendTime.getTime()
+    )
 
-    for (let i = 0; i < faker.number.int({ min: 0, max: 150 }); i++) {
-      if (faker.datatype.boolean()) {
-        const message = {
-          id: faker.string.uuid(),
-          priority: faker.number.int({ min: 0, max: 3 }),
-          header: faker.lorem.words({ min: 1, max: 3 }),
-          message: faker.lorem.paragraph(),
-          sendTime: faker.date.past(),
-          openedTime: faker.datatype.boolean({ probability: 0.8 }) ? faker.date.recent() : null
-        }
-
-        messages.push(message)
-      }
-    }
+    const sortedSent = author.messages.sent?.sort(
+      (a, b) => b.sendTime.getTime() - a.sendTime.getTime()
+    )
 
     db.user.update({
       where: {
@@ -192,9 +266,12 @@ const updateUsers = () => {
       },
       data: {
         suspensionTimeout: undefined,
-        messages: messages,
         role: roles[faker.number.int({ min: 0, max: roles.length - 1 })],
-        posts: postsList || []
+        posts: postsList || [],
+        messages: {
+          inbox: sortedInbox,
+          sent: sortedSent
+        }
       }
     })
   })
@@ -341,6 +418,7 @@ const updateUsersWithNoRole = () => {
 
 updatePosts()
 updateUsers()
+updateMessages()
 
 updateDemoUser()
 
@@ -354,5 +432,6 @@ window.mocks = {
   getUsers: () => db.user.getAll(),
   getPosts: () => db.post.getAll(),
   getPeaks: () => db.peak.getAll(),
-  getRoles: () => db.role.getAll()
+  getRoles: () => db.role.getAll(),
+  getMessages: () => db.message.getAll()
 }

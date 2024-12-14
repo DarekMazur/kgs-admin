@@ -44,7 +44,9 @@ const Menu = () => {
       icon: (
         <Badge
           badgeContent={
-            globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+            globalUser
+              ? globalUser.messages.inbox.filter((message) => !message.openedTime).length
+              : 0
           }
           color="primary"
         >
@@ -52,7 +54,9 @@ const Menu = () => {
         </Badge>
       ),
       title: 'Wiadomości',
-      action: () => {}
+      action: () => {
+        navigate('/admin/messages')
+      }
     },
     { icon: <ExitToAppIcon />, title: 'Wyloguj', action: logout },
     { icon: null, title: null, action: () => {} },
@@ -97,7 +101,9 @@ const Menu = () => {
           <Box sx={{ m: '1rem 2rem' }}>
             <Badge
               badgeContent={
-                globalUser ? globalUser.messages.filter((message) => message.openedTime).length : 0
+                globalUser
+                  ? globalUser.messages.inbox.filter((message) => !message.openedTime).length
+                  : 0
               }
               color="secondary"
               sx={{

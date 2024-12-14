@@ -1,21 +1,13 @@
 import { RootState } from '../../../../store'
 import { useSelector } from 'react-redux'
-import { FC, ReactNode, SyntheticEvent, useState } from 'react'
-import { Box, Paper, styled, Tab, Tabs, Typography } from '@mui/material'
+import { SyntheticEvent, useState } from 'react'
+import { Box, Paper, Tabs, Typography } from '@mui/material'
 import { IUser } from '../../../utils/types.ts'
 import HomeUsers from '../../../components/Home/HomeUsers/HomeUsers.tsx'
 import HomePosts from '../../../components/Home/HomePosts/HomePosts.tsx'
 import HomeAdmins from '../../../components/Home/HomeAdmins/HomeAdmins.tsx'
-
-interface ITabPanelProps {
-  children?: ReactNode
-  index: number
-  value: number
-}
-
-interface IStyledTabProps {
-  label: string
-}
+import CustomTab from '../../../components/CustomTab/CustomTab.tsx'
+import TabPanel from '../../../components/TabPanel/TabPanel.tsx'
 
 const Home = () => {
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((store) => store.globalUser)
@@ -24,20 +16,6 @@ const Home = () => {
   const handleChange = (_event: SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-
-  const TabPanel: FC<ITabPanelProps> = ({ children, value, index, ...props }) => {
-    return (
-      <Box role="tabpanel" hidden={value !== index} {...props} {...props}>
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-      </Box>
-    )
-  }
-
-  const CustomTab = styled((props: IStyledTabProps) => <Tab disableRipple {...props} />)(
-    ({ theme }) => ({
-      color: theme.palette.text.primary
-    })
-  )
 
   return (
     <>
