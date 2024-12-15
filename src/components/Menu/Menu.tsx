@@ -96,7 +96,7 @@ const Menu = () => {
 
   return (
     <>
-      {sessionStorage.getItem('auth') === 'true' && globalUser ? (
+      {globalUser && globalUser.role.id < 4 ? (
         <AppBar position="static" component="div">
           <Box sx={{ m: '1rem 2rem' }}>
             <Badge

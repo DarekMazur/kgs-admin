@@ -70,13 +70,11 @@ const Login = () => {
           navigate('/admin')
         } catch (error) {
           console.error(error)
-          sessionStorage.setItem('auth', 'false')
-          localStorage.removeItem('jwt')
+          localStorage.clear()
         }
       })
       .catch((err) => {
-        sessionStorage.setItem('auth', 'false')
-        localStorage.removeItem('jwt')
+        localStorage.clear()
         console.error(err.message)
       })
   }

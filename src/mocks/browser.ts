@@ -290,7 +290,7 @@ const updateDemoUser = () => {
       role: db.role.findFirst({
         where: {
           id: {
-            equals: 3
+            equals: 4
           }
         }
       })!
@@ -308,7 +308,7 @@ const updateDemoUser = () => {
       role: db.role.findFirst({
         where: {
           id: {
-            equals: 1
+            equals: 2
           }
         }
       })!
@@ -326,7 +326,25 @@ const updateDemoUser = () => {
       role: db.role.findFirst({
         where: {
           id: {
-            equals: 2
+            equals: 3
+          }
+        }
+      })!
+    }
+  })
+  db.user.update({
+    where: {
+      id: {
+        equals: demoSuperAdminId
+      }
+    },
+    data: {
+      suspensionTimeout: undefined,
+      isConfirmed: true,
+      role: db.role.findFirst({
+        where: {
+          id: {
+            equals: 1
           }
         }
       })!

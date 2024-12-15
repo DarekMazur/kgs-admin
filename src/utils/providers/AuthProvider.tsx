@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    // @ts-ignore
     setIsAuthenticated(!!token)
   }, [token])
 
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
       if (token) {
         // @ts-ignore
         const id = jwtDecode(token).id
+        // @ts-ignore
         await login(id, token, !!localStorage.getItem('jwt'))
         return <Outlet />
       }
@@ -57,17 +59,14 @@ export const AuthProvider = ({ children }: { children: ReactElement }) => {
   }
 
   const logout = () => {
-    localStorage.removeItem('jwt')
-    sessionStorage.removeItem('jwt')
-    sessionStorage.removeItem('auth')
+    localStorage.clear()
+    sessionStorage.clear()
     setToken(null)
     dispatch(setGlobalUser(null))
   }
 
-  const isAuthorized = sessionStorage.getItem('auth') === 'true'
-
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isAuthorized, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

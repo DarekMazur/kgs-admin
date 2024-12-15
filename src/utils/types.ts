@@ -81,7 +81,7 @@ export interface IUser {
 
 export interface IAuthValue {
   isAuthenticated: boolean
-  isAuthorized: boolean
+  token: string | null
   login: (userToken: string, userId: string, isPermanent: boolean) => void
   logout: () => void
 }
