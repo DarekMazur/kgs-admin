@@ -36,12 +36,10 @@ export const useMe = () => {
           }
 
           dispatch(setGlobalUser({ ...me, messages: sortedMessages }))
-          sessionStorage.setItem('auth', 'true')
           return res as IUser
         }
 
         dispatch(setGlobalUser(null))
-        sessionStorage.setItem('auth', 'false')
         return null
       })
       .catch((err) => {

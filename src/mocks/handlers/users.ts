@@ -147,7 +147,20 @@ export const handlers = [
         return HttpResponse.json('Authentication failed', { status: 403 })
       }
 
-      const token = import.meta.env.VITE_TOKEN_PUBLIC_ADMIN
+      const getTokenByRole = () => {
+        switch (loggedUser.role!.id) {
+          case 4:
+            return import.meta.env.VITE_TOKEN_PUBLIC_USER
+          case 3:
+            return import.meta.env.VITE_TOKEN_PUBLIC_MODERATOR
+          case 2:
+            return import.meta.env.VITE_TOKEN_PUBLIC_ADMIN
+          case 1:
+            return import.meta.env.VITE_TOKEN_PUBLIC_SUPERADMIN
+        }
+      }
+
+      const token: string = getTokenByRole()
 
       const response = {
         data: loggedUser,
