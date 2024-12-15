@@ -18,6 +18,7 @@ const HomeUsers = () => {
   const [newUsers, setNewUsers] = useState<IUser[]>([])
   const [suspended, setSuspended] = useState<IUser[]>([])
   const [banned, setBanned] = useState<IUser[]>([])
+  const [otherUsers, setOtherUsers] = useState<IUser[]>([])
 
   useEffect(() => {
     const date7daysFromNow = Date.now() - 7 * 24 * 60 * 60 * 1000
@@ -31,6 +32,14 @@ const HomeUsers = () => {
         users.filter(
           (user) =>
             user.suspensionTimeout && new Date(user.suspensionTimeout).getTime() > Date.now()
+        )
+      )
+      setOtherUsers(
+        users.filter(
+          (user) =>
+            new Date(user.registrationDate).getTime() < date7daysFromNow &&
+            !user.isBanned &&
+            (!user.suspensionTimeout || new Date(user.suspensionTimeout).getTime() < Date.now())
         )
       )
     }
@@ -81,7 +90,7 @@ const HomeUsers = () => {
                 { id: 2, value: banned.length, label: 'Zablokowani Użytkownicy' },
                 {
                   id: 3,
-                  value: users.length - banned.length - newUsers.length - suspended.length,
+                  value: otherUsers.length,
                   label: 'Pozostali'
                 }
               ]
