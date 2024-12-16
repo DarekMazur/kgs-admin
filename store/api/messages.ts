@@ -30,6 +30,26 @@ export const messagesApi = createApi({
       invalidatesTags: ['Messages']
     }),
 
+    updateMessages: builder.mutation<
+      IMessage,
+      {
+        id: string
+        openedTime: Date | string | null
+        sender: { id: string }
+        recipient: { id: string }
+      }
+    >({
+      query: ({ id, openedTime, sender, recipient }) => ({
+        url: `messages/${id}`,
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt') || sessionStorage.getItem('jwt')}`
+        },
+        body: { openedTime, sender, recipient }
+      }),
+      invalidatesTags: ['Messages']
+    }),
+
     deleteMessages: builder.mutation<IMessage, string>({
       query: (id) => ({
         url: `messages/${id}`,
@@ -43,4 +63,5 @@ export const messagesApi = createApi({
   })
 })
 
-export const { useCreateMessagesMutation, useDeleteMessagesMutation } = messagesApi
+export const { useCreateMessagesMutation, useDeleteMessagesMutation, useUpdateMessagesMutation } =
+  messagesApi
