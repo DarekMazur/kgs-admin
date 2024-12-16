@@ -70,6 +70,7 @@ const Messages = () => {
       }
 
       const updatedUser = { ...globalUser, messages }
+      setOpenMessage(null)
 
       dispatch(setGlobalUser(updatedUser))
     }
