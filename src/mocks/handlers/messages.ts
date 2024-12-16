@@ -167,7 +167,7 @@ export const handlers = [
       }
     })!
 
-    const reciepent = db.user.findFirst({
+    const recipient = db.user.findFirst({
       where: {
         id: {
           equals: message.recipient.id
@@ -191,7 +191,7 @@ export const handlers = [
       },
       data: {
         messages: {
-          inbox: reciepent.messages.inbox?.filter((message) => message.id !== messageId)
+          inbox: recipient.messages.inbox?.filter((message) => message.id !== messageId)
         }
       }
     })
