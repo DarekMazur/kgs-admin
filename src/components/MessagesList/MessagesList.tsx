@@ -22,7 +22,7 @@ const MessagesList: FC<{
             message={message}
             handleChoseMessage={handleChoseMessage}
             isLast={index + 1 >= messagesList.length}
-            isCurrent={currentMessage && currentMessage.id === message.id}
+            isCurrent={!!currentMessage && currentMessage.id === message.id}
           />
         ))}
       </List>
