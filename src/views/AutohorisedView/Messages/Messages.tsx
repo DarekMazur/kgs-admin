@@ -137,12 +137,14 @@ const Messages = () => {
               <TabPanel value={value} index={0}>
                 <MessagesList
                   messages={globalUser.messages.inbox}
+                  currentId={openMessage ? openMessage.id : null}
                   handleChoseMessage={handleChoseMessage}
                 />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <MessagesList
                   messages={globalUser.messages.sent}
+                  currentId={openMessage ? openMessage.id : null}
                   handleChoseMessage={handleChoseMessage}
                 />
               </TabPanel>
