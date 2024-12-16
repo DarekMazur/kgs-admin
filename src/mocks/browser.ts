@@ -258,6 +258,14 @@ const updateUsers = () => {
       (a, b) => b.sendTime.getTime() - a.sendTime.getTime()
     )
 
+    const roleId = faker.datatype.boolean({ probability: 0.9 })
+      ? 4
+      : faker.datatype.boolean({ probability: 0.8 })
+        ? 3
+        : faker.datatype.boolean({ probability: 0.8 })
+          ? 2
+          : 1
+
     db.user.update({
       where: {
         id: {
@@ -266,7 +274,13 @@ const updateUsers = () => {
       },
       data: {
         suspensionTimeout: undefined,
-        role: roles[faker.number.int({ min: 0, max: roles.length - 1 })],
+        role: db.role.findFirst({
+          where: {
+            id: {
+              equals: roleId
+            }
+          }
+        })!,
         posts: postsList || [],
         messages: {
           inbox: sortedInbox,
@@ -398,7 +412,13 @@ const createDemoUsersWithAllPeaks = async () => {
   }
 
   db.user.create({
-    role: roles[faker.number.int({ min: 0, max: roles.length - 1 })],
+    role: db.role.findFirst({
+      where: {
+        id: {
+          equals: 4
+        }
+      }
+    })!,
     registrationDate:
       faker.number.int({ min: 0, max: 3 }) === 0 ? faker.date.recent() : faker.date.past(),
     suspensionTimeout: undefined,
