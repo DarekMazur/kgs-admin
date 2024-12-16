@@ -6,7 +6,6 @@ export interface IRole {
 
 export interface IMessage {
   id: string
-  priority: number
   header: string
   message: string
   sendTime: Date
