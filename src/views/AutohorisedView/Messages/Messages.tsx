@@ -92,10 +92,10 @@ const Messages = () => {
             ],
             sent: [...globalUser.messages.sent]
           }
-        }
 
-        if (globalUser.messages.inbox.find((message) => message.id === id)) {
-          updateMessage({ ...message, openedTime: new Date() })
+          if (globalUser.messages.inbox.find((message) => message.id === id)) {
+            updateMessage({ ...message, openedTime: new Date() })
+          }
         }
 
         const updatedUser = { ...globalUser, messages }

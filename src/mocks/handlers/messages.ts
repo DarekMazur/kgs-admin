@@ -80,7 +80,7 @@ export const handlers = [
     return HttpResponse.json(newMessage, { status: 200 })
   }),
 
-  http.put(`${import.meta.env.VITE_API_URL}/messages/:id`, async ({ request, params }) => {
+  http.put(`${import.meta.env.VITE_API_URL}/messages/:messageId`, async ({ request, params }) => {
     const { messageId } = params
     const body = await request.json()
     // @ts-ignore
@@ -154,9 +154,11 @@ export const handlers = [
         openedTime
       }
     })
+
+    return HttpResponse.json(updatedMessage, { status: 200 })
   }),
 
-  http.delete(`${import.meta.env.VITE_API_URL}/messages/:id`, ({ params }) => {
+  http.delete(`${import.meta.env.VITE_API_URL}/messages/:messageId`, ({ params }) => {
     const { messageId } = params
 
     const message = db.message.findFirst({
