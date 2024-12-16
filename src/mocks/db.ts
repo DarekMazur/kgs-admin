@@ -49,7 +49,6 @@ export const db = factory({
       username: () => faker.internet.username(),
       role: () => faker.lorem.words({ min: 1, max: 2 })
     },
-    priority: () => faker.number.int({ min: 1, max: 3 }),
     header: () => faker.lorem.words({ min: 1, max: 3 }),
     message: () => faker.lorem.paragraph(),
     sendTime: () => faker.date.past(),

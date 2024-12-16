@@ -40,15 +40,43 @@ export const handlers = [
       sender: {
         id: sender.id,
         username: userSender.username,
-        role: userSender.role?.name
+        role: userSender.role!.name
       },
       recipient: {
         id: recipient.id,
         username: userRecipient.username,
-        role: userRecipient.role?.name
+        role: userRecipient.role!.name
       }
     }
 
-    return HttpResponse.json(newMessage, { status: 20 })
+    db.message.create(newMessage)
+
+    db.user.update({
+      where: {
+        id: {
+          equals: sender.id
+        }
+      },
+      data: {
+        messages: {
+          sent: [...sender.messages, newMessage]
+        }
+      }
+    })
+
+    db.user.update({
+      where: {
+        id: {
+          equals: recipient.id
+        }
+      },
+      data: {
+        messages: {
+          inbox: [...recipient.messages, newMessage]
+        }
+      }
+    })
+
+    return HttpResponse.json(newMessage, { status: 200 })
   })
 ]
