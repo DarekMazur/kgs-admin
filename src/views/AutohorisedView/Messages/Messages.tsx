@@ -1,5 +1,10 @@
 import { Box, Container, Paper, Tabs, Typography } from '@mui/material'
-import { RootState, setGlobalUser, useDeleteMessagesMutation } from '../../../../store'
+import {
+  RootState,
+  setGlobalUser,
+  useDeleteMessagesMutation,
+  useUpdateMessagesMutation
+} from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMessage, IUser } from '../../../utils/types.ts'
 import { SyntheticEvent, useEffect, useState } from 'react'
@@ -15,7 +20,8 @@ const Messages = () => {
   const [value, setValue] = useState(0)
   const dispatch = useDispatch()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [deletePost] = useDeleteMessagesMutation()
+  const [deleteMessage] = useDeleteMessagesMutation()
+  const [updateMessage] = useUpdateMessagesMutation()
 
   useEffect(() => {
     setSearchParams({ box: 'inbox' })
@@ -45,6 +51,8 @@ const Messages = () => {
           sent: [...globalUser.messages.sent]
         }
 
+        updateMessage({ ...message, openedTime: message.openedTime ? null : new Date() })
+
         const updatedUser = { ...globalUser, messages }
 
         dispatch(setGlobalUser(updatedUser))
@@ -53,7 +61,7 @@ const Messages = () => {
   }
 
   const handleDelete = (id: string) => {
-    deletePost(id)
+    deleteMessage(id)
 
     if (globalUser) {
       const messages = {
@@ -84,6 +92,10 @@ const Messages = () => {
             ],
             sent: [...globalUser.messages.sent]
           }
+        }
+
+        if (globalUser.messages.inbox.find((message) => message.id === id)) {
+          updateMessage({ ...message, openedTime: new Date() })
         }
 
         const updatedUser = { ...globalUser, messages }
