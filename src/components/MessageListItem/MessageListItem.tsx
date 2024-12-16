@@ -8,13 +8,19 @@ import { useSearchParams } from 'react-router-dom'
 const MessageListItem: FC<{
   message: IMessage
   isLast: boolean
+  isCurrent: boolean
   handleChoseMessage: (id: string) => void
-}> = ({ message, isLast, handleChoseMessage }) => {
+}> = ({ message, isLast, isCurrent, handleChoseMessage }) => {
   const [searchParams] = useSearchParams()
 
   return (
     <ListItem key={message.id} sx={{ gap: '1rem' }} onClick={() => handleChoseMessage(message.id)}>
-      <Box sx={{ width: '100%', position: 'relative' }}>
+      <Box
+        sx={{
+          width: '100%',
+          position: 'relative'
+        }}
+      >
         <Typography
           variant="body2"
           component="p"
@@ -28,7 +34,14 @@ const MessageListItem: FC<{
         >
           {formatDate(new Date(message.sendTime), 'short')}
         </Typography>
-        <Box sx={{ display: 'flex', gap: '0.6rem' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: '0.6rem',
+            position: 'relative',
+            color: isCurrent ? theme.palette.secondary.main : 'unset'
+          }}
+        >
           <Avatar sx={{ backgroundColor: theme.palette.secondary.main }}>
             {searchParams.get('box') === 'inbox'
               ? message.sender.username.slice(0, 1)

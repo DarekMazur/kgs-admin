@@ -70,6 +70,7 @@ const Messages = () => {
       }
 
       const updatedUser = { ...globalUser, messages }
+      setOpenMessage(null)
 
       dispatch(setGlobalUser(updatedUser))
     }
@@ -92,10 +93,10 @@ const Messages = () => {
             ],
             sent: [...globalUser.messages.sent]
           }
-        }
 
-        if (globalUser.messages.inbox.find((message) => message.id === id)) {
-          updateMessage({ ...message, openedTime: new Date() })
+          if (globalUser.messages.inbox.find((message) => message.id === id)) {
+            updateMessage({ ...message, openedTime: new Date() })
+          }
         }
 
         const updatedUser = { ...globalUser, messages }
@@ -136,12 +137,14 @@ const Messages = () => {
               <TabPanel value={value} index={0}>
                 <MessagesList
                   messages={globalUser.messages.inbox}
+                  currentId={openMessage ? openMessage.id : null}
                   handleChoseMessage={handleChoseMessage}
                 />
               </TabPanel>
               <TabPanel value={value} index={1}>
                 <MessagesList
                   messages={globalUser.messages.sent}
+                  currentId={openMessage ? openMessage.id : null}
                   handleChoseMessage={handleChoseMessage}
                 />
               </TabPanel>
