@@ -59,7 +59,7 @@ export const handlers = [
       },
       data: {
         messages: {
-          sent: [...sender.messages, newMessage]
+          sent: [...sender.messages.sent, newMessage]
         }
       }
     })
@@ -72,11 +72,54 @@ export const handlers = [
       },
       data: {
         messages: {
-          inbox: [...recipient.messages, newMessage]
+          inbox: [...recipient.messages.inbox, newMessage]
         }
       }
     })
 
     return HttpResponse.json(newMessage, { status: 200 })
+  }),
+
+  http.delete(`${import.meta.env.VITE_API_URL}/messages/:id`, ({ params }) => {
+    const { messageId } = params
+
+    const message = db.message.findFirst({
+      where: {
+        id: {
+          equals: messageId as string
+        }
+      }
+    })!
+
+    const reciepent = db.user.findFirst({
+      where: {
+        id: {
+          equals: message.recipient.id
+        }
+      }
+    })!
+
+    db.message.delete({
+      where: {
+        id: {
+          equals: messageId as string
+        }
+      }
+    })
+
+    db.user.update({
+      where: {
+        id: {
+          equals: message.recipient.id
+        }
+      },
+      data: {
+        messages: {
+          inbox: reciepent.messages.inbox?.filter((message) => message.id !== messageId)
+        }
+      }
+    })
+
+    return HttpResponse.json(db.message.getAll(), { status: 200 })
   })
 ]
