@@ -80,6 +80,82 @@ export const handlers = [
     return HttpResponse.json(newMessage, { status: 200 })
   }),
 
+  http.put(`${import.meta.env.VITE_API_URL}/messages/:id`, async ({ request, params }) => {
+    const { messageId } = params
+    const body = await request.json()
+    // @ts-ignore
+    const { openedTime, sender, recipient } = body
+
+    const message = db.message.findFirst({
+      where: {
+        id: {
+          equals: messageId as string
+        }
+      }
+    })!
+
+    const updatedMessage = { ...message, openedTime }
+
+    const userSender = db.user.findFirst({
+      where: {
+        id: {
+          equals: sender.id
+        }
+      }
+    })!
+
+    const userRecipient = db.user.findFirst({
+      where: {
+        id: {
+          equals: recipient.id
+        }
+      }
+    })!
+
+    db.user.update({
+      where: {
+        id: {
+          equals: sender.id
+        }
+      },
+      data: {
+        messages: {
+          sent: [
+            ...userSender.messages.sent!.filter((message) => message.id !== messageId),
+            updatedMessage
+          ]
+        }
+      }
+    })
+
+    db.user.update({
+      where: {
+        id: {
+          equals: recipient.id
+        }
+      },
+      data: {
+        messages: {
+          inbox: [
+            ...userRecipient.messages.inbox!.filter((message) => message.id !== messageId),
+            updatedMessage
+          ]
+        }
+      }
+    })
+
+    db.message.update({
+      where: {
+        id: {
+          equals: messageId as string
+        }
+      },
+      data: {
+        openedTime
+      }
+    })
+  }),
+
   http.delete(`${import.meta.env.VITE_API_URL}/messages/:id`, ({ params }) => {
     const { messageId } = params
 

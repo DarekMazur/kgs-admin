@@ -1,5 +1,5 @@
 import { Box, Container, Paper, Tabs, Typography } from '@mui/material'
-import { RootState, setGlobalUser } from '../../../../store'
+import { RootState, setGlobalUser, useDeleteMessagesMutation } from '../../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMessage, IUser } from '../../../utils/types.ts'
 import { SyntheticEvent, useEffect, useState } from 'react'
@@ -15,6 +15,7 @@ const Messages = () => {
   const [value, setValue] = useState(0)
   const dispatch = useDispatch()
   const [searchParams, setSearchParams] = useSearchParams()
+  const [deletePost] = useDeleteMessagesMutation()
 
   useEffect(() => {
     setSearchParams({ box: 'inbox' })
@@ -52,6 +53,8 @@ const Messages = () => {
   }
 
   const handleDelete = (id: string) => {
+    deletePost(id)
+
     if (globalUser) {
       const messages = {
         inbox: [...globalUser.messages.inbox.filter((message) => message.id !== id)],
