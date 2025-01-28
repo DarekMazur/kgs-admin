@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { useGetSingleUsersQuery, useUpdateUsersMutation } from '../../../../store'
+import { RootState, useGetSingleUsersQuery, useUpdateUsersMutation } from '../../../../store'
 import {
   Avatar,
   Box,
@@ -21,11 +21,14 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import Loader from '../../../components/Loader/Loader.tsx'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
+import { IUser } from '../../../utils/types'
+import { useSelector } from 'react-redux'
 
 const UserView = () => {
   const { id } = useParams()
   const { data: user, isLoading } = useGetSingleUsersQuery(id as string)
   const [updateUser] = useUpdateUsersMutation()
+  const globalUser: IUser | null = useSelector<RootState, IUser | null>((store) => store.globalUser)
 
   const handleHide = (id: string) => {
     if (user) {
@@ -59,10 +62,22 @@ const UserView = () => {
     }
   }
 
+  const checkAuth = (userRoleId: number, loggedUserRoleId: number) => {
+    if (loggedUserRoleId > 2) {
+      return true
+    }
+
+    if (loggedUserRoleId === 2) {
+      return userRoleId === 1
+    }
+
+    return false
+  }
+
   return (
     <Container>
       {isLoading ? <Loader /> : null}
-      {user ? (
+      {user && globalUser ? (
         <Box sx={{ mt: '2rem' }}>
           <BreadcrumbsNav name={user.username as string} />
           <Box sx={{ display: 'flex', alignItems: 'center', my: '2rem', gap: '3rem' }}>
@@ -155,7 +170,8 @@ const UserView = () => {
                             disabled={
                               (user.suspensionTimeout &&
                                 new Date(user.suspensionTimeout).getTime() > Date.now()) ||
-                              user.isBanned
+                              user.isBanned ||
+                              checkAuth(user.role.id, globalUser.role.id)
                             }
                             onClick={() => handleSuspend(user.id)}
                           >
@@ -163,7 +179,8 @@ const UserView = () => {
                               color={
                                 (user.suspensionTimeout &&
                                   new Date(user.suspensionTimeout).getTime() > Date.now()) ||
-                                user.isBanned
+                                user.isBanned ||
+                                checkAuth(user.role.id, globalUser.role.id)
                                   ? 'disabled'
                                   : 'warning'
                               }
@@ -171,8 +188,17 @@ const UserView = () => {
                           </IconButton>
                         </Tooltip>
                         <Tooltip title="Zablokuj Użytkownika">
-                          <IconButton disabled={user.isBanned} onClick={() => handleBan(user.id)}>
-                            <BlockIcon color={user.isBanned ? 'disabled' : 'error'} />
+                          <IconButton
+                            disabled={user.isBanned || checkAuth(user.role.id, globalUser.role.id)}
+                            onClick={() => handleBan(user.id)}
+                          >
+                            <BlockIcon
+                              color={
+                                user.isBanned || checkAuth(user.role.id, globalUser.role.id)
+                                  ? 'disabled'
+                                  : 'error'
+                              }
+                            />
                           </IconButton>
                         </Tooltip>
                       </CardActions>
