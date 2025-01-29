@@ -23,6 +23,8 @@ import Loader from '../../../components/Loader/Loader.tsx'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 import { IUser } from '../../../utils/types'
 import { useSelector } from 'react-redux'
+import { getAuth } from '../../../utils/helpers/getAuth.ts'
+import UserEditControls from '../../../components/UserEditControls/UserEditControls.tsx'
 
 const UserView = () => {
   const { id } = useParams()
@@ -60,18 +62,6 @@ const UserView = () => {
         suspensionTimeout: new Date()
       })
     }
-  }
-
-  const checkAuth = (userRoleId: number, loggedUserRoleId: number) => {
-    if (loggedUserRoleId > 2) {
-      return true
-    }
-
-    if (loggedUserRoleId === 2) {
-      return userRoleId === 1
-    }
-
-    return false
   }
 
   return (
@@ -112,6 +102,12 @@ const UserView = () => {
               </Typography>
             </Box>
           </Box>
+          {getAuth(user.role.id, globalUser.role.id) ? (
+            <Box>
+              <UserEditControls user={user} handleSuspend={handleSuspend} handleBan={handleBan} />
+            </Box>
+          ) : null}
+
           {user.posts.length > 0 ? (
             <>
               <Typography>Wpisy Użytkownika:</Typography>
@@ -165,42 +161,11 @@ const UserView = () => {
                             </IconButton>
                           </Tooltip>
                         )}
-                        <Tooltip title="Zawieś Użytkownika">
-                          <IconButton
-                            disabled={
-                              (user.suspensionTimeout &&
-                                new Date(user.suspensionTimeout).getTime() > Date.now()) ||
-                              user.isBanned ||
-                              checkAuth(user.role.id, globalUser.role.id)
-                            }
-                            onClick={() => handleSuspend(user.id)}
-                          >
-                            <WarningAmberIcon
-                              color={
-                                (user.suspensionTimeout &&
-                                  new Date(user.suspensionTimeout).getTime() > Date.now()) ||
-                                user.isBanned ||
-                                checkAuth(user.role.id, globalUser.role.id)
-                                  ? 'disabled'
-                                  : 'warning'
-                              }
-                            />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Zablokuj Użytkownika">
-                          <IconButton
-                            disabled={user.isBanned || checkAuth(user.role.id, globalUser.role.id)}
-                            onClick={() => handleBan(user.id)}
-                          >
-                            <BlockIcon
-                              color={
-                                user.isBanned || checkAuth(user.role.id, globalUser.role.id)
-                                  ? 'disabled'
-                                  : 'error'
-                              }
-                            />
-                          </IconButton>
-                        </Tooltip>
+                        <UserEditControls
+                          user={user}
+                          handleSuspend={handleSuspend}
+                          handleBan={handleBan}
+                        />
                       </CardActions>
                     </Card>
                   </ListItem>
