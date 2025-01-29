@@ -13,7 +13,12 @@ import {
   CardContent,
   CardActions,
   IconButton,
-  Tooltip
+  Tooltip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent
 } from '@mui/material'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import BlockIcon from '@mui/icons-material/Block'
@@ -25,6 +30,7 @@ import { IUser } from '../../../utils/types'
 import { useSelector } from 'react-redux'
 import { getAuth } from '../../../utils/helpers/getAuth.ts'
 import UserEditControls from '../../../components/UserEditControls/UserEditControls.tsx'
+import { useState } from 'react'
 
 const UserView = () => {
   const { id } = useParams()
@@ -62,6 +68,12 @@ const UserView = () => {
         suspensionTimeout: new Date()
       })
     }
+  }
+
+  const [role, setRole] = useState(user?.role.id.toString())
+
+  const handleRoleChange = (event: SelectChangeEvent) => {
+    setRole(event.target.value as string)
   }
 
   return (
@@ -103,8 +115,28 @@ const UserView = () => {
             </Box>
           </Box>
           {getAuth(user.role.id, globalUser.role.id) ? (
-            <Box>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '2rem', my: 4 }}>
               <UserEditControls user={user} handleSuspend={handleSuspend} handleBan={handleBan} />
+              <FormControl fullWidth>
+                <InputLabel id="role-select-label">Ustaw rolę</InputLabel>
+                <Select
+                  labelId="role-select"
+                  id="role-select"
+                  value={role}
+                  label="Ustaw rolę"
+                  onChange={handleRoleChange}
+                  disabled={!getAuth(user.role.id, globalUser.role.id)}
+                >
+                  <MenuItem value={4}>Użytkownik</MenuItem>
+                  <MenuItem value={3}>Moderator</MenuItem>
+                  <MenuItem value={2} disabled={globalUser.role.id !== 1}>
+                    Administrator
+                  </MenuItem>
+                  <MenuItem value={1} disabled={globalUser.role.id !== 1}>
+                    Super Administrator
+                  </MenuItem>
+                </Select>
+              </FormControl>
             </Box>
           ) : null}
 
