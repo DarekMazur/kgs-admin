@@ -40,12 +40,32 @@ import UserEditControls from '../../../components/UserEditControls/UserEditContr
 import { useState } from 'react'
 import { styledSubmitButton } from '../../UnauthorisedView/Login/Login.styles.ts'
 
+interface IUserStatus {
+  role?: string
+  banned?: boolean
+  suspended?: boolean
+}
+
 const UserView = () => {
   const { id } = useParams()
   const { data: user, isLoading } = useGetSingleUsersQuery(id as string)
   const { data: roles, isLoading: rolesLoading } = useGetRolesQuery()
   const [updateUser] = useUpdateUsersMutation()
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((store) => store.globalUser)
+
+  const [userStatus, setUserStatus] = useState<IUserStatus>()
+
+  const handleBannedStatus = () => {
+    setUserStatus({ ...userStatus, banned: !userStatus?.banned })
+  }
+
+  const handleSuspendStatus = () => {
+    setUserStatus({ ...userStatus, suspended: !userStatus?.suspended })
+  }
+
+  const handleRoleChange = (event: SelectChangeEvent) => {
+    setUserStatus({ ...userStatus, role: event.target.value as string })
+  }
 
   const handleHide = (id: string) => {
     if (user) {
@@ -79,10 +99,19 @@ const UserView = () => {
     }
   }
 
-  const [role, setRole] = useState(user?.role.id.toString())
-
-  const handleRoleChange = (event: SelectChangeEvent) => {
-    setRole(event.target.value as string)
+  const handleSubmit = (id: string) => {
+    if (user) {
+      updateUser({
+        id,
+        isBanned: userStatus?.banned || user.isBanned,
+        suspensionTimeout: userStatus?.suspended
+          ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+          : user.suspensionTimeout,
+        role: userStatus?.role
+          ? roles!.filter((role) => role.id === Number(userStatus.role))[0]
+          : user.role
+      })
+    }
   }
 
   return (
@@ -134,14 +163,27 @@ const UserView = () => {
                 p: 2
               }}
             >
-              <UserEditControls user={user} handleSuspend={handleSuspend} handleBan={handleBan} />
+              <UserEditControls
+                user={{
+                  ...user,
+                  isBanned: userStatus?.banned || user.isBanned,
+                  suspensionTimeout: userStatus?.suspended
+                    ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                    : user.suspensionTimeout,
+                  role: userStatus?.role
+                    ? roles!.filter((role) => role.id === Number(userStatus.role))[0]
+                    : user.role
+                }}
+                handleSuspend={handleSuspendStatus}
+                handleBan={handleBannedStatus}
+              />
               {roles ? (
                 <FormControl fullWidth>
                   <InputLabel id="role-select-label">Ustaw rolę</InputLabel>
                   <Select
                     labelId="role-select"
                     id="role-select"
-                    value={role}
+                    value={userStatus?.role}
                     label="Ustaw rolę"
                     onChange={handleRoleChange}
                     disabled={!getAuth(user.role.id, globalUser.role.id)}
@@ -162,7 +204,11 @@ const UserView = () => {
                   </Select>
                 </FormControl>
               ) : null}
-              <Button variant="contained" sx={styledSubmitButton}>
+              <Button
+                variant="contained"
+                sx={styledSubmitButton}
+                onClick={() => handleSubmit(user.id)}
+              >
                 Zapisz
               </Button>
             </Paper>

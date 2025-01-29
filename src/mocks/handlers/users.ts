@@ -1,7 +1,7 @@
 import { http, HttpResponse } from 'msw'
 import { db } from '../db'
 import { jwtDecode } from 'jwt-decode'
-import { IPeak, IPost, IMinMax, IUser } from '../../utils/types.ts'
+import { IPeak, IPost, IMinMax, IUser, IRole } from '../../utils/types.ts'
 import { formatDate } from '../../utils/helpers/formatDate.ts'
 
 // @ts-ignore
@@ -217,6 +217,7 @@ export const handlers = [
       totalSuspensions?: number
       isConfirmed?: boolean
       post?: IPost
+      role?: IRole
     }
     const { userId } = params
     const body = (await request.json()) as IUserUpdate
@@ -294,7 +295,7 @@ export const handlers = [
           isConfirmed: body.isConfirmed === undefined ? user.isConfirmed : body.isConfirmed,
           posts: updatedPosts,
           registrationDate: user.registrationDate,
-          role: user.role
+          role: body.role ?? user.role
         }
 
         db.user.update({
