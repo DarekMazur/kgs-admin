@@ -1,5 +1,10 @@
 import { useParams } from 'react-router'
-import { RootState, useGetSingleUsersQuery, useUpdateUsersMutation } from '../../../../store'
+import {
+  RootState,
+  useGetRolesQuery,
+  useGetSingleUsersQuery,
+  useUpdateUsersMutation
+} from '../../../../store'
 import {
   Avatar,
   Box,
@@ -18,7 +23,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  SelectChangeEvent
+  SelectChangeEvent,
+  Button,
+  Paper
 } from '@mui/material'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import BlockIcon from '@mui/icons-material/Block'
@@ -31,10 +38,12 @@ import { useSelector } from 'react-redux'
 import { getAuth } from '../../../utils/helpers/getAuth.ts'
 import UserEditControls from '../../../components/UserEditControls/UserEditControls.tsx'
 import { useState } from 'react'
+import { styledSubmitButton } from '../../UnauthorisedView/Login/Login.styles.ts'
 
 const UserView = () => {
   const { id } = useParams()
   const { data: user, isLoading } = useGetSingleUsersQuery(id as string)
+  const { data: roles, isLoading: rolesLoading } = useGetRolesQuery()
   const [updateUser] = useUpdateUsersMutation()
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((store) => store.globalUser)
 
@@ -78,7 +87,7 @@ const UserView = () => {
 
   return (
     <Container>
-      {isLoading ? <Loader /> : null}
+      {isLoading || rolesLoading ? <Loader /> : null}
       {user && globalUser ? (
         <Box sx={{ mt: '2rem' }}>
           <BreadcrumbsNav name={user.username as string} />
@@ -115,29 +124,48 @@ const UserView = () => {
             </Box>
           </Box>
           {getAuth(user.role.id, globalUser.role.id) ? (
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: '2rem', my: 4 }}>
+            <Paper
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: '2rem',
+                my: 4,
+                p: 2
+              }}
+            >
               <UserEditControls user={user} handleSuspend={handleSuspend} handleBan={handleBan} />
-              <FormControl fullWidth>
-                <InputLabel id="role-select-label">Ustaw rolę</InputLabel>
-                <Select
-                  labelId="role-select"
-                  id="role-select"
-                  value={role}
-                  label="Ustaw rolę"
-                  onChange={handleRoleChange}
-                  disabled={!getAuth(user.role.id, globalUser.role.id)}
-                >
-                  <MenuItem value={4}>Użytkownik</MenuItem>
-                  <MenuItem value={3}>Moderator</MenuItem>
-                  <MenuItem value={2} disabled={globalUser.role.id !== 1}>
-                    Administrator
-                  </MenuItem>
-                  <MenuItem value={1} disabled={globalUser.role.id !== 1}>
-                    Super Administrator
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+              {roles ? (
+                <FormControl fullWidth>
+                  <InputLabel id="role-select-label">Ustaw rolę</InputLabel>
+                  <Select
+                    labelId="role-select"
+                    id="role-select"
+                    value={role}
+                    label="Ustaw rolę"
+                    onChange={handleRoleChange}
+                    disabled={!getAuth(user.role.id, globalUser.role.id)}
+                    sx={{ maxWidth: '20rem' }}
+                  >
+                    {roles
+                      .slice()
+                      .sort((a, b) => b.id - a.id)
+                      .map((role) => (
+                        <MenuItem
+                          key={role.id}
+                          value={role.id}
+                          disabled={globalUser.role.id >= role.id}
+                        >
+                          {role.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              ) : null}
+              <Button variant="contained" sx={styledSubmitButton}>
+                Zapisz
+              </Button>
+            </Paper>
           ) : null}
 
           {user.posts.length > 0 ? (
