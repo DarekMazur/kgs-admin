@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IUserParams, IPost, IUser } from '../../src/utils/types'
+import { IUserParams, IPost, IUser, IRole } from '../../src/utils/types'
 
 const getParams = (params: IUserParams) => {
   const keys = Object.keys(params)
@@ -48,6 +48,7 @@ export const usersApi = createApi({
         totalSuspensions?: number
         isConfirmed?: boolean
         post?: IPost
+        role?: IRole
       }
     >({
       query: ({
@@ -62,7 +63,8 @@ export const usersApi = createApi({
         suspensionTimeout,
         totalSuspensions,
         isConfirmed,
-        post
+        post,
+        role
       }) => ({
         url: `users/${id}`,
         method: 'PUT',
@@ -80,7 +82,8 @@ export const usersApi = createApi({
           suspensionTimeout,
           totalSuspensions,
           isConfirmed,
-          post
+          post,
+          role
         }
       }),
       invalidatesTags: ['Users']

@@ -1,5 +1,10 @@
 import { useParams } from 'react-router'
-import { RootState, useGetSingleUsersQuery, useUpdateUsersMutation } from '../../../../store'
+import {
+  RootState,
+  useGetRolesQuery,
+  useGetSingleUsersQuery,
+  useUpdateUsersMutation
+} from '../../../../store'
 import {
   Avatar,
   Box,
@@ -13,7 +18,14 @@ import {
   CardContent,
   CardActions,
   IconButton,
-  Tooltip
+  Tooltip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  Button,
+  Paper
 } from '@mui/material'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import BlockIcon from '@mui/icons-material/Block'
@@ -23,12 +35,37 @@ import Loader from '../../../components/Loader/Loader.tsx'
 import BreadcrumbsNav from '../../../components/BreadcrumbsNav/BreadcrumbsNav.tsx'
 import { IUser } from '../../../utils/types'
 import { useSelector } from 'react-redux'
+import { getAuth } from '../../../utils/helpers/getAuth.ts'
+import UserEditControls from '../../../components/UserEditControls/UserEditControls.tsx'
+import { useState } from 'react'
+import { styledSubmitButton } from '../../UnauthorisedView/Login/Login.styles.ts'
+
+interface IUserStatus {
+  role?: string
+  banned?: boolean
+  suspended?: boolean
+}
 
 const UserView = () => {
   const { id } = useParams()
   const { data: user, isLoading } = useGetSingleUsersQuery(id as string)
+  const { data: roles, isLoading: rolesLoading } = useGetRolesQuery()
   const [updateUser] = useUpdateUsersMutation()
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((store) => store.globalUser)
+
+  const [userStatus, setUserStatus] = useState<IUserStatus>()
+
+  const handleBannedStatus = () => {
+    setUserStatus({ ...userStatus, banned: !userStatus?.banned })
+  }
+
+  const handleSuspendStatus = () => {
+    setUserStatus({ ...userStatus, suspended: !userStatus?.suspended })
+  }
+
+  const handleRoleChange = (event: SelectChangeEvent) => {
+    setUserStatus({ ...userStatus, role: event.target.value as string })
+  }
 
   const handleHide = (id: string) => {
     if (user) {
@@ -62,21 +99,24 @@ const UserView = () => {
     }
   }
 
-  const checkAuth = (userRoleId: number, loggedUserRoleId: number) => {
-    if (loggedUserRoleId > 2) {
-      return true
+  const handleSubmit = (id: string) => {
+    if (user) {
+      updateUser({
+        id,
+        isBanned: userStatus?.banned || user.isBanned,
+        suspensionTimeout: userStatus?.suspended
+          ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+          : user.suspensionTimeout,
+        role: userStatus?.role
+          ? roles!.filter((role) => role.id === Number(userStatus.role))[0]
+          : user.role
+      })
     }
-
-    if (loggedUserRoleId === 2) {
-      return userRoleId === 1
-    }
-
-    return false
   }
 
   return (
     <Container>
-      {isLoading ? <Loader /> : null}
+      {isLoading || rolesLoading ? <Loader /> : null}
       {user && globalUser ? (
         <Box sx={{ mt: '2rem' }}>
           <BreadcrumbsNav name={user.username as string} />
@@ -112,6 +152,68 @@ const UserView = () => {
               </Typography>
             </Box>
           </Box>
+          {getAuth(user.role.id, globalUser.role.id) ? (
+            <Paper
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: '2rem',
+                my: 4,
+                p: 2
+              }}
+            >
+              <UserEditControls
+                user={{
+                  ...user,
+                  isBanned: userStatus?.banned || user.isBanned,
+                  suspensionTimeout: userStatus?.suspended
+                    ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                    : user.suspensionTimeout,
+                  role: userStatus?.role
+                    ? roles!.filter((role) => role.id === Number(userStatus.role))[0]
+                    : user.role
+                }}
+                handleSuspend={handleSuspendStatus}
+                handleBan={handleBannedStatus}
+              />
+              {roles ? (
+                <FormControl fullWidth>
+                  <InputLabel id="role-select-label">Ustaw rolę</InputLabel>
+                  <Select
+                    labelId="role-select"
+                    id="role-select"
+                    value={userStatus?.role}
+                    label="Ustaw rolę"
+                    onChange={handleRoleChange}
+                    disabled={!getAuth(user.role.id, globalUser.role.id)}
+                    sx={{ maxWidth: '20rem' }}
+                  >
+                    {roles
+                      .slice()
+                      .sort((a, b) => b.id - a.id)
+                      .map((role) => (
+                        <MenuItem
+                          key={role.id}
+                          value={role.id}
+                          disabled={globalUser.role.id >= role.id}
+                        >
+                          {role.name}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              ) : null}
+              <Button
+                variant="contained"
+                sx={styledSubmitButton}
+                onClick={() => handleSubmit(user.id)}
+              >
+                Zapisz
+              </Button>
+            </Paper>
+          ) : null}
+
           {user.posts.length > 0 ? (
             <>
               <Typography>Wpisy Użytkownika:</Typography>
@@ -165,42 +267,11 @@ const UserView = () => {
                             </IconButton>
                           </Tooltip>
                         )}
-                        <Tooltip title="Zawieś Użytkownika">
-                          <IconButton
-                            disabled={
-                              (user.suspensionTimeout &&
-                                new Date(user.suspensionTimeout).getTime() > Date.now()) ||
-                              user.isBanned ||
-                              checkAuth(user.role.id, globalUser.role.id)
-                            }
-                            onClick={() => handleSuspend(user.id)}
-                          >
-                            <WarningAmberIcon
-                              color={
-                                (user.suspensionTimeout &&
-                                  new Date(user.suspensionTimeout).getTime() > Date.now()) ||
-                                user.isBanned ||
-                                checkAuth(user.role.id, globalUser.role.id)
-                                  ? 'disabled'
-                                  : 'warning'
-                              }
-                            />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Zablokuj Użytkownika">
-                          <IconButton
-                            disabled={user.isBanned || checkAuth(user.role.id, globalUser.role.id)}
-                            onClick={() => handleBan(user.id)}
-                          >
-                            <BlockIcon
-                              color={
-                                user.isBanned || checkAuth(user.role.id, globalUser.role.id)
-                                  ? 'disabled'
-                                  : 'error'
-                              }
-                            />
-                          </IconButton>
-                        </Tooltip>
+                        <UserEditControls
+                          user={user}
+                          handleSuspend={handleSuspend}
+                          handleBan={handleBan}
+                        />
                       </CardActions>
                     </Card>
                   </ListItem>
