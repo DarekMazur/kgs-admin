@@ -65,27 +65,30 @@ export const usersApi = createApi({
         isConfirmed,
         post,
         role
-      }) => ({
-        url: `users/${id}`,
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('jwt') || sessionStorage.getItem('jwt')}`
-        },
-        body: {
-          email,
-          password,
-          avatar,
-          firstName,
-          lastName,
-          description,
-          isBanned,
-          suspensionTimeout,
-          totalSuspensions,
-          isConfirmed,
-          post,
-          role
+      }) => (
+        console.log(suspensionTimeout),
+        {
+          url: `users/${id}`,
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwt') || sessionStorage.getItem('jwt')}`
+          },
+          body: {
+            email,
+            password,
+            avatar,
+            firstName,
+            lastName,
+            description,
+            isBanned,
+            suspensionTimeout,
+            totalSuspensions,
+            isConfirmed,
+            post,
+            role
+          }
         }
-      }),
+      ),
       invalidatesTags: ['Users']
     })
   })
