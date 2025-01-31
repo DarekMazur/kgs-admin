@@ -37,7 +37,7 @@ import { IUser } from '../../../utils/types'
 import { useSelector } from 'react-redux'
 import { getAuth } from '../../../utils/helpers/getAuth.ts'
 import UserEditControls from '../../../components/UserEditControls/UserEditControls.tsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { styledSubmitButton } from '../../UnauthorisedView/Login/Login.styles.ts'
 
 interface IUserStatus {
@@ -53,7 +53,21 @@ const UserView = () => {
   const [updateUser] = useUpdateUsersMutation()
   const globalUser: IUser | null = useSelector<RootState, IUser | null>((store) => store.globalUser)
 
+  const suspensionTimes = [1, 7, 30]
+
+  const initUserStatus = {
+    role: user?.role.id.toString(),
+    banned: user?.isBanned,
+    suspended: user?.suspensionTimeout && user?.suspensionTimeout > new Date()
+  }
+
   const [userStatus, setUserStatus] = useState<IUserStatus>()
+
+  const [timeout, setTimeout] = useState('7')
+
+  useEffect(() => {
+    setUserStatus(initUserStatus)
+  }, [user])
 
   const handleBannedStatus = () => {
     setUserStatus({ ...userStatus, banned: !userStatus?.banned })
@@ -65,6 +79,10 @@ const UserView = () => {
 
   const handleRoleChange = (event: SelectChangeEvent) => {
     setUserStatus({ ...userStatus, role: event.target.value as string })
+  }
+
+  const handleTimeoutChange = (event: SelectChangeEvent) => {
+    setTimeout(event.target.value as string)
   }
 
   const handleHide = (id: string) => {
@@ -105,7 +123,7 @@ const UserView = () => {
         id,
         isBanned: userStatus?.banned || user.isBanned,
         suspensionTimeout: userStatus?.suspended
-          ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+          ? new Date(Date.now() + Number(timeout) * 24 * 60 * 60 * 1000)
           : user.suspensionTimeout,
         role: userStatus?.role
           ? roles!.filter((role) => role.id === Number(userStatus.role))[0]
@@ -177,6 +195,24 @@ const UserView = () => {
                 handleSuspend={handleSuspendStatus}
                 handleBan={handleBannedStatus}
               />
+              <FormControl fullWidth>
+                <InputLabel id="suspension-select-label">Czas zawieszenia</InputLabel>
+                <Select
+                  labelId="suspension-selectt"
+                  id="suspension-select"
+                  value={timeout}
+                  label="Czas zawieszenia"
+                  onChange={handleTimeoutChange}
+                  sx={{ maxWidth: '20rem' }}
+                  disabled={!userStatus?.suspended}
+                >
+                  {suspensionTimes.map((time) => (
+                    <MenuItem key={time} value={time}>
+                      {`${time.toString()} ${time === 1 ? 'dzień' : 'dni'}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               {roles ? (
                 <FormControl fullWidth>
                   <InputLabel id="role-select-label">Ustaw rolę</InputLabel>
